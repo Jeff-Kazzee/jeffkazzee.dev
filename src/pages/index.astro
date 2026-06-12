@@ -1,9 +1,11 @@
 ---
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import PostCard from '../components/PostCard.astro';
+import earthrise from '../assets/earthrise.avif';
 
 const projects = await getCollection('projects');
 const byOrder = (a: typeof projects[number], b: typeof projects[number]) =>
@@ -44,20 +46,32 @@ const jsonLd = JSON.stringify({
   <script type="application/ld+json" set:html={jsonLd} is:inline />
 
   <section class="wrap hero">
-    <p class="now rise" style="--i: 0">
-      <span class="dot live" aria-hidden="true"></span>
-      Currently building <a href="/projects/obscura/">Obscura</a>, a local-first AI media studio for Windows
-    </p>
-    <h1 class="rise" style="--i: 1">I make tools, games, and weird useful things.</h1>
-    <p class="lede rise" style="--i: 2">
-      Self-taught builder, shipping for <strong>Windows users</strong>. I use AI to
-      think better and build stranger, then hand the boring parts to a machine.
-    </p>
-    <nav class="links rise" style="--i: 3" aria-label="Profiles">
-      {links.map((l) => (
-        <a href={l.href} rel={l.href.startsWith('http') ? 'me noopener' : undefined}>{l.label}</a>
-      ))}
-    </nav>
+    <div class="hero-text">
+      <p class="now rise" style="--i: 0">
+        <span class="dot live" aria-hidden="true"></span>
+        Currently building <a href="/projects/obscura/">Obscura</a>, a local-first AI media studio for Windows
+      </p>
+      <h1 class="rise" style="--i: 1">I make tools, games, and weird useful things.</h1>
+      <p class="lede rise" style="--i: 2">
+        Self-taught builder, shipping for <strong>Windows users</strong>. I use AI to
+        think better and build stranger, then hand the boring parts to a machine.
+      </p>
+      <nav class="links rise" style="--i: 3" aria-label="Profiles">
+        {links.map((l) => (
+          <a href={l.href} rel={l.href.startsWith('http') ? 'me noopener' : undefined}>{l.label}</a>
+        ))}
+      </nav>
+    </div>
+    <figure class="hero-art rise" style="--i: 2">
+      <Image
+        src={earthrise}
+        alt="A crescent Earth rising over the gray surface of the Moon"
+        widths={[640, 1100]}
+        sizes="(max-width: 899px) 100vw, 480px"
+        loading="eager"
+      />
+      <figcaption>Earthrise. The view worth building for.</figcaption>
+    </figure>
   </section>
 
   <section class="wrap">
@@ -97,10 +111,42 @@ const jsonLd = JSON.stringify({
 
 <style>
   .hero {
-    padding-block: clamp(4rem, 12vh, 7rem) clamp(2rem, 6vh, 4rem);
+    padding-block: clamp(3.5rem, 10vh, 6rem) clamp(2rem, 6vh, 4rem);
+    display: grid;
+    gap: clamp(2.5rem, 5vw, 4.5rem);
+    align-items: center;
+  }
+
+  @media (min-width: 900px) {
+    .hero {
+      grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    }
+  }
+
+  .hero-text {
     display: grid;
     gap: calc(var(--space) * 3);
-    max-width: min(var(--site-max), 54rem + 6vw);
+  }
+
+  .hero-art {
+    margin: 0;
+  }
+
+  .hero-art :global(img) {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .hero-art figcaption {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 0.88rem;
+    color: var(--ink-faint);
+    padding-top: 0.6rem;
+    text-align: right;
   }
 
   .now {
