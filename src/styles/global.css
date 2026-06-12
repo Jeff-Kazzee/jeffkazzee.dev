@@ -1,0 +1,364 @@
+/* ============================================================
+   jeffkazzee.dev — brutalist design system
+   Hand-rolled. No framework. The snap IS the aesthetic.
+   ============================================================ */
+
+:root {
+  /* color */
+  --bg: #0a0a0a;
+  --surface: #111111;
+  --ink: #f0f0ec;
+  --ink-dim: #9a9a92;
+  --accent: #00e065;
+  --accent-2: #ffd000;
+  --border: var(--ink);
+
+  /* structure */
+  --border-w: 3px;
+  --shadow-x: 6px;
+  --shadow-hard: var(--shadow-x) var(--shadow-x) 0 0 var(--accent);
+  --shadow-hard-lg: 10px 10px 0 0 var(--accent);
+  --space: 0.5rem; /* 8px scale */
+  --measure: 68ch;
+  --site-max: 72rem;
+
+  /* type */
+  --font-mono: ui-monospace, "Cascadia Code", "Cascadia Mono", Consolas,
+    "JetBrains Mono", Menlo, monospace;
+
+  /* motion */
+  --ease-snap: cubic-bezier(0.2, 0, 0, 1);
+  --t-fast: 120ms;
+  --t-base: 200ms;
+}
+
+/* ---------- base ---------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  border-radius: 0 !important;
+  margin: 0;
+}
+
+html {
+  background: var(--bg);
+  color-scheme: dark;
+  scrollbar-color: var(--accent) var(--surface);
+}
+
+body {
+  font-family: var(--font-mono);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: var(--ink);
+  background: var(--bg);
+  border-top: 4px solid var(--accent);
+  min-height: 100vh;
+}
+
+::selection {
+  background: var(--accent);
+  color: #000;
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent-2);
+  outline-offset: 2px;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  text-transform: uppercase;
+}
+
+h2 {
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  text-transform: uppercase;
+}
+
+p {
+  max-width: var(--measure);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+code {
+  background: var(--surface);
+  border: 1px solid var(--ink-dim);
+  padding: 0.1em 0.35em;
+  font-size: 0.92em;
+}
+
+pre {
+  border: var(--border-w) solid var(--border);
+  padding: calc(var(--space) * 2);
+  overflow-x: auto;
+  margin-block: calc(var(--space) * 3);
+}
+
+pre code {
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+hr {
+  border: none;
+  border-top: var(--border-w) solid var(--border);
+  margin-block: calc(var(--space) * 4);
+}
+
+/* ---------- links: instant inversion, no transition ---------- */
+
+a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--accent);
+}
+
+a:hover {
+  background: var(--accent);
+  color: #000;
+  text-decoration: none;
+}
+
+/* ---------- layout helpers ---------- */
+
+.wrap {
+  max-width: var(--site-max);
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 4vw, 2.5rem);
+}
+
+.flow > * + * {
+  margin-block-start: calc(var(--space) * 2);
+}
+
+/* ---------- blinking block cursor ---------- */
+
+.cursor::after {
+  content: "█";
+  color: var(--accent);
+  animation: blink 1.06s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ---------- typewriter (hero) ---------- */
+
+.typewriter {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: fit-content;
+  animation: typing 1.4s steps(24, end) both;
+}
+
+@keyframes typing {
+  from {
+    max-width: 0;
+  }
+  to {
+    max-width: 100%;
+  }
+}
+
+/* staggered entrance for hero lines: set --i per element */
+.rise {
+  animation: rise 0.45s var(--ease-snap) both;
+  animation-delay: calc(1.5s + var(--i, 0) * 150ms);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- glitch (hero name + section headings only) ---------- */
+
+.glitch {
+  position: relative;
+}
+
+.glitch:hover::before,
+.glitch:hover::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.glitch:hover::before {
+  color: var(--accent);
+  animation: glitch-a 0.4s steps(3) both;
+}
+
+.glitch:hover::after {
+  color: var(--accent-2);
+  animation: glitch-b 0.4s steps(3) both;
+}
+
+@keyframes glitch-a {
+  0% {
+    clip-path: inset(20% 0 60% 0);
+    transform: translate(-4px, -2px);
+  }
+  50% {
+    clip-path: inset(60% 0 10% 0);
+    transform: translate(3px, 1px);
+  }
+  100% {
+    clip-path: inset(0 0 100% 0);
+    transform: none;
+  }
+}
+
+@keyframes glitch-b {
+  0% {
+    clip-path: inset(55% 0 25% 0);
+    transform: translate(4px, 2px);
+  }
+  50% {
+    clip-path: inset(10% 0 75% 0);
+    transform: translate(-3px, -1px);
+  }
+  100% {
+    clip-path: inset(100% 0 0 0);
+    transform: none;
+  }
+}
+
+/* ---------- hard-shadow hover physics (cards, buttons) ---------- */
+
+.lift {
+  border: var(--border-w) solid var(--border);
+  background: var(--surface);
+  transition: transform var(--t-fast) var(--ease-snap),
+    box-shadow var(--t-fast) var(--ease-snap);
+}
+
+.lift:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: var(--shadow-hard-lg);
+}
+
+.lift:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 0 var(--accent);
+}
+
+/* ---------- scroll reveal (used with src/scripts/reveal.ts) ---------- */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.reveal.in {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.4s var(--ease-snap), transform 0.4s var(--ease-snap);
+  transition-delay: calc(var(--i, 0) * 60ms);
+}
+
+/* ---------- marquee ---------- */
+
+.marquee {
+  display: flex;
+  overflow: hidden;
+  border-block: var(--border-w) solid var(--border);
+  user-select: none;
+}
+
+.marquee__track {
+  display: flex;
+  flex-shrink: 0;
+  gap: 3rem;
+  padding: calc(var(--space) * 1.5) 1.5rem;
+  white-space: nowrap;
+  animation: marquee 28s linear infinite;
+}
+
+.marquee:hover .marquee__track {
+  animation-play-state: paused;
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+/* ---------- status pulse ---------- */
+
+.pulse {
+  color: var(--accent);
+  animation: blink 1.4s steps(1) infinite;
+}
+
+/* ---------- reduced motion: everything stops ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .typewriter {
+    max-width: 100%;
+    animation: none;
+  }
+
+  .rise,
+  .reveal {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+
+  .cursor::after,
+  .pulse {
+    animation: none;
+    opacity: 1;
+  }
+
+  .marquee {
+    display: none;
+  }
+
+  .glitch:hover::before,
+  .glitch:hover::after {
+    content: none;
+  }
+}

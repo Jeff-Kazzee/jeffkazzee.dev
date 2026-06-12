@@ -1,0 +1,72 @@
+---
+const path = Astro.url.pathname;
+const items = [
+  { href: '/', label: '~/' },
+  { href: '/projects/', label: 'projects' },
+  { href: '/blog/', label: 'blog' },
+];
+const isActive = (href: string) =>
+  href === '/' ? path === '/' : path.startsWith(href);
+---
+
+<header>
+  <div class="wrap bar">
+    <a class="mark" href="/">jeff@kazzee<span class="dim">:</span><span class="tilde">~</span><span class="dim">$</span></a>
+    <nav aria-label="Main">
+      {items.map((item) => (
+        <a href={item.href} class:list={['nav-link', { active: isActive(item.href) }]} aria-current={isActive(item.href) ? 'page' : undefined}>
+          {item.label}
+        </a>
+      ))}
+    </nav>
+  </div>
+</header>
+
+<style>
+  header {
+    border-bottom: var(--border-w) solid var(--border);
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: calc(var(--space) * 2);
+    flex-wrap: wrap;
+  }
+
+  .mark {
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .dim {
+    color: var(--ink-dim);
+  }
+
+  .tilde {
+    color: var(--accent);
+  }
+
+  nav {
+    display: flex;
+    gap: 0.25rem;
+  }
+
+  .nav-link {
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    padding: 0.35rem 0.7rem;
+  }
+
+  .nav-link:hover::before {
+    content: "▸ ";
+  }
+
+  .nav-link.active {
+    border: 2px solid var(--accent);
+  }
+</style>

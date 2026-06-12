@@ -1,0 +1,138 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import StackBadges from '../../components/StackBadges.astro';
+import LinkButton from '../../components/LinkButton.astro';
+import ScreenshotGallery from '../../components/ScreenshotGallery.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+const d = project.data;
+const pulsing = d.status === 'alpha' || d.status === 'wip';
+---
+
+<BaseLayout title={`${d.title} — jeffkazzee.dev`} description={d.description}>
+  <article class="wrap">
+    <header>
+      <p class="crumb"><a href="/projects/">← cd ../</a></p>
+      <h1 class="glitch" data-text={d.title}>{d.title}</h1>
+      <p class="status">
+        <span class:list={[{ pulse: pulsing }]} aria-hidden="true">●</span>
+        {d.status}{d.builtOn === 'zo' && ' · built on zo computer'} · <FormattedDate date={d.date} />
+      </p>
+    </header>
+
+    <table class="spec">
+      <tbody>
+        {d.stack.length > 0 && (
+          <tr>
+            <th scope="row">stack</th>
+            <td><StackBadges items={d.stack} /></td>
+          </tr>
+        )}
+        {d.tags.length > 0 && (
+          <tr>
+            <th scope="row">tags</th>
+            <td>{d.tags.join(' · ')}</td>
+          </tr>
+        )}
+        {d.builtOn === 'zo' && (
+          <tr>
+            <th scope="row">platform</th>
+            <td>zo computer (self-owned cloud)</td>
+          </tr>
+        )}
+      </tbody>
+    </table>
+
+    <nav class="actions" aria-label="Project links">
+      {d.releaseUrl && <LinkButton href={d.releaseUrl} variant="primary">download for windows</LinkButton>}
+      {d.liveUrl && <LinkButton href={d.liveUrl} variant={d.releaseUrl ? 'default' : 'primary'}>live</LinkButton>}
+      {d.repoUrl && <LinkButton href={d.repoUrl}>source</LinkButton>}
+    </nav>
+
+    <ScreenshotGallery screenshots={d.screenshots} />
+
+    <div class="prose">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  article {
+    padding-block: calc(var(--space) * 5);
+    display: grid;
+    gap: calc(var(--space) * 4);
+  }
+
+  header {
+    display: grid;
+    gap: calc(var(--space) * 2);
+  }
+
+  .crumb a {
+    text-decoration: none;
+    color: var(--ink-dim);
+  }
+
+  .status {
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    color: var(--ink-dim);
+  }
+
+  .status span {
+    color: var(--accent);
+  }
+
+  .spec {
+    border: var(--border-w) solid var(--border);
+    border-collapse: collapse;
+    max-width: 100%;
+  }
+
+  .spec th,
+  .spec td {
+    border: 1px solid var(--ink-dim);
+    padding: calc(var(--space) * 1.5);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .spec th {
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: var(--ink-dim);
+    width: 8rem;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--space) * 2);
+  }
+
+  .prose :global(h2),
+  .prose :global(h3) {
+    margin-block: calc(var(--space) * 4) calc(var(--space) * 2);
+  }
+
+  .prose :global(p),
+  .prose :global(ul),
+  .prose :global(ol) {
+    margin-block-end: calc(var(--space) * 2);
+    max-width: var(--measure);
+  }
+</style>

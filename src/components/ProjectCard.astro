@@ -1,0 +1,83 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import StackBadges from './StackBadges.astro';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  /** Stagger index for scroll reveal. */
+  index?: number;
+}
+
+const { project, index = 0 } = Astro.props;
+const { title, description, stack, status, builtOn } = project.data;
+const pulsing = status === 'alpha' || status === 'wip';
+---
+
+<article class="card lift reveal" style={`--i: ${index}`}>
+  <header>
+    <h3><a href={`/projects/${project.id}/`}>{title}</a></h3>
+    <p class="status" data-status={status}>
+      <span class:list={[{ pulse: pulsing }]} aria-hidden="true">●</span> {status}{builtOn === 'zo' && ' · built on zo'}
+    </p>
+  </header>
+  <p class="desc">{description}</p>
+  <StackBadges items={stack} />
+</article>
+
+<style>
+  .card {
+    padding: calc(var(--space) * 3);
+    display: grid;
+    gap: calc(var(--space) * 2);
+    align-content: start;
+    height: 100%;
+  }
+
+  header {
+    display: grid;
+    gap: calc(var(--space) * 1);
+  }
+
+  h3 {
+    font-size: 1.25rem;
+    text-transform: uppercase;
+  }
+
+  h3 a {
+    text-decoration: none;
+  }
+
+  h3 a::after {
+    /* whole-card click target */
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
+  .card {
+    position: relative;
+  }
+
+  .status {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-dim);
+  }
+
+  .status[data-status='shipped'] span,
+  .status[data-status='alpha'] span {
+    color: var(--accent);
+  }
+
+  .status[data-status='demo'] span,
+  .status[data-status='prototype'] span,
+  .status[data-status='wip'] span {
+    color: var(--accent-2);
+  }
+
+  .desc {
+    color: var(--ink-dim);
+    font-size: 0.95rem;
+  }
+</style>

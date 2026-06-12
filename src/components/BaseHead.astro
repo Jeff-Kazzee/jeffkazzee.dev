@@ -1,0 +1,41 @@
+---
+import { ClientRouter } from 'astro:transitions';
+
+interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+  ogType?: string;
+  /** Override for mirrored content (e.g. Substack originals). */
+  canonicalUrl?: string;
+}
+
+const { title, description, ogImage = '/og-default.png', ogType = 'website', canonicalUrl } = Astro.props;
+const canonical = canonicalUrl ?? new URL(Astro.url.pathname, Astro.site).href;
+const ogImageAbs = new URL(ogImage, Astro.site).href;
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="generator" content={Astro.generator} />
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<meta name="theme-color" content="#0a0a0a" />
+
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:type" content={ogType} />
+<meta property="og:url" content={new URL(Astro.url.pathname, Astro.site).href} />
+<meta property="og:image" content={ogImageAbs} />
+<meta property="og:site_name" content="jeffkazzee.dev" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImageAbs} />
+
+<link rel="alternate" type="application/rss+xml" title="jeffkazzee.dev" href={new URL('rss.xml', Astro.site).href} />
+<link rel="sitemap" href="/sitemap-index.xml" />
+
+<ClientRouter />

@@ -1,0 +1,159 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Prompt from '../components/Prompt.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import PostCard from '../components/PostCard.astro';
+import Marquee from '../components/Marquee.astro';
+
+const projects = await getCollection('projects');
+const byOrder = (a: typeof projects[number], b: typeof projects[number]) =>
+  a.data.order - b.data.order;
+
+const featured = projects.filter((p) => p.data.featured && !p.data.builtOn).sort(byOrder);
+const zoShelf = projects.filter((p) => p.data.builtOn === 'zo').sort(byOrder);
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+
+const links = [
+  { href: 'https://github.com/Jeff-Kazzee', label: 'github' },
+  { href: 'https://x.com/jeffkazzee', label: 'x' },
+  { href: 'https://jeffkazzee.substack.com', label: 'substack' },
+  { href: 'mailto:jeffkazzee@gmail.com', label: 'email' },
+  { href: '/rss.xml', label: 'rss' },
+];
+
+const marqueeItems = [
+  'SHIPPED: OBSCURA — LOCAL-FIRST AI MEDIA STUDIO FOR WINDOWS',
+  '1,162 RECIPES: ZO COOKBOOK',
+  'LAUNCHLING: 500 STARTUP IDEAS. NOT SLOP.',
+  'BUILDING FOR WINDOWS USERS',
+  'AI FOR THINKING, NOT JUST GRINDING',
+];
+
+const jsonLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Jeff Kazzee',
+  url: 'https://jeffkazzee.dev',
+  sameAs: [
+    'https://github.com/Jeff-Kazzee',
+    'https://x.com/jeffkazzee',
+    'https://jeffkazzee.substack.com',
+    'https://jeffkazzee.zo.space',
+  ],
+});
+---
+
+<BaseLayout
+  title="Jeff Kazzee — builds tools, games, and weird useful things with AI"
+  description="Self-taught builder. Desktop apps for Windows users, web experiments, and things built on a Zo computer — all AI-assisted, all shipped."
+>
+  <script type="application/ld+json" set:html={jsonLd} is:inline />
+
+  <section class="wrap hero">
+    <p class="typewriter">jeff@kazzee:~$ whoami<span class="cursor"></span></p>
+    <h1 class="glitch" data-text="JEFF KAZZEE">Jeff Kazzee</h1>
+    <p class="rise" style="--i: 0">
+      Self-taught builder. I make tools, games, and weird useful things with AI —
+      and I'm shipping for <strong>Windows users</strong>.
+    </p>
+    <p class="rise dim" style="--i: 1">
+      Not to grind harder. To think better, build stranger, and hand the boring
+      stuff to a machine.
+    </p>
+    <nav class="rise links" style="--i: 2" aria-label="Profiles">
+      {links.map((l) => (
+        <a href={l.href} rel={l.href.startsWith('http') ? 'me noopener' : undefined}>[{l.label}]</a>
+      ))}
+    </nav>
+  </section>
+
+  <Marquee items={marqueeItems} />
+
+  <section class="wrap">
+    <Prompt command="./featured --windows" />
+    <div class="grid">
+      {featured.map((p, i) => (
+        <ProjectCard project={p} index={i} />
+      ))}
+    </div>
+  </section>
+
+  <section class="wrap">
+    <Prompt command="ls /zo-computer" />
+    <p class="shelf-note">
+      Things built and hosted on my <a href="https://jeffkazzee.zo.space" rel="noopener">Zo computer</a> —
+      a personal cloud server I actually own.
+    </p>
+    <div class="grid grid-3">
+      {zoShelf.map((p, i) => (
+        <ProjectCard project={p} index={i} />
+      ))}
+    </div>
+  </section>
+
+  <section class="wrap">
+    <Prompt command="tail -n 3 ./writing" />
+    <div class="posts">
+      {posts.map((post, i) => (
+        <PostCard post={post} index={i} />
+      ))}
+    </div>
+    <p class="more"><a href="/blog/">all posts →</a></p>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-block: clamp(3rem, 10vh, 6rem) clamp(2rem, 6vh, 4rem);
+    display: grid;
+    gap: calc(var(--space) * 2);
+  }
+
+  .typewriter {
+    color: var(--accent);
+    font-size: 0.95rem;
+  }
+
+  .dim {
+    color: var(--ink-dim);
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding-top: calc(var(--space) * 1);
+  }
+
+  .links a {
+    text-decoration: none;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+    gap: calc(var(--space) * 3);
+  }
+
+  .grid-3 {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  }
+
+  .shelf-note {
+    color: var(--ink-dim);
+    margin-bottom: calc(var(--space) * 3);
+  }
+
+  .posts {
+    display: grid;
+    gap: calc(var(--space) * 4);
+  }
+
+  .more {
+    padding-top: calc(var(--space) * 3);
+  }
+</style>

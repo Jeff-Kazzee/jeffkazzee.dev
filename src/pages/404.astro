@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="404 — jeffkazzee.dev" description="No such file or directory.">
+  <section class="wrap">
+    <p class="term">
+      jeff@kazzee:~$ cd {'{requested_path}'}<br />
+      <span class="err">bash: cd: no such file or directory</span><br />
+      jeff@kazzee:~$ <span class="cursor"></span>
+    </p>
+    <h1>404</h1>
+    <p><a href="/">[ return home ]</a></p>
+  </section>
+</BaseLayout>
+
+<style>
+  section {
+    padding-block: clamp(4rem, 15vh, 8rem);
+    display: grid;
+    gap: calc(var(--space) * 3);
+  }
+
+  .term {
+    color: var(--ink-dim);
+  }
+
+  .err {
+    color: var(--accent-2);
+  }
+
+  h1 {
+    font-size: clamp(4rem, 18vw, 9rem);
+    color: var(--accent);
+  }
+
+  a {
+    text-decoration: none;
+    font-weight: 700;
+  }
+</style>

@@ -1,0 +1,56 @@
+---
+const links = [
+  { href: 'https://github.com/Jeff-Kazzee', label: 'github' },
+  { href: 'https://x.com/jeffkazzee', label: 'x' },
+  { href: 'https://jeffkazzee.substack.com', label: 'substack' },
+  { href: 'https://jeffkazzee.zo.space', label: 'zo.space' },
+  { href: 'mailto:jeffkazzee@gmail.com', label: 'email' },
+  { href: '/rss.xml', label: 'rss' },
+];
+---
+
+<footer>
+  <div class="wrap inner">
+    <p class="line">BUILT ON MY OWN TERMS. STILL LEARNING. STILL HERE.</p>
+    <nav aria-label="Footer">
+      {links.map((l) => (
+        <a href={l.href} rel={l.href.startsWith('http') ? 'me noopener' : undefined}>[{l.label}]</a>
+      ))}
+    </nav>
+    <p class="colophon">built with astro + AI agents · hand-rolled css · no trackers</p>
+  </div>
+</footer>
+
+<style>
+  footer {
+    border-top: var(--border-w) solid var(--border);
+    margin-top: calc(var(--space) * 10);
+  }
+
+  .inner {
+    padding-block: calc(var(--space) * 4);
+    display: grid;
+    gap: calc(var(--space) * 2);
+  }
+
+  .line {
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    color: var(--ink-dim);
+  }
+
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  nav a {
+    text-decoration: none;
+  }
+
+  .colophon {
+    font-size: 0.8rem;
+    color: var(--ink-dim);
+  }
+</style>

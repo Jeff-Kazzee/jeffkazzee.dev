@@ -1,0 +1,46 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  screenshots: CollectionEntry<'projects'>['data']['screenshots'];
+}
+
+const { screenshots } = Astro.props;
+---
+
+{screenshots.length > 0 && (
+  <div class="gallery">
+    {screenshots.map((shot) => (
+      <figure>
+        <Image src={shot.src} alt={shot.alt} widths={[640, 1280]} sizes="(max-width: 768px) 100vw, 640px" />
+        <figcaption>{shot.alt}</figcaption>
+      </figure>
+    ))}
+  </div>
+)}
+
+<style>
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+    gap: calc(var(--space) * 3);
+    margin-block: calc(var(--space) * 4);
+  }
+
+  figure {
+    margin: 0;
+  }
+
+  figure :global(img) {
+    border: var(--border-w) solid var(--border);
+    width: 100%;
+    height: auto;
+  }
+
+  figcaption {
+    font-size: 0.8rem;
+    color: var(--ink-dim);
+    padding-top: 0.4rem;
+  }
+</style>

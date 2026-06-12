@@ -1,0 +1,109 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const d = post.data;
+---
+
+<BaseLayout
+  title={`${d.title} — jeffkazzee.dev`}
+  description={d.description}
+  ogType="article"
+  canonicalUrl={d.canonicalUrl}
+>
+  <article class="wrap">
+    <header>
+      <p class="crumb"><a href="/blog/">← cd ../</a></p>
+      <h1>{d.title}</h1>
+      <p class="meta">
+        <FormattedDate date={d.pubDate} />
+        {d.updatedDate && (
+          <>
+            {' · updated '}
+            <FormattedDate date={d.updatedDate} />
+          </>
+        )}
+      </p>
+      {d.canonicalUrl && (
+        <p class="origin">
+          originally published on <a href={d.canonicalUrl} rel="noopener">substack</a>
+        </p>
+      )}
+    </header>
+
+    <div class="prose">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  article {
+    padding-block: calc(var(--space) * 5);
+    display: grid;
+    gap: calc(var(--space) * 4);
+    max-width: calc(var(--measure) + 6rem);
+  }
+
+  header {
+    display: grid;
+    gap: calc(var(--space) * 1.5);
+  }
+
+  .crumb a {
+    text-decoration: none;
+    color: var(--ink-dim);
+  }
+
+  h1 {
+    font-size: clamp(1.6rem, 5vw, 2.5rem);
+    text-transform: none;
+  }
+
+  .meta {
+    color: var(--ink-dim);
+  }
+
+  .origin {
+    border: 2px solid var(--ink-dim);
+    padding: calc(var(--space) * 1) calc(var(--space) * 1.5);
+    font-size: 0.85rem;
+    color: var(--ink-dim);
+    width: fit-content;
+  }
+
+  .prose :global(h2),
+  .prose :global(h3) {
+    margin-block: calc(var(--space) * 4) calc(var(--space) * 2);
+  }
+
+  .prose :global(p),
+  .prose :global(ul),
+  .prose :global(ol) {
+    margin-block-end: calc(var(--space) * 2);
+    max-width: var(--measure);
+  }
+
+  .prose :global(img) {
+    border: var(--border-w) solid var(--border);
+    margin-block: calc(var(--space) * 3);
+  }
+
+  .prose :global(blockquote) {
+    border-left: var(--border-w) solid var(--accent);
+    padding-left: calc(var(--space) * 2);
+    color: var(--ink-dim);
+    margin-block: calc(var(--space) * 3);
+  }
+</style>
