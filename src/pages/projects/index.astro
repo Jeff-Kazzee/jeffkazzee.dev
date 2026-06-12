@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Prompt from '../../components/Prompt.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
 
 const projects = (await getCollection('projects')).sort((a, b) => {
@@ -16,11 +16,11 @@ const projects = (await getCollection('projects')).sort((a, b) => {
   description="Tools, games, and weird useful things: desktop apps for Windows, web experiments, agent tooling, and things built on a Zo computer."
 >
   <section class="wrap">
-    <Prompt command="ls -la ./projects" level="h1" />
-    <p class="note">
-      {projects.length} entries. Desktop apps, games, agent tooling, and things
-      built on my Zo computer. Demos are marked as demos — honesty is a feature.
-    </p>
+    <SectionHeading
+      title="Projects"
+      level="h1"
+      note={`${projects.length} entries. Demos are marked as demos; honesty is a feature.`}
+    />
     <div class="grid">
       {projects.map((p, i) => (
         <ProjectCard project={p} index={i % 6} />
@@ -30,14 +30,9 @@ const projects = (await getCollection('projects')).sort((a, b) => {
 </BaseLayout>
 
 <style>
-  .note {
-    color: var(--ink-dim);
-    margin-bottom: calc(var(--space) * 4);
-  }
-
   .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
-    gap: calc(var(--space) * 3);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+    gap: calc(var(--space) * 4);
   }
 </style>

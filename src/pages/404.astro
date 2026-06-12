@@ -2,40 +2,33 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="404 — jeffkazzee.dev" description="No such file or directory.">
+<BaseLayout title="404 — jeffkazzee.dev" description="This page doesn't exist.">
   <section class="wrap">
-    <p class="term">
-      jeff@kazzee:~$ cd {'{requested_path}'}<br />
-      <span class="err">bash: cd: no such file or directory</span><br />
-      jeff@kazzee:~$ <span class="cursor"></span>
-    </p>
     <h1>404</h1>
-    <p><a href="/">[ return home ]</a></p>
+    <p class="wink">No such file or directory. The machine and I both checked.</p>
+    <p><a class="btn" href="/">Return home</a></p>
   </section>
 </BaseLayout>
 
 <style>
   section {
-    padding-block: clamp(4rem, 15vh, 8rem);
+    padding-block: clamp(5rem, 18vh, 10rem);
     display: grid;
     gap: calc(var(--space) * 3);
-  }
-
-  .term {
-    color: var(--ink-dim);
-  }
-
-  .err {
-    color: var(--accent-2);
+    justify-items: start;
   }
 
   h1 {
-    font-size: clamp(4rem, 18vw, 9rem);
-    color: var(--accent);
+    font-size: clamp(4.5rem, 16vw, 9rem);
+    font-weight: 500;
+    color: var(--pine);
+    line-height: 1;
   }
 
-  a {
-    text-decoration: none;
-    font-weight: 700;
+  .wink {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--ink-soft);
   }
 </style>

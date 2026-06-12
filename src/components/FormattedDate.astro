@@ -5,14 +5,12 @@ interface Props {
 
 const { date } = Astro.props;
 const iso = date.toISOString().slice(0, 10);
+const human = date.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  timeZone: 'UTC',
+});
 ---
 
-<time datetime={iso}>{iso}</time>
-
-<style>
-  time {
-    color: var(--ink-dim);
-    font-size: 0.85rem;
-    letter-spacing: 0.05em;
-  }
-</style>
+<time datetime={iso}>{human}</time>

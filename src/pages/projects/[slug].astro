@@ -17,47 +17,39 @@ export async function getStaticPaths() {
 const { project } = Astro.props;
 const { Content } = await render(project);
 const d = project.data;
-const pulsing = d.status === 'alpha' || d.status === 'wip';
+const wip = d.status !== 'shipped';
 ---
 
 <BaseLayout title={`${d.title} — jeffkazzee.dev`} description={d.description}>
   <article class="wrap">
     <header>
-      <p class="crumb"><a href="/projects/">← cd ../</a></p>
-      <h1 class="glitch" data-text={d.title}>{d.title}</h1>
+      <p class="crumb"><a href="/projects/">← All projects</a></p>
+      <h1>{d.title}</h1>
       <p class="status">
-        <span class:list={[{ pulse: pulsing }]} aria-hidden="true">●</span>
-        {d.status}{d.builtOn === 'zo' && ' · built on zo computer'} · <FormattedDate date={d.date} />
+        <span class="dot" data-tone={wip ? 'wip' : undefined} aria-hidden="true"></span>
+        {d.status}{d.builtOn === 'zo' && ' · built on a Zo computer'} · <FormattedDate date={d.date} />
       </p>
     </header>
 
-    <table class="spec">
-      <tbody>
-        {d.stack.length > 0 && (
-          <tr>
-            <th scope="row">stack</th>
-            <td><StackBadges items={d.stack} /></td>
-          </tr>
-        )}
-        {d.tags.length > 0 && (
-          <tr>
-            <th scope="row">tags</th>
-            <td>{d.tags.join(' · ')}</td>
-          </tr>
-        )}
-        {d.builtOn === 'zo' && (
-          <tr>
-            <th scope="row">platform</th>
-            <td>zo computer (self-owned cloud)</td>
-          </tr>
-        )}
-      </tbody>
-    </table>
+    <div class="meta">
+      {d.stack.length > 0 && (
+        <div class="meta-row">
+          <h2 class="meta-label">Stack</h2>
+          <StackBadges items={d.stack} />
+        </div>
+      )}
+      {d.tags.length > 0 && (
+        <div class="meta-row">
+          <h2 class="meta-label">Tags</h2>
+          <p>{d.tags.join(' · ')}</p>
+        </div>
+      )}
+    </div>
 
     <nav class="actions" aria-label="Project links">
-      {d.releaseUrl && <LinkButton href={d.releaseUrl} variant="primary">download for windows</LinkButton>}
-      {d.liveUrl && <LinkButton href={d.liveUrl} variant={d.releaseUrl ? 'default' : 'primary'}>live</LinkButton>}
-      {d.repoUrl && <LinkButton href={d.repoUrl}>source</LinkButton>}
+      {d.releaseUrl && <LinkButton href={d.releaseUrl} variant="primary">Download for Windows</LinkButton>}
+      {d.liveUrl && <LinkButton href={d.liveUrl} variant={d.releaseUrl ? 'default' : 'primary'}>Visit live site</LinkButton>}
+      {d.repoUrl && <LinkButton href={d.repoUrl}>Source</LinkButton>}
     </nav>
 
     <ScreenshotGallery screenshots={d.screenshots} />
@@ -70,7 +62,7 @@ const pulsing = d.status === 'alpha' || d.status === 'wip';
 
 <style>
   article {
-    padding-block: calc(var(--space) * 5);
+    padding-block: clamp(2.5rem, 7vh, 4rem) calc(var(--space) * 5);
     display: grid;
     gap: calc(var(--space) * 4);
   }
@@ -81,58 +73,76 @@ const pulsing = d.status === 'alpha' || d.status === 'wip';
   }
 
   .crumb a {
+    font-size: 0.9rem;
+    color: var(--ink-faint);
     text-decoration: none;
-    color: var(--ink-dim);
+  }
+
+  .crumb a:hover {
+    color: var(--pine);
   }
 
   .status {
-    text-transform: uppercase;
     font-size: 0.8rem;
-    letter-spacing: 0.1em;
-    color: var(--ink-dim);
-  }
-
-  .status span {
-    color: var(--accent);
-  }
-
-  .spec {
-    border: var(--border-w) solid var(--border);
-    border-collapse: collapse;
-    max-width: 100%;
-  }
-
-  .spec th,
-  .spec td {
-    border: 1px solid var(--ink-dim);
-    padding: calc(var(--space) * 1.5);
-    text-align: left;
-    vertical-align: top;
-  }
-
-  .spec th {
+    font-weight: 600;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
-    color: var(--ink-dim);
-    width: 8rem;
+    color: var(--ink-faint);
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+  }
+
+  .meta {
+    display: grid;
+    gap: calc(var(--space) * 2);
+    border-block: 1px solid var(--line);
+    padding-block: calc(var(--space) * 3);
+  }
+
+  .meta-row {
+    display: grid;
+    grid-template-columns: 6rem 1fr;
+    gap: 1rem;
+    align-items: baseline;
+  }
+
+  .meta-label {
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .meta-row p {
+    font-size: 0.95rem;
+    color: var(--ink-soft);
   }
 
   .actions {
     display: flex;
     flex-wrap: wrap;
-    gap: calc(var(--space) * 2);
+    gap: calc(var(--space) * 1.5);
+  }
+
+  .prose {
+    font-family: var(--font-serif);
+    font-size: 1.125rem;
+    line-height: 1.8;
   }
 
   .prose :global(h2),
   .prose :global(h3) {
-    margin-block: calc(var(--space) * 4) calc(var(--space) * 2);
+    margin-block: calc(var(--space) * 5) calc(var(--space) * 2);
   }
 
   .prose :global(p),
   .prose :global(ul),
   .prose :global(ol) {
-    margin-block-end: calc(var(--space) * 2);
+    margin-block-end: calc(var(--space) * 2.5);
     max-width: var(--measure);
   }
 </style>

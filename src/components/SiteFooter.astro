@@ -1,56 +1,64 @@
 ---
 const links = [
-  { href: 'https://github.com/Jeff-Kazzee', label: 'github' },
-  { href: 'https://x.com/jeffkazzee', label: 'x' },
-  { href: 'https://jeffkazzee.substack.com', label: 'substack' },
+  { href: 'https://github.com/Jeff-Kazzee', label: 'GitHub' },
+  { href: 'https://x.com/jeffkazzee', label: 'X' },
+  { href: 'https://jeffkazzee.substack.com', label: 'Substack' },
   { href: 'https://jeffkazzee.zo.space', label: 'zo.space' },
-  { href: 'mailto:jeffkazzee@gmail.com', label: 'email' },
-  { href: '/rss.xml', label: 'rss' },
+  { href: 'mailto:jeffkazzee@gmail.com', label: 'Email' },
+  { href: '/rss.xml', label: 'RSS' },
 ];
 ---
 
 <footer>
   <div class="wrap inner">
-    <p class="line">BUILT ON MY OWN TERMS. STILL LEARNING. STILL HERE.</p>
+    <p class="line">Built on my own terms. Still learning, still here.</p>
     <nav aria-label="Footer">
       {links.map((l) => (
-        <a href={l.href} rel={l.href.startsWith('http') ? 'me noopener' : undefined}>[{l.label}]</a>
+        <a href={l.href} rel={l.href.startsWith('http') ? 'me noopener' : undefined}>{l.label}</a>
       ))}
     </nav>
-    <p class="colophon">built with astro + AI agents · hand-rolled css · no trackers</p>
+    <p class="colophon">Built with Astro and AI agents. Hand-rolled CSS, no trackers.</p>
   </div>
 </footer>
 
 <style>
   footer {
-    border-top: var(--border-w) solid var(--border);
-    margin-top: calc(var(--space) * 10);
+    border-top: 1px solid var(--line);
+    margin-top: clamp(4rem, 12vh, 7rem);
+    background: var(--paper-deep);
   }
 
   .inner {
-    padding-block: calc(var(--space) * 4);
+    padding-block: calc(var(--space) * 6);
     display: grid;
-    gap: calc(var(--space) * 2);
+    gap: calc(var(--space) * 2.5);
   }
 
   .line {
-    font-size: 0.8rem;
-    letter-spacing: 0.1em;
-    color: var(--ink-dim);
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--ink-soft);
   }
 
   nav {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: 0.5rem 1.5rem;
   }
 
   nav a {
+    font-size: 0.9rem;
+    color: var(--ink-soft);
     text-decoration: none;
   }
 
+  nav a:hover {
+    color: var(--pine);
+  }
+
   .colophon {
-    font-size: 0.8rem;
-    color: var(--ink-dim);
+    font-size: 0.82rem;
+    color: var(--ink-faint);
   }
 </style>

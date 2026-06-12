@@ -24,7 +24,7 @@ const d = post.data;
 >
   <article class="wrap">
     <header>
-      <p class="crumb"><a href="/blog/">← cd ../</a></p>
+      <p class="crumb"><a href="/blog/">← All writing</a></p>
       <h1>{d.title}</h1>
       <p class="meta">
         <FormattedDate date={d.pubDate} />
@@ -34,12 +34,13 @@ const d = post.data;
             <FormattedDate date={d.updatedDate} />
           </>
         )}
+        {d.canonicalUrl && (
+          <>
+            {' · originally on '}
+            <a href={d.canonicalUrl} rel="noopener">Substack</a>
+          </>
+        )}
       </p>
-      {d.canonicalUrl && (
-        <p class="origin">
-          originally published on <a href={d.canonicalUrl} rel="noopener">substack</a>
-        </p>
-      )}
     </header>
 
     <div class="prose">
@@ -50,60 +51,61 @@ const d = post.data;
 
 <style>
   article {
-    padding-block: calc(var(--space) * 5);
+    padding-block: clamp(2.5rem, 7vh, 4rem) calc(var(--space) * 5);
     display: grid;
-    gap: calc(var(--space) * 4);
-    max-width: calc(var(--measure) + 6rem);
+    gap: calc(var(--space) * 5);
+    max-width: calc(var(--measure) + 8rem);
   }
 
   header {
     display: grid;
-    gap: calc(var(--space) * 1.5);
+    gap: calc(var(--space) * 2);
   }
 
   .crumb a {
+    font-size: 0.9rem;
+    color: var(--ink-faint);
     text-decoration: none;
-    color: var(--ink-dim);
+  }
+
+  .crumb a:hover {
+    color: var(--pine);
   }
 
   h1 {
-    font-size: clamp(1.6rem, 5vw, 2.5rem);
-    text-transform: none;
+    font-size: clamp(1.9rem, 4.5vw, 2.8rem);
   }
 
   .meta {
-    color: var(--ink-dim);
+    font-size: 0.9rem;
+    color: var(--ink-faint);
   }
 
-  .origin {
-    border: 2px solid var(--ink-dim);
-    padding: calc(var(--space) * 1) calc(var(--space) * 1.5);
-    font-size: 0.85rem;
-    color: var(--ink-dim);
-    width: fit-content;
+  .prose {
+    font-family: var(--font-serif);
+    font-size: 1.125rem;
+    line-height: 1.8;
   }
 
   .prose :global(h2),
   .prose :global(h3) {
-    margin-block: calc(var(--space) * 4) calc(var(--space) * 2);
+    margin-block: calc(var(--space) * 5) calc(var(--space) * 2);
   }
 
   .prose :global(p),
   .prose :global(ul),
   .prose :global(ol) {
-    margin-block-end: calc(var(--space) * 2);
+    margin-block-end: calc(var(--space) * 2.5);
     max-width: var(--measure);
   }
 
   .prose :global(img) {
-    border: var(--border-w) solid var(--border);
-    margin-block: calc(var(--space) * 3);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    margin-block: calc(var(--space) * 4);
   }
 
-  .prose :global(blockquote) {
-    border-left: var(--border-w) solid var(--accent);
-    padding-left: calc(var(--space) * 2);
-    color: var(--ink-dim);
-    margin-block: calc(var(--space) * 3);
+  .prose :global(a) {
+    text-decoration-thickness: 1px;
   }
 </style>

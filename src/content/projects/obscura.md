@@ -5,6 +5,13 @@ tags: [desktop, windows, ai]
 stack: [Electron, React 19, TypeScript, Vite, SQLite, OpenRouter]
 repoUrl: https://github.com/Jeff-Kazzee/obscura
 releaseUrl: https://github.com/Jeff-Kazzee/obscura/releases/latest
+screenshots:
+  - src: ./_images/obscura-studio.png
+    alt: The Studio — compose a prompt, pick a model, and see the cost before you generate
+  - src: ./_images/obscura-models.png
+    alt: Live OpenRouter model catalog with per-image pricing
+  - src: ./_images/obscura-gallery.png
+    alt: The local gallery — every asset on your own disk, searchable
 date: 2026-05-15
 featured: true
 status: alpha

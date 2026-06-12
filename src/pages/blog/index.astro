@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Prompt from '../../components/Prompt.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
 import PostCard from '../../components/PostCard.astro';
 
 const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
@@ -14,10 +14,9 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
   description="Essays and field notes on AI-assisted building — what worked, what didn't, the path actually taken. Originals on Substack, mirrored here."
 >
   <section class="wrap">
-    <Prompt command="cat ./writing/*" level="h1" />
+    <SectionHeading title="Writing" level="h1" note="Essays and field notes on AI-assisted building." />
     <p class="note">
-      Essays and field notes. Originals live on
-      <a href="https://jeffkazzee.substack.com" rel="noopener">Substack</a> —
+      Originals live on <a href="https://jeffkazzee.substack.com" rel="noopener">Substack</a>,
       mirrored here so the archive lives on a URL I control.
     </p>
     <div class="posts">
@@ -30,12 +29,12 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
 
 <style>
   .note {
-    color: var(--ink-dim);
-    margin-bottom: calc(var(--space) * 4);
+    color: var(--ink-soft);
+    font-size: 0.97rem;
+    margin-bottom: calc(var(--space) * 5);
   }
 
   .posts {
-    display: grid;
-    gap: calc(var(--space) * 4);
+    border-bottom: 1px solid var(--line);
   }
 </style>

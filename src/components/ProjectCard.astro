@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import StackBadges from './StackBadges.astro';
 
@@ -6,78 +7,178 @@ interface Props {
   project: CollectionEntry<'projects'>;
   /** Stagger index for scroll reveal. */
   index?: number;
+  /** 'row' = spacious list entry (featured work); 'card' = raised tile, image-led when a screenshot exists. */
+  variant?: 'row' | 'card';
 }
 
-const { project, index = 0 } = Astro.props;
-const { title, description, stack, status, builtOn } = project.data;
-const pulsing = status === 'alpha' || status === 'wip';
+const { project, index = 0, variant = 'card' } = Astro.props;
+const { title, description, stack, status, builtOn, screenshots } = project.data;
+const wip = status !== 'shipped';
+const thumb = screenshots[0];
 ---
 
-<article class="card lift reveal" style={`--i: ${index}`}>
-  <header>
-    <h3><a href={`/projects/${project.id}/`}>{title}</a></h3>
-    <p class="status" data-status={status}>
-      <span class:list={[{ pulse: pulsing }]} aria-hidden="true">●</span> {status}{builtOn === 'zo' && ' · built on zo'}
-    </p>
-  </header>
-  <p class="desc">{description}</p>
-  <StackBadges items={stack} />
-</article>
+{variant === 'row' ? (
+  <article class="row reveal" style={`--i: ${index}`}>
+    <div class="row-text">
+      <header>
+        <h3><a href={`/projects/${project.id}/`}>{title}</a></h3>
+        <p class="status">
+          <span class="dot" data-tone={wip ? 'wip' : undefined} aria-hidden="true"></span>
+          {status}
+        </p>
+      </header>
+      <p class="desc">{description}</p>
+      <StackBadges items={stack} />
+    </div>
+    {thumb && (
+      <Image
+        class="row-thumb"
+        src={thumb.src}
+        alt={thumb.alt}
+        widths={[640, 1280]}
+        sizes="(max-width: 820px) 100vw, 540px"
+      />
+    )}
+  </article>
+) : (
+  <article class="card surface reveal" style={`--i: ${index}`}>
+    {thumb && (
+      <Image
+        class="thumb"
+        src={thumb.src}
+        alt=""
+        widths={[480, 960]}
+        sizes="(max-width: 768px) 100vw, 420px"
+      />
+    )}
+    <div class="body">
+      <header>
+        <h3><a href={`/projects/${project.id}/`}>{title}</a></h3>
+        <p class="status">
+          <span class="dot" data-tone={wip ? 'wip' : undefined} aria-hidden="true"></span>
+          {status}{builtOn === 'zo' && ' · on Zo'}
+        </p>
+      </header>
+      <p class="desc">{description}</p>
+    </div>
+  </article>
+)}
 
 <style>
-  .card {
-    padding: calc(var(--space) * 3);
-    display: grid;
-    gap: calc(var(--space) * 2);
-    align-content: start;
-    height: 100%;
-  }
-
-  header {
-    display: grid;
-    gap: calc(var(--space) * 1);
-  }
-
+  /* ----- shared ----- */
   h3 {
-    font-size: 1.25rem;
-    text-transform: uppercase;
+    font-size: 1.3rem;
   }
 
   h3 a {
+    color: var(--ink);
     text-decoration: none;
+  }
+
+  article {
+    position: relative;
   }
 
   h3 a::after {
     /* whole-card click target */
-    content: "";
+    content: '';
     position: absolute;
     inset: 0;
   }
 
-  .card {
-    position: relative;
-  }
-
   .status {
-    font-size: 0.75rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--ink-dim);
-  }
-
-  .status[data-status='shipped'] span,
-  .status[data-status='alpha'] span {
-    color: var(--accent);
-  }
-
-  .status[data-status='demo'] span,
-  .status[data-status='prototype'] span,
-  .status[data-status='wip'] span {
-    color: var(--accent-2);
+    color: var(--ink-faint);
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
   }
 
   .desc {
-    color: var(--ink-dim);
-    font-size: 0.95rem;
+    color: var(--ink-soft);
+    font-size: 0.97rem;
+  }
+
+  /* ----- row variant ----- */
+  .row {
+    padding-block: calc(var(--space) * 5);
+    border-top: 1px solid var(--line);
+    display: grid;
+    gap: calc(var(--space) * 4);
+    align-items: center;
+  }
+
+  @media (min-width: 821px) {
+    .row {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    }
+  }
+
+  .row-text {
+    display: grid;
+    gap: calc(var(--space) * 1.5);
+    align-content: start;
+  }
+
+  .row header {
+    display: flex;
+    align-items: baseline;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .row h3 {
+    font-size: 1.55rem;
+  }
+
+  .row h3 a:hover {
+    color: var(--pine);
+  }
+
+  .row .desc {
+    font-size: 1.02rem;
+    max-width: 58ch;
+  }
+
+  .row :global(.row-thumb) {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-rest);
+  }
+
+  /* ----- card variant ----- */
+  .card {
+    overflow: hidden;
+    display: grid;
+    align-content: start;
+    height: 100%;
+  }
+
+  .thumb {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    object-position: top;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .body {
+    padding: calc(var(--space) * 3);
+    display: grid;
+    gap: calc(var(--space) * 1.5);
+  }
+
+  .card header {
+    display: grid;
+    gap: calc(var(--space) * 0.75);
+  }
+
+  .card h3 {
+    font-size: 1.2rem;
   }
 </style>

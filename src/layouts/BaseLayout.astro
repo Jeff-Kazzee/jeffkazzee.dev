@@ -16,6 +16,7 @@ interface Props {
 <!doctype html>
 <html lang="en">
   <head>
+    <script is:inline>document.documentElement.classList.add('js');</script>
     <BaseHead {...Astro.props} />
   </head>
   <body>
@@ -34,9 +35,10 @@ interface Props {
     position: absolute;
     left: -999px;
     top: 0;
-    background: var(--accent);
-    color: #000;
+    background: var(--pine);
+    color: var(--paper);
     padding: 0.5rem 1rem;
+    border-radius: 0 0 var(--radius) 0;
     z-index: 10;
   }
 

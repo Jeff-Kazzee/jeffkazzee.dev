@@ -11,29 +11,42 @@ const { post, index = 0 } = Astro.props;
 ---
 
 <article class="post reveal" style={`--i: ${index}`}>
-  <FormattedDate date={post.data.pubDate} />
+  <p class="date"><FormattedDate date={post.data.pubDate} /></p>
   <h3><a href={`/blog/${post.id}/`}>{post.data.title}</a></h3>
-  <p>{post.data.description}</p>
+  <p class="desc">{post.data.description}</p>
 </article>
 
 <style>
   .post {
-    border-left: var(--border-w) solid var(--border);
-    padding-left: calc(var(--space) * 3);
     display: grid;
-    gap: calc(var(--space) * 1);
+    gap: calc(var(--space) * 0.75);
+    padding-block: calc(var(--space) * 3.5);
+    border-top: 1px solid var(--line);
   }
 
-  .post:hover {
-    border-left-color: var(--accent);
+  .date {
+    font-size: 0.82rem;
+    letter-spacing: 0.04em;
+    color: var(--ink-faint);
   }
 
   h3 {
-    font-size: 1.15rem;
+    font-size: 1.35rem;
+    font-weight: 540;
   }
 
-  p {
-    color: var(--ink-dim);
-    font-size: 0.95rem;
+  h3 a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  h3 a:hover {
+    color: var(--pine);
+  }
+
+  .desc {
+    color: var(--ink-soft);
+    font-size: 0.97rem;
+    max-width: 58ch;
   }
 </style>

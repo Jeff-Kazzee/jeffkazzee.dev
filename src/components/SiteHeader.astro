@@ -1,17 +1,15 @@
 ---
 const path = Astro.url.pathname;
 const items = [
-  { href: '/', label: '~/' },
-  { href: '/projects/', label: 'projects' },
-  { href: '/blog/', label: 'blog' },
+  { href: '/projects/', label: 'Projects' },
+  { href: '/blog/', label: 'Writing' },
 ];
-const isActive = (href: string) =>
-  href === '/' ? path === '/' : path.startsWith(href);
+const isActive = (href: string) => path.startsWith(href);
 ---
 
 <header>
   <div class="wrap bar">
-    <a class="mark" href="/">jeff@kazzee<span class="dim">:</span><span class="tilde">~</span><span class="dim">$</span></a>
+    <a class="mark" href="/">Jeff Kazzee</a>
     <nav aria-label="Main">
       {items.map((item) => (
         <a href={item.href} class:list={['nav-link', { active: isActive(item.href) }]} aria-current={isActive(item.href) ? 'page' : undefined}>
@@ -24,49 +22,53 @@ const isActive = (href: string) =>
 
 <style>
   header {
-    border-bottom: var(--border-w) solid var(--border);
+    border-bottom: 1px solid var(--line);
+    background: var(--paper);
   }
 
   .bar {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     justify-content: space-between;
     gap: 1rem;
-    padding-block: calc(var(--space) * 2);
+    padding-block: calc(var(--space) * 2.5);
     flex-wrap: wrap;
   }
 
   .mark {
-    font-weight: 700;
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 1.15rem;
+    letter-spacing: -0.01em;
+    color: var(--ink);
     text-decoration: none;
   }
 
-  .dim {
-    color: var(--ink-dim);
-  }
-
-  .tilde {
-    color: var(--accent);
+  .mark:hover {
+    color: var(--pine);
   }
 
   nav {
     display: flex;
-    gap: 0.25rem;
+    gap: clamp(1rem, 3vw, 2rem);
   }
 
   .nav-link {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--ink-soft);
     text-decoration: none;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-    letter-spacing: 0.06em;
-    padding: 0.35rem 0.7rem;
+    padding-block: 0.2rem;
   }
 
-  .nav-link:hover::before {
-    content: "▸ ";
+  .nav-link:hover {
+    color: var(--pine);
   }
 
   .nav-link.active {
-    border: 2px solid var(--accent);
+    color: var(--pine);
+    text-decoration: underline;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 6px;
   }
 </style>
