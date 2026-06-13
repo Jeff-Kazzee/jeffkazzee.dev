@@ -45,8 +45,17 @@ const jsonLd = JSON.stringify({
 >
   <script type="application/ld+json" set:html={jsonLd} is:inline />
 
-  <section class="wrap hero">
-    <div class="hero-text">
+  <section class="hero">
+    <Image
+      class="hero-bg"
+      src={earthrise}
+      alt="A crescent Earth rising over the gray surface of the Moon"
+      widths={[820, 1400, 2000]}
+      sizes="100vw"
+      loading="eager"
+    />
+    <div class="hero-scrim" aria-hidden="true"></div>
+    <div class="wrap hero-inner">
       <p class="now rise" style="--i: 0">
         <span class="dot live" aria-hidden="true"></span>
         Currently building <a href="/projects/obscura/">Obscura</a>, a local-first AI media studio for Windows
@@ -62,16 +71,6 @@ const jsonLd = JSON.stringify({
         ))}
       </nav>
     </div>
-    <figure class="hero-art rise" style="--i: 2">
-      <Image
-        src={earthrise}
-        alt="A crescent Earth rising over the gray surface of the Moon"
-        widths={[640, 1100]}
-        sizes="(max-width: 899px) 100vw, 480px"
-        loading="eager"
-      />
-      <figcaption>Earthrise. The view worth building for.</figcaption>
-    </figure>
   </section>
 
   <section class="wrap">
@@ -111,42 +110,41 @@ const jsonLd = JSON.stringify({
 
 <style>
   .hero {
-    padding-block: clamp(3.5rem, 10vh, 6rem) clamp(2rem, 6vh, 4rem);
-    display: grid;
-    gap: clamp(2.5rem, 5vw, 4.5rem);
-    align-items: center;
+    position: relative;
+    overflow: hidden;
+    min-height: clamp(36rem, 92vh, 54rem);
+    display: flex;
+    align-items: flex-end;
   }
 
-  @media (min-width: 900px) {
-    .hero {
-      grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
-    }
+  .hero :global(.hero-bg) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 70%;
   }
 
-  .hero-text {
+  .hero-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      var(--bg) 0%,
+      oklch(0% 0 0 / 0) 16%,
+      oklch(0% 0 0 / 0) 52%,
+      oklch(8% 0.01 255 / 0.55) 78%,
+      oklch(8% 0.01 255 / 0.88) 100%
+    );
+  }
+
+  .hero-inner {
+    position: relative;
+    width: 100%;
     display: grid;
     gap: calc(var(--space) * 3);
-  }
-
-  .hero-art {
-    margin: 0;
-  }
-
-  .hero-art :global(img) {
-    width: 100%;
-    height: auto;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-soft);
-  }
-
-  .hero-art figcaption {
-    font-family: var(--font-serif);
-    font-style: italic;
-    font-size: 0.88rem;
-    color: var(--ink-faint);
-    padding-top: 0.6rem;
-    text-align: right;
+    padding-block: clamp(6rem, 16vh, 9rem) clamp(3rem, 9vh, 5rem);
   }
 
   .now {
@@ -159,13 +157,16 @@ const jsonLd = JSON.stringify({
   }
 
   h1 {
-    max-width: 16ch;
+    font-size: clamp(2.8rem, 6.5vw, 4.75rem);
+    max-width: 15ch;
+    color: var(--ink);
+    text-shadow: 0 1px 24px oklch(5% 0.01 255 / 0.6);
   }
 
   .lede {
     font-size: 1.2rem;
-    line-height: 1.65;
-    color: var(--ink-soft);
+    line-height: 1.7;
+    color: oklch(84% 0.01 95);
     max-width: 46ch;
   }
 

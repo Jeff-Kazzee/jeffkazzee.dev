@@ -23,7 +23,7 @@ const isActive = (href: string) => path.startsWith(href);
 <style>
   header {
     border-bottom: 1px solid var(--line);
-    background: var(--paper);
+    background: var(--bg);
   }
 
   .bar {
@@ -45,7 +45,7 @@ const isActive = (href: string) => path.startsWith(href);
   }
 
   .mark:hover {
-    color: var(--pine);
+    color: var(--accent);
   }
 
   nav {
@@ -62,11 +62,11 @@ const isActive = (href: string) => path.startsWith(href);
   }
 
   .nav-link:hover {
-    color: var(--pine);
+    color: var(--accent);
   }
 
   .nav-link.active {
-    color: var(--pine);
+    color: var(--accent);
     text-decoration: underline;
     text-decoration-thickness: 1.5px;
     text-underline-offset: 6px;

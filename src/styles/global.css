@@ -1,22 +1,22 @@
 /* ============================================================
-   jeffkazzee.dev — warm gallery design system
-   Hand-rolled. No framework. Warm paper, ink, one pine accent.
+   jeffkazzee.dev — night gallery design system
+   Hand-rolled. No framework. Night sky, moonlight ink, one jade accent.
    ============================================================ */
 
 :root {
   /* color */
-  --paper: oklch(96.5% 0.012 92);
-  --paper-deep: oklch(93.5% 0.016 90);
-  --card: oklch(98.4% 0.007 95);
-  --ink: oklch(26% 0.018 70);
-  --ink-soft: oklch(42% 0.022 75);
-  --ink-faint: oklch(55% 0.02 80);
-  --line: oklch(86% 0.018 88);
-  --pine: oklch(43% 0.085 158);
-  --pine-deep: oklch(35% 0.075 160);
-  --moss: oklch(64% 0.16 150);
-  --moss-tint: oklch(93% 0.035 152);
-  --amber: oklch(58% 0.115 75);
+  --bg: oklch(15% 0.012 255);
+  --bg-raised: oklch(18% 0.014 255);
+  --surface: oklch(19.5% 0.015 257);
+  --ink: oklch(93% 0.008 95);
+  --ink-soft: oklch(76% 0.012 95);
+  --ink-faint: oklch(62% 0.014 95);
+  --line: oklch(30% 0.015 255);
+  --accent: oklch(78% 0.11 155);
+  --accent-bright: oklch(86% 0.1 152);
+  --accent-vivid: oklch(72% 0.17 150);
+  --accent-tint: oklch(30% 0.05 155);
+  --amber: oklch(76% 0.12 80);
 
   /* type */
   --font-serif: "Literata", Georgia, "Times New Roman", serif;
@@ -28,9 +28,9 @@
   --measure: 66ch;
   --site-max: 70rem;
   --radius: 10px;
-  --shadow-soft: 0 1px 2px oklch(26% 0.02 70 / 0.05),
-    0 8px 24px oklch(26% 0.02 70 / 0.07);
-  --shadow-rest: 0 1px 2px oklch(26% 0.02 70 / 0.04);
+  --shadow-soft: 0 1px 2px oklch(5% 0.01 255 / 0.5),
+    0 12px 32px oklch(5% 0.01 255 / 0.45);
+  --shadow-rest: 0 1px 2px oklch(5% 0.01 255 / 0.35);
 
   /* motion */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
@@ -48,26 +48,27 @@
 }
 
 html {
-  background: var(--paper);
-  color-scheme: light;
+  background: var(--bg);
+  color-scheme: dark;
 }
 
 body {
   font-family: var(--font-sans);
   font-size: 1.0625rem;
-  line-height: 1.7;
+  /* light type on dark reads lighter; extra leading compensates */
+  line-height: 1.75;
   color: var(--ink);
-  background: var(--paper);
+  background: var(--bg);
   min-height: 100vh;
 }
 
 ::selection {
-  background: var(--moss-tint);
-  color: var(--pine-deep);
+  background: var(--accent-tint);
+  color: var(--accent-bright);
 }
 
 :focus-visible {
-  outline: 2px solid var(--pine);
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
   border-radius: 2px;
 }
@@ -108,14 +109,14 @@ img {
 
 code {
   font-family: var(--font-mono);
-  background: var(--paper-deep);
+  background: var(--bg-raised);
   border-radius: 4px;
   padding: 0.1em 0.35em;
   font-size: 0.88em;
 }
 
 pre {
-  background: var(--paper-deep);
+  background: var(--bg-raised);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: calc(var(--space) * 2.5);
@@ -149,18 +150,18 @@ blockquote {
 /* ---------- links ---------- */
 
 a {
-  color: var(--pine);
+  color: var(--accent);
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
-  text-decoration-color: oklch(43% 0.085 158 / 0.4);
+  text-decoration-color: oklch(78% 0.11 155 / 0.4);
   transition: color var(--t-fast) var(--ease-out),
     text-decoration-color var(--t-fast) var(--ease-out);
 }
 
 a:hover {
-  color: var(--pine-deep);
-  text-decoration-color: var(--pine-deep);
+  color: var(--accent-bright);
+  text-decoration-color: var(--accent-bright);
 }
 
 /* ---------- layout helpers ---------- */
@@ -188,7 +189,7 @@ a:hover {
   border-radius: 999px;
   border: 1px solid var(--line);
   color: var(--ink);
-  background: var(--card);
+  background: var(--surface);
   transition: border-color var(--t-fast) var(--ease-out),
     color var(--t-fast) var(--ease-out),
     background-color var(--t-fast) var(--ease-out),
@@ -196,27 +197,27 @@ a:hover {
 }
 
 .btn:hover {
-  border-color: var(--pine);
-  color: var(--pine-deep);
+  border-color: var(--accent);
+  color: var(--accent-bright);
   box-shadow: var(--shadow-rest);
 }
 
 .btn.primary {
-  background: var(--pine);
-  border-color: var(--pine);
-  color: var(--paper);
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg);
 }
 
 .btn.primary:hover {
-  background: var(--pine-deep);
-  border-color: var(--pine-deep);
-  color: var(--paper);
+  background: var(--accent-bright);
+  border-color: var(--accent-bright);
+  color: var(--bg);
 }
 
 /* ---------- card surface ---------- */
 
 .surface {
-  background: var(--card);
+  background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   box-shadow: var(--shadow-rest);
@@ -226,7 +227,7 @@ a:hover {
 }
 
 .surface:hover {
-  border-color: oklch(43% 0.085 158 / 0.45);
+  border-color: oklch(78% 0.11 155 / 0.45);
   box-shadow: var(--shadow-soft);
   transform: translateY(-2px);
 }
@@ -238,7 +239,7 @@ a:hover {
   width: 0.5em;
   height: 0.5em;
   border-radius: 50%;
-  background: var(--pine);
+  background: var(--accent);
   vertical-align: 0.05em;
 }
 
@@ -247,17 +248,17 @@ a:hover {
 }
 
 .dot.live {
-  background: var(--moss);
+  background: var(--accent-vivid);
   animation: breathe 2.6s var(--ease-out) infinite;
 }
 
 @keyframes breathe {
   0%,
   100% {
-    box-shadow: 0 0 0 0 oklch(64% 0.16 150 / 0.45);
+    box-shadow: 0 0 0 0 oklch(72% 0.17 150 / 0.5);
   }
   55% {
-    box-shadow: 0 0 0 6px oklch(64% 0.16 150 / 0);
+    box-shadow: 0 0 0 6px oklch(72% 0.17 150 / 0);
   }
 }
 

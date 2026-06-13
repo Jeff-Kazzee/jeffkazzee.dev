@@ -14,7 +14,7 @@ Personal portfolio and blog at jeffkazzee.dev. It exists to prove, with shipped 
 
 ## Brand Personality
 
-Warm, exacting, handmade. The site should feel like a small, well-lit gallery of working objects: calm confidence, generous space, craft in the details. The voice stays plainspoken and a little playful; the visuals carry credibility. A few winks of builder personality survive (a live status dot, one unexpected detail per page), but no costume.
+Awe-inspiring, exacting, handmade. The site should feel like a night observatory gallery of working objects: a full-bleed Earthrise hero sets the scale, dark rooms let the shipped work glow, craft shows in the details. The voice stays plainspoken and a little playful; the visuals carry credibility. A few winks of builder personality survive (a live status dot, one unexpected detail per page), but no costume.
 
 ## Anti-references
 
@@ -26,11 +26,11 @@ Warm, exacting, handmade. The site should feel like a small, well-lit gallery of
 ## Design Principles
 
 1. **The work is the exhibit.** Project screenshots and writing get the best light; chrome stays quiet around them.
-2. **Warmth is credibility.** Paper-warm surfaces and humane type read as a person who cares, which is the hiring pitch.
+2. **Awe with warmth.** Night-sky surfaces set the scale; humane serif type and warm moonlight text keep it a person, not a product launch.
 3. **One wink per room.** Each page may keep one small touch of play; never more, never zero.
 4. **Mature the green, don't kill it.** The old neon green survives as a single deep, confident accent, the thread of identity continuity.
 5. **Fast and still.** Static-first Astro; motion is rare, soft, and earns its place.
 
 ## Accessibility & Inclusion
 
-WCAG 2.1 AA. Preserve the existing good bones: skip link, visible focus states, full `prefers-reduced-motion` support, semantic landmarks. Body text contrast ≥ 7:1 on the paper background; accent used on text only where it passes 4.5:1.
+WCAG 2.1 AA. Preserve the existing good bones: skip link, visible focus states, full `prefers-reduced-motion` support, semantic landmarks. Body text contrast ≥ 7:1 on the night background; accent used on text only where it passes 4.5:1; hero text protected by a scrim, never set over busy image regions.
