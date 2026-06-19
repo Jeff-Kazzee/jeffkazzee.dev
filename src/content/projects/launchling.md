@@ -8,10 +8,9 @@ screenshots:
   - src: ./_images/launchling.png
     alt: Launchling landing page — a deck of startup ideas, not slop
 date: 2026-05-30
-featured: true
 builtOn: zo
 status: shipped
-order: 3
+order: 9
 ---
 
 Launchling is a quarterly deck of five hundred considered startup opportunities. Swipe through the cards, match the ones that hit, and the full PRP opens immediately — executive summary, wedge, moat, why now, build shape, pricing.

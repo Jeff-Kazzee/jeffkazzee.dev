@@ -9,7 +9,7 @@ screenshots:
     alt: Dumpling Cafe demo site
 date: 2026-02-01
 status: demo
-order: 15
+order: 14
 ---
 
 A small cafe website demo. One of the quick builds — made fast, shipped to a URL, lessons folded into the next thing.

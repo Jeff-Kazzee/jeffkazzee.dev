@@ -8,9 +8,8 @@ screenshots:
   - src: ./_images/puckwork.png
     alt: PUCKWORK gameplay — the simulated air cushion rendered on canvas
 date: 2026-04-20
-featured: true
 status: demo
-order: 2
+order: 8
 ---
 
 Air hockey, except the air is real — simulated, anyway. PUCKWORK models the air cushion itself, so the puck rides a field of pressure instead of faking it with friction constants.

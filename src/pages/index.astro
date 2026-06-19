@@ -40,8 +40,8 @@ const jsonLd = JSON.stringify({
 ---
 
 <BaseLayout
-  title="Jeff Kazzee — builds tools, games, and weird useful things with AI"
-  description="Self-taught builder. Desktop apps for Windows users, web experiments, and things built on a Zo computer — all AI-assisted, all shipped."
+  title="Jeff Kazzee — local-first AI tools, agent workspaces, and open data"
+  description="Self-taught builder shipping local-first AI desktop apps, agent-workspace tooling, open data, and practical web experiments."
 >
   <script type="application/ld+json" set:html={jsonLd} is:inline />
 
@@ -58,12 +58,12 @@ const jsonLd = JSON.stringify({
     <div class="wrap hero-inner">
       <p class="now rise" style="--i: 0">
         <span class="dot live" aria-hidden="true"></span>
-        Currently building <a href="/projects/obscura/">Obscura</a>, a local-first AI media studio for Windows
+        Currently building <a href="/projects/obscura/">Obscura</a> and <a href="/projects/vivary/">Vivary</a>
       </p>
-      <h1 class="rise" style="--i: 1">I make tools, games, and weird useful things.</h1>
+      <h1 class="rise" style="--i: 1">I build local-first AI tools and useful public systems.</h1>
       <p class="lede rise" style="--i: 2">
-        Self-taught builder, shipping for <strong>Windows users</strong>. I use AI to
-        think better and build stranger, then hand the boring parts to a machine.
+        Self-taught builder focused on <strong>creative software</strong>, agent-workspace
+        infrastructure, and open utilities people can actually inspect.
       </p>
       <nav class="links rise" style="--i: 3" aria-label="Profiles">
         {links.map((l) => (
@@ -74,7 +74,7 @@ const jsonLd = JSON.stringify({
   </section>
 
   <section class="wrap">
-    <SectionHeading title="Selected work" note="Desktop apps and tools, built to be used." />
+    <SectionHeading title="Selected work" note="Local-first AI software, agent infrastructure, and open data." />
     <div class="rows">
       {featured.map((p, i) => (
         <ProjectCard project={p} index={i} variant="row" />

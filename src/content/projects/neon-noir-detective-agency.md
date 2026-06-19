@@ -10,7 +10,7 @@ screenshots:
     alt: Neon Noir Detective Agency — pure HTML and CSS noir atmosphere
 date: 2025-11-01
 status: demo
-order: 14
+order: 13
 ---
 
 A fictional detective agency rendered in pure HTML and CSS — neon-soaked noir atmosphere with zero JavaScript. A constraint exercise: how much mood can you build with stylesheets alone?

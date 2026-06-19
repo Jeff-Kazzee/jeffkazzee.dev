@@ -8,10 +8,9 @@ screenshots:
   - src: ./_images/zo-cookbook.png
     alt: Zo Cookbook home — 1,162 recipes browsable by category and search
 date: 2026-05-20
-featured: true
 builtOn: zo
 status: shipped
-order: 4
+order: 10
 ---
 
 A public cookbook for Zo Computer users: over a thousand recipes spanning apps & sites, space configurations, automations, and prompts — browsable by category, tab, search, or discover mode.
