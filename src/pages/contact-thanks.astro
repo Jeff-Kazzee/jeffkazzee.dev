@@ -1,0 +1,53 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import LinkButton from '../components/LinkButton.astro';
+---
+
+<BaseLayout
+  title="Inquiry sent - Jeff Kazzee"
+  description="Thanks for sending a project inquiry to Jeff Kazzee."
+>
+  <section class="wrap thanks">
+    <p class="now">Inquiry sent</p>
+    <h1>Thanks. I will read it.</h1>
+    <p class="lede">
+      Your note was sent to my email. Replies come from jeffkazzee@gmail.com.
+    </p>
+    <div class="cta">
+      <LinkButton href="/work-with-me/" variant="primary">Back to work with me</LinkButton>
+      <LinkButton href="mailto:jeffkazzee@gmail.com?subject=Project%20inquiry">Email directly</LinkButton>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .thanks {
+    min-height: 58vh;
+    display: grid;
+    align-content: center;
+    gap: calc(var(--space) * 3);
+    padding-block: clamp(5rem, 14vh, 9rem);
+  }
+
+  .now {
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+  }
+
+  h1 {
+    max-width: 12ch;
+  }
+
+  .lede {
+    font-size: 1.15rem;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    max-width: 42rem;
+  }
+
+  .cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+</style>
