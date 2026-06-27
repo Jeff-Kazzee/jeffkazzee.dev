@@ -97,6 +97,17 @@ const jsonLd = JSON.stringify({
     </p>
   </section>
 
+  <section class="wrap cta-band">
+    <div class="cta-inner">
+      <h2>Need a small project made real?</h2>
+      <p>
+        I'm open to scoped work: repo cleanup, documentation, small prototypes,
+        landing pages, workflow libraries, and Zo Computer resources.
+      </p>
+      <a href="/work-with-me/" class="btn primary">Work with me</a>
+    </div>
+  </section>
+
   <section class="wrap">
     <SectionHeading title="Writing" note="Essays and field notes on AI-assisted building." />
     <div class="posts">
@@ -214,5 +225,31 @@ const jsonLd = JSON.stringify({
 
   .more a {
     text-decoration: none;
+  }
+
+  .cta-band {
+    padding-block: clamp(3.5rem, 9vh, 5.5rem);
+  }
+
+  .cta-inner {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+    padding: clamp(2rem, 5vw, 3.5rem);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(var(--space) * 2.5);
+  }
+
+  .cta-inner h2 {
+    max-width: 18ch;
+  }
+
+  .cta-inner p {
+    max-width: 44ch;
+    color: var(--ink-soft);
   }
 </style>

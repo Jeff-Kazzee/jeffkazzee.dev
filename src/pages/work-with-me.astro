@@ -1,0 +1,323 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import LinkButton from '../components/LinkButton.astro';
+
+const services = [
+  {
+    title: 'Repo cleanup pass',
+    desc: 'README rewrite, repo description, install/use instructions, status note, screenshot recommendations, issue/roadmap cleanup.',
+    tag: 'Most common',
+  },
+  {
+    title: 'Small tool prototype',
+    desc: 'Scoped feature definition, simple implementation, README, basic verification, deploy notes or handoff.',
+  },
+  {
+    title: 'AI workflow / documentation kit',
+    desc: 'Workflow map, prompt and process docs, examples, checklists, failure modes, and a guide to using it without making a mess.',
+  },
+  {
+    title: 'Landing page for a useful tool',
+    desc: 'Headline and positioning, feature sections, proof block, screenshot/demo recommendations, contact or install CTA.',
+  },
+  {
+    title: 'Zo Computer workflow / resource',
+    desc: 'Workflow design, resource structure, instructions, and hosted/public page plan for people building on their own machine.',
+  },
+  {
+    title: 'QA and polish pass',
+    desc: 'Test a product surface, document bugs, clean up copy, tighten UX flows, and leave behind a prioritized fix list.',
+  },
+];
+
+const stack = [
+  'Python', 'TypeScript', 'Astro', 'React', 'Next.js',
+  'Electron', 'SQLite', 'Markdown / MDX', 'YAML',
+  'GitHub Actions', 'Cloudflare / Vercel', 'AI coding agents',
+];
+---
+
+<BaseLayout
+  title="Work with me - Jeff Kazzee"
+  description="Scoped AI/web projects: repo cleanup, documentation, small prototypes, workflow libraries, and Zo Computer resources."
+>
+  <section class="hero wrap">
+    <p class="now rise" style="--i: 0">
+      <span class="dot" data-tone="wip" aria-hidden="true"></span>
+      Available for scoped work
+    </p>
+    <h1 class="rise" style="--i: 1">Work with me</h1>
+    <p class="lede rise" style="--i: 2">
+      I help people turn messy ideas into small useful software, docs, workflows,
+      and public artifacts. Clear scope, concrete output, no agency overhead.
+    </p>
+    <div class="cta rise" style="--i: 3">
+      <LinkButton href="mailto:jeffkazzee@gmail.com?subject=Project%20inquiry" variant="primary">
+        Email me
+      </LinkButton>
+      <LinkButton href="#packages">See packages</LinkButton>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <SectionHeading
+      title="Who I help"
+      note="Solo builders, small teams, AI tool makers, open-source maintainers, and Zo Computer users."
+    />
+    <div class="flow">
+      <p>
+        I'm a good fit when you need someone to take a rough idea, make it
+        understandable, build a first version, clean up the public proof, or
+        document the system so other people can use it.
+      </p>
+      <p>
+        I am <strong>not</strong> a senior engineer for hire. I'm not an agency.
+        I'm not selling guru energy. I'm useful when the job benefits from a mix
+        of building, writing, cleanup, and practical systems thinking, and when
+        the goal is a finished artifact you can open, send, run, or publish.
+      </p>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <SectionHeading
+      title="What I can do"
+      note="Small AI-assisted web tools, docs-heavy prototypes, repo cleanup, workflow libraries, and technical writing."
+    />
+    <div class="grid">
+      {services.map((s, i) => (
+        <article class="surface card reveal" style={`--i: ${i}`}>
+          {s.tag && <span class="tag">{s.tag}</span>}
+          <h3>{s.title}</h3>
+          <p>{s.desc}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="wrap">
+    <SectionHeading
+      title="How I work"
+    />
+    <ol class="steps flow">
+      <li><strong>Define the artifact.</strong> We agree on the output.</li>
+      <li><strong>Inspect what exists.</strong> I look at the repo, notes, or current state before proposing changes.</li>
+      <li><strong>Write a small plan.</strong> Scope, approach, what I'll deliver, what I won't.</li>
+      <li><strong>Build or edit.</strong> Implementation, done with AI agents where useful and by hand where it matters.</li>
+      <li><strong>Verify.</strong> Tests, manual checks, link validation, or whatever the artifact needs.</li>
+      <li><strong>Document and hand off.</strong> README, next steps, known limitations. No mystery deliverables.</li>
+    </ol>
+    <p class="boundary">
+      I will tell you when a project is too large, too fuzzy, or better suited
+      for a senior engineer. I won't take on vague "build my startup" work, and I
+      won't pretend AI agents remove the need for judgment, testing, or taste.
+    </p>
+  </section>
+
+  <section class="wrap" id="packages">
+    <SectionHeading
+      title="Sample packages"
+      note="Starting points, not a menu. Every engagement gets scoped to fit."
+    />
+    <div class="grid">
+      <article class="surface card reveal">
+        <h3>1-day cleanup pass</h3>
+        <p class="price">Single session</p>
+        <p>README rewrite, repo description, install instructions, status note, screenshot recommendations, and a prioritized improvement list.</p>
+        <p class="fit">Best for: public repos that need to look credible fast.</p>
+      </article>
+      <article class="surface card reveal" style="--i: 1">
+        <h3>2-3 day prototype</h3>
+        <p class="price">Short sprint</p>
+        <p>Scoped feature, simple implementation, README, basic verification, and deploy or handoff notes.</p>
+        <p class="fit">Best for: testing whether an idea is worth building for real.</p>
+      </article>
+      <article class="surface card reveal" style="--i: 2">
+        <h3>1-week sprint</h3>
+        <p class="price">Focused build</p>
+        <p>Docs site, workflow library, landing page, or small web app with strong documentation and a proof block.</p>
+        <p class="fit">Best for: tools that exist but are hard to explain or use.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <SectionHeading
+      title="Stack"
+      note="Boring, inspectable systems. If a plain file or static site solves the problem, I won't sell you a platform."
+    />
+    <ul class="chips">
+      {stack.map((tech) => (
+        <li class="chip">{tech}</li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="wrap contact">
+    <SectionHeading title="Contact" />
+    <p>
+      Send me a note with what you're trying to make, what already exists, the
+      smallest useful version, your deadline, and any links I should inspect.
+    </p>
+    <p>If it looks like a fit, I'll suggest a small first scope, not a roadmap.</p>
+    <div class="cta">
+      <LinkButton href="mailto:jeffkazzee@gmail.com?subject=Project%20inquiry" variant="primary">
+        Email me
+      </LinkButton>
+      <LinkButton href="https://github.com/Jeff-Kazzee">See my work</LinkButton>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-block: clamp(3.5rem, 10vh, 6rem) clamp(2rem, 6vh, 4rem);
+    display: grid;
+    gap: calc(var(--space) * 3);
+  }
+
+  .now {
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+  }
+
+  .now .dot {
+    margin-right: 0.35em;
+  }
+
+  .lede {
+    font-size: 1.2rem;
+    line-height: 1.7;
+    color: oklch(84% 0.01 95);
+    max-width: 46ch;
+  }
+
+  .cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+    gap: calc(var(--space) * 3);
+  }
+
+  .card {
+    padding: calc(var(--space) * 4);
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--space) * 1.5);
+  }
+
+  .card h3 {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--ink);
+  }
+
+  .card p {
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    line-height: 1.65;
+  }
+
+  .tag {
+    align-self: flex-start;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-tint);
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+  }
+
+  .steps {
+    list-style: none;
+    padding: 0;
+    counter-reset: step;
+  }
+
+  .steps li {
+    counter-increment: step;
+    padding-inline-start: 2.5rem;
+    position: relative;
+    font-size: 1rem;
+    color: var(--ink-soft);
+    line-height: 1.7;
+  }
+
+  .steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0.1rem;
+    width: 1.6rem;
+    height: 1.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--accent);
+    background: var(--accent-tint);
+    border-radius: 50%;
+  }
+
+  .steps strong {
+    color: var(--ink);
+  }
+
+  .boundary {
+    margin-top: calc(var(--space) * 5);
+    padding: calc(var(--space) * 3) calc(var(--space) * 4);
+    border-inline-start: 3px solid var(--amber);
+    background: var(--bg-raised);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    font-size: 0.98rem;
+    color: var(--ink-soft);
+    line-height: 1.7;
+  }
+
+  .price {
+    font-size: 0.82rem !important;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--accent) !important;
+    text-transform: uppercase;
+  }
+
+  .fit {
+    font-size: 0.88rem !important;
+    color: var(--ink-faint) !important;
+    font-style: italic;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+  }
+
+  .chip {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0.3rem 0.8rem;
+  }
+
+  .contact {
+    padding-block-end: clamp(4rem, 10vh, 7rem);
+  }
+</style>
