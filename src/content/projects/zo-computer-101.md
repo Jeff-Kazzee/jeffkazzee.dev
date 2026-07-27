@@ -9,8 +9,9 @@ screenshots:
     alt: Zo Computer 101 field guide homepage
 date: 2026-06-19
 builtOn: zo
+portfolioGroup: zo
 status: shipped
-order: 8
+order: 2
 ---
 
 Zo Computer 101 is a free field guide for people learning their way around Zo Computer. It covers the practical first questions: memory, the browser, hosting, automations, personas, integrations, recipe packs, and how to judge AI output without pretending the tool is magic.

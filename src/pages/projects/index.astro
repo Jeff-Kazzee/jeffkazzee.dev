@@ -5,35 +5,64 @@ import SectionHeading from '../../components/SectionHeading.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
 
 const allProjects = await getCollection('projects');
-const hasScreenshots = (project: typeof allProjects[number]) => project.data.screenshots.length > 0;
-
-const projects = allProjects.sort((a, b) => {
-  if (hasScreenshots(a) !== hasScreenshots(b)) return hasScreenshots(a) ? -1 : 1;
-  if (a.data.featured !== b.data.featured) return a.data.featured ? -1 : 1;
-  if (a.data.order !== b.data.order) return a.data.order - b.data.order;
-  return b.data.date.valueOf() - a.data.date.valueOf();
-});
+const byOrder = (a: typeof allProjects[number], b: typeof allProjects[number]) =>
+  a.data.order - b.data.order;
+const studioProjects = allProjects
+  .filter((project) => project.data.portfolioGroup === 'studio')
+  .sort(byOrder);
+const zoProjects = allProjects
+  .filter((project) => project.data.portfolioGroup === 'zo')
+  .sort(byOrder);
+const projectCount = studioProjects.length + zoProjects.length;
 ---
 
 <BaseLayout
   title="Projects — jeffkazzee.dev"
-  description="A working portfolio of local-first AI tools, agent-workspace infrastructure, open data, web experiments, and things built on a Zo computer."
+  description="A working portfolio of agent workspaces, local-first AI memory, practical learning tools, and public Zo resources."
 >
   <section class="wrap">
     <SectionHeading
       title="Projects"
       level="h1"
-      note={`${projects.length} entries. Screenshot-backed work appears first; quieter tooling lives further down.`}
+      note={`${projectCount} projects with live demos, working software, and public source where available.`}
     />
-    <div class="grid">
-      {projects.map((p, i) => (
-        <ProjectCard project={p} index={i % 6} />
-      ))}
-    </div>
+    <section class="project-section" aria-labelledby="studio-projects">
+      <SectionHeading
+        title="Core products"
+        id="studio-projects"
+        note="Vivary and Bellamente lead the portfolio, followed by Journeyman."
+      />
+      <div class="rows">
+        {studioProjects.map((project, index) => (
+          <ProjectCard project={project} index={index} variant="row" />
+        ))}
+      </div>
+    </section>
+
+    <section class="project-section" aria-labelledby="zo-projects">
+      <SectionHeading
+        title="Built on Zo"
+        id="zo-projects"
+        note="Public resources and small tools built from real use."
+      />
+      <div class="grid">
+        {zoProjects.map((project, index) => (
+          <ProjectCard project={project} index={index} />
+        ))}
+      </div>
+    </section>
   </section>
 </BaseLayout>
 
 <style>
+  .project-section + .project-section {
+    margin-top: calc(var(--space) * 7);
+  }
+
+  .rows {
+    border-bottom: 1px solid var(--line);
+  }
+
   .grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));

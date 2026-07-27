@@ -9,8 +9,9 @@ screenshots:
     alt: Ukrainian Trainer — Kyiv Arcade dashboard with the 14-day field course
 date: 2026-05-10
 builtOn: zo
+portfolioGroup: zo
 status: shipped
-order: 11
+order: 4
 ---
 
 A language trainer that plays like an arcade game. The Kyiv Arcade runs you through a 14-day field course — Contact, Identity, Needs, Questions, Movement, all the way to the Day 14 Field Exam — built from 142 cards with spaced difficulty.

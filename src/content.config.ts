@@ -19,6 +19,7 @@ const projects = defineCollection({
       date: z.coerce.date(),
       featured: z.boolean().default(false),
       builtOn: z.enum(['zo']).optional(),
+      portfolioGroup: z.enum(['studio', 'zo']).optional(),
       status: z
         .enum(['shipped', 'alpha', 'prototype', 'demo', 'wip'])
         .default('wip'),

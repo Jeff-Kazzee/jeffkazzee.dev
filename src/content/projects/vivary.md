@@ -10,8 +10,9 @@ screenshots:
     alt: Vivary landing page showing the agent-workspace scaffold and typed graph concept
 date: 2026-06-15
 featured: true
+portfolioGroup: studio
 status: alpha
-order: 2
+order: 1
 ---
 
 Vivary is the installable workspace shell for serious agent work: run the scaffold, pick a preset, and get a small world with state, memory boundaries, gates, and a typed Markdown graph.

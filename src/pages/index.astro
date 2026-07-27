@@ -11,8 +11,8 @@ const projects = await getCollection('projects');
 const byOrder = (a: typeof projects[number], b: typeof projects[number]) =>
   a.data.order - b.data.order;
 
-const featured = projects.filter((p) => p.data.featured && !p.data.builtOn).sort(byOrder);
-const zoShelf = projects.filter((p) => p.data.builtOn === 'zo').sort(byOrder);
+const featured = projects.filter((p) => p.data.portfolioGroup === 'studio').sort(byOrder);
+const zoShelf = projects.filter((p) => p.data.portfolioGroup === 'zo').sort(byOrder);
 
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
@@ -40,8 +40,8 @@ const jsonLd = JSON.stringify({
 ---
 
 <BaseLayout
-  title="Jeff Kazzee — local-first AI tools, agent workspaces, and open data"
-  description="Self-taught builder shipping local-first AI desktop apps, agent-workspace tooling, open data, and practical web experiments."
+  title="Jeff Kazzee — practical AI systems, agent workspaces, and learning tools"
+  description="Self-taught AI-native product builder shipping agent workspaces, local-first memory, practical learning tools, and public resources."
 >
   <script type="application/ld+json" set:html={jsonLd} is:inline />
 
@@ -58,12 +58,12 @@ const jsonLd = JSON.stringify({
     <div class="wrap hero-inner">
       <p class="now rise" style="--i: 0">
         <span class="dot live" aria-hidden="true"></span>
-        Currently building <a href="/projects/obscura/">Obscura</a> and <a href="/projects/vivary/">Vivary</a>
+        Building <a href="/projects/vivary/">Vivary</a> and <a href="/projects/bellamente/">Bellamente</a>
       </p>
-      <h1 class="rise" style="--i: 1">I build local-first AI tools and useful public systems.</h1>
+      <h1 class="rise" style="--i: 1">I build practical AI systems people can inspect and use.</h1>
       <p class="lede rise" style="--i: 2">
-        Self-taught builder focused on <strong>creative software</strong>, agent-workspace
-        infrastructure, and open utilities people can actually inspect.
+        Self-taught builder focused on <strong>agent workspaces</strong>, local-first memory,
+        and learning tools grounded in real work.
       </p>
       <nav class="links rise" style="--i: 3" aria-label="Profiles">
         {links.map((l) => (
@@ -74,7 +74,7 @@ const jsonLd = JSON.stringify({
   </section>
 
   <section class="wrap">
-    <SectionHeading title="Selected work" note="Local-first AI software, agent infrastructure, and open data." />
+    <SectionHeading title="Selected work" note="The strongest products from The Little AI Company." />
     <div class="rows">
       {featured.map((p, i) => (
         <ProjectCard project={p} index={i} variant="row" />
@@ -85,7 +85,7 @@ const jsonLd = JSON.stringify({
   <section class="wrap">
     <SectionHeading
       title="On Zo Computer"
-      note="Built and hosted on a personal cloud server I actually own."
+      note="Public tools and learning resources built from daily use."
     />
     <div class="grid">
       {zoShelf.map((p, i) => (
@@ -93,7 +93,7 @@ const jsonLd = JSON.stringify({
       ))}
     </div>
     <p class="shelf-link">
-      The machine itself lives at <a href="https://jeffkazzee.zo.space" rel="noopener">jeffkazzee.zo.space</a>.
+      See the broader workspace at <a href="https://jeffkazzee.zo.space" rel="noopener">jeffkazzee.zo.space</a>.
     </p>
   </section>
 
