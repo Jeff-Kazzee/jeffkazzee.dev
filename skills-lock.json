@@ -1,0 +1,401 @@
+{
+  "version": 1,
+  "skills": {
+    "architect": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/architect/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "7460e5e26d804463a4f99dea2a3925af1270a525fa85426ca52d80f4bf7d760d"
+    },
+    "arena": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/arena/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "9f4a1c41c6ce216b909fcb588dbc894d2b3ec22908dddfd7386911829ee7696a"
+    },
+    "automate-me": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/automate-me/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "b8aaed36da5f2220f447b5072e339ef5e152a92e8c0b23731204ea8925a4d364"
+    },
+    "blast-radius": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/blast-radius/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "9d18f28ac3eef64d76644789a3a30c2ac45634f5456cca2dae84116c317af22a"
+    },
+    "bro": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/bro/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "7c91484b4f40f4415812c2e4de7d8ef9e2b4d8d844856ea15d100c6f45a2d961"
+    },
+    "create-verification-skill": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/create-verification-skill/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "33f8cf493e6837109e5c8c8844bf26ba51339c1c069f722ff8d8335bc4512bfb"
+    },
+    "figure-it-out": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/figure-it-out/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "c0f32195b4cec50589aca0b9f933d55632f1200cb1dcb307c876c0576e37f75f"
+    },
+    "how": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/how/SKILL.md",
+      "allowImplicitInvocation": true,
+      "computedHash": "2acab31ed6f8d8370c37f3fada6ab9a3c69fff52443c27cd29ee050ece31c3fe"
+    },
+    "interrogate": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/interrogate/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "524dc579d82e69e3ec0c7f72471cfee83d5403441aa96e2701df6cd5b885d8f7"
+    },
+    "maintain-verification-skill": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/maintain-verification-skill/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "f38bd7de2ea025c10588347b4fd161caf9d426d170e1f8111173d493663481ad"
+    },
+    "no-comments": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/no-comments/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "8385f242d1cf53761fd598645fafbbc8506ea4398589071d8adc1995df615c1c"
+    },
+    "poteto-mode": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/poteto-mode/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "b6629ac05bcb9859cb651e1b3a85c2be33db2407e797fe28d8fb00bb4e030ab4"
+    },
+    "principle-boundary-discipline": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/principle-boundary-discipline/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "a495703e153bb200f5b2f654459980516b0212973fbe478033b1c127535ff800"
+    },
+    "principle-build-the-lever": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/principle-build-the-lever/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "939d0dbb60d00d149bfacf88b3040b0a9cf60abbc001671522410eb74e542131"
+    },
+    "principle-encode-lessons-in-structure": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/principle-encode-lessons-in-structure/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "db9f8a97ef2d4b9664cb5386223c8664a1ab90d824de2e390a3c2b63705ee530"
+    },
+    "principle-exhaust-the-design-space": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/principle-exhaust-the-design-space/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "bd9d850f9811deb9084b0e166d93bf13b89633b6d53cb28b15759ed989167db7"
+    },
+    "principle-experience-first": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/principle-experience-first/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "712ff3f019bcce5989b49c2dd09aab6ac2014d765bcb85f04f2c187205e91402"
+    },
+    "principle-fix-root-causes": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/principle-fix-root-causes/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "dc9d4ebfaf2006b9351b1e132e53b97dec532af52b9dd26f034dcac377bd3289"
+    },
+    "principle-foundational-thinking": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/principle-foundational-thinking/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "0aa5e08828b72dbfc7bf718efb53ab13227ef0c49e859716f1580dd2306614fa"
+    },
+    "principle-guard-the-context-window": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/principle-guard-the-context-window/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "c706771a5775fb2577391a9717e1a2033299935de106ee358c5b1b3da3a5c2ba"
+    },
+    "principle-laziness-protocol": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/principle-laziness-protocol/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "b103b22a78cb6476e183690ac60847870083bbdb7d0bb002e5600b849934d720"
+    },
+    "principle-make-operations-idempotent": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/principle-make-operations-idempotent/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "a85724192968e9c8a35d8cc10a61a4e9ae6fe8320d96bb9aa97d8c035bb618fb"
+    },
+    "principle-migrate-callers-then-delete-legacy-apis": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/principle-migrate-callers-then-delete-legacy-apis/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "d5b79d73a4ef09a3d90855abff8edda27d0cc10a5ae6ce86757eec455cfda5b5"
+    },
+    "principle-minimize-reader-load": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/principle-minimize-reader-load/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "95bbe5f094cf3ac253e6bbfec9498f77b5d22c9c8deec930b0297a5825f5e012"
+    },
+    "principle-model-the-domain": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/principle-model-the-domain/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "2b83697dbf72d02860e399b6615d3bf631611c19540ecbd465ee77801e09c981"
+    },
+    "principle-never-block-on-the-human": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/principle-never-block-on-the-human/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "2235e6c3e809ea8e98b4a600f0beb61e037082b48f0d5d34a5dce34bc70c27b9"
+    },
+    "principle-outcome-oriented-execution": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/principle-outcome-oriented-execution/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "b03b975703b73dc59fcce50410ab1d0ed19d43af6b185b8841ad21639f25cde6"
+    },
+    "principle-prove-it-works": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/principle-prove-it-works/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "092dbbf57ebab54fd489285376b9f9023995e28db219180dc9d551923b83cbac"
+    },
+    "principle-redesign-from-first-principles": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/principle-redesign-from-first-principles/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "0667236bbedd1227cb44cfd31e7889eb12be53c885a750c03bc3babc0584b249"
+    },
+    "principle-separate-before-serializing-shared-state": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/principle-separate-before-serializing-shared-state/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "2014ac9eaeb3779950c29b39e4b1a2e17a94dc01e336d2bbb3e93d2c56f96ea1"
+    },
+    "principle-sequence-verifiable-units": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/principle-sequence-verifiable-units/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "ffc6efa23552abd8e5fe76b85929bcc57742b75d322180866b5d887e7458806c"
+    },
+    "principle-subtract-before-you-add": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/principle-subtract-before-you-add/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "85053866f9fcdd5d87e356af6517662342b4976fcad4807d88d7d8ef3eaacb52"
+    },
+    "principle-type-system-discipline": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/principle-type-system-discipline/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "39c55c48101c4c0336d7c58f0600b2cbc8a1c94d9991bd62e784262fe5e1f7f1"
+    },
+    "recall": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/recall/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "059cbf9f3470a115ad7b20375d0eee38c66416157c5f11e5586554c953dad5e0"
+    },
+    "reflect": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/reflect/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "5564fcd4f7ace445ecb0a3787ed4a5e529deec316e3f1cb6c97091f2060cc492"
+    },
+    "setup-pstack": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/setup-pstack/SKILL.md",
+      "allowImplicitInvocation": true,
+      "computedHash": "bd23f3957fc1d4d786aeb89309bfa7e2e63b4759eb56e9e2423dfc0089f5bdd9"
+    },
+    "show-me-your-work": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/show-me-your-work/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "ae3594d867dfa72ff72f905eae6994f0031ec6591187c5e637a763ff41b9548a"
+    },
+    "swarm": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/swarm/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "ef27062c48c697a6551eebde4b69cc35828f6dc76c48af56d112f817976d5de5"
+    },
+    "tdd": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/tdd/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "d11098ae35a8da1958bb784c4bba6610df9c81ee40981f5012803a49eefcb8ab"
+    },
+    "teach": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/teach/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "87dc4c75cd453212eb967d5a40c92a02b434db4610c010fa3b2b69cfc16eff65"
+    },
+    "technical-writing": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/technical-writing/SKILL.md",
+      "allowImplicitInvocation": false,
+      "computedHash": "0e6c58f25b8b84d394489ce3c79b5e7a4665da7e404397ba5b4a5943ce4d0e52"
+    },
+    "typescript-best-practices": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/typescript-best-practices/SKILL.md",
+      "allowImplicitInvocation": true,
+      "computedHash": "848f338041f6416a7b17853b7995aac226648c8863024a01a64fa1b30d796529"
+    },
+    "unslop": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/unslop/SKILL.md",
+      "allowImplicitInvocation": true,
+      "computedHash": "c5c66e09af620e2413137fab5c17871c8e5d7fe512ddddf59b84c9b0f1b26040"
+    },
+    "why": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cursor/plugins.git",
+      "ref": "fd6dd6f7276956a532bb78a748a8d2818b6eb5f4",
+      "skillPath": "pstack/skills/why/SKILL.md",
+      "allowImplicitInvocation": true,
+      "computedHash": "1086278b6d3ae0576846b0e7ec366c6f045aa59a6afec0745ca6dca8e5592425"
+    }
+  }
+}

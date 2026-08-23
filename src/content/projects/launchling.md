@@ -1,21 +1,21 @@
 ---
 title: Launchling
-description: A deck of startup ideas. Not slop. 500 considered opportunities per quarter — swipe, match, read the full PRP. No email gate.
+description: A quarterly deck of 500 startup ideas. Swipe through cards and open the full PRP without a signup or email gate.
 tags: [product, zo, ideas]
 stack: [Built on Zo Computer]
 liveUrl: https://www.launchling.app
 screenshots:
   - src: ./_images/launchling.png
-    alt: Launchling landing page — a deck of startup ideas, not slop
+    alt: Launchling landing page with a deck of startup ideas
 date: 2026-05-30
 builtOn: zo
 status: shipped
 order: 9
 ---
 
-Launchling is a quarterly deck of five hundred considered startup opportunities. Swipe through the cards, match the ones that hit, and the full PRP opens immediately — executive summary, wedge, moat, why now, build shape, pricing.
+Launchling is a quarterly deck of five hundred startup opportunities. Swipe through the cards, save the ones that fit, and open the full PRP immediately. Each one covers the executive summary, entry point, defensibility, timing, build scope, and pricing.
 
-Every card is a real opportunity: a specific buyer, a specific wedge, a timing trigger you can point to in the news. Written by operators, not harvested from a prompt.
+Each card names a buyer, a practical entry point, and a timing trigger tied to current events. Operators write the cards instead of generating them in bulk from one prompt.
 
 No signup to read. No email gate. No upsell. The deck is the product.
 

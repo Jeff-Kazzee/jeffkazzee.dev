@@ -10,14 +10,14 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
 ---
 
 <BaseLayout
-  title="Writing — jeffkazzee.dev"
-  description="Essays and field notes on AI-assisted building — what worked, what didn't, the path actually taken. Originals on Substack, mirrored here."
+  title="Writing | jeffkazzee.dev"
+  description="Essays and field notes by Jeff Kazzee about software, AI-assisted building, learning, and the work behind the projects."
 >
   <section class="wrap">
-    <SectionHeading title="Writing" level="h1" note="Essays and field notes on AI-assisted building." />
+    <SectionHeading title="Writing" level="h1" note="Essays and field notes from building, learning, and paying attention." />
     <p class="note">
-      Originals live on <a href="https://jeffkazzee.substack.com" rel="noopener">Substack</a>,
-      mirrored here so the archive lives on a URL I control.
+      New posts publish here first. Older essays may still point to the original
+      <a href="https://jeffkazzee.substack.com" rel="noopener">Substack</a> edition.
     </p>
     <div class="posts">
       {posts.map((post, i) => (
@@ -35,6 +35,8 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
   }
 
   .posts {
-    border-bottom: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+    gap: calc(var(--space) * 3);
   }
 </style>

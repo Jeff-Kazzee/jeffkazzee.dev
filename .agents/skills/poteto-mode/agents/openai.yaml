@@ -1,0 +1,6 @@
+interface:
+  display_name: "Poteto Mode"
+  short_description: "Poteto's concise, rigorous working style"
+  default_prompt: "Use $poteto-mode to run this task with deliberate delegation, plain prose, and direct verification."
+policy:
+  allow_implicit_invocation: false

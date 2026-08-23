@@ -18,16 +18,54 @@ const { project } = Astro.props;
 const { Content } = await render(project);
 const d = project.data;
 const wip = d.status !== 'shipped';
+const statusLabel = d.status.replaceAll('-', ' ');
+const projectUrl = new URL(`/projects/${project.id}/`, Astro.site).href;
+const projectLinks = Array.from(
+  new Set(
+    [d.liveUrl, d.repoUrl, d.releaseUrl].filter(
+      (url): url is string => typeof url === 'string',
+    ),
+  ),
+);
+const projectJsonLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  '@id': `${projectUrl}#project`,
+  name: d.title,
+  description: d.description,
+  url: projectUrl,
+  dateCreated: d.date.toISOString(),
+  creativeWorkStatus: statusLabel,
+  author: {
+    '@type': 'Person',
+    name: 'Jeff Kazzee',
+    url: 'https://jeffkazzee.dev',
+  },
+  isPartOf: {
+    '@type': 'WebSite',
+    '@id': 'https://jeffkazzee.dev/#website',
+    name: 'jeffkazzee.dev',
+    url: 'https://jeffkazzee.dev',
+  },
+  ...(d.tags.length > 0 ? { keywords: d.tags } : {}),
+  ...(projectLinks.length > 0 ? { sameAs: projectLinks } : {}),
+}).replaceAll('<', '\\u003c');
 ---
 
-<BaseLayout title={`${d.title} — jeffkazzee.dev`} description={d.description}>
+<BaseLayout
+  title={`${d.title} | jeffkazzee.dev`}
+  description={d.description}
+  robots={d.visibility === 'archived' ? 'noindex,follow' : undefined}
+>
+  <script type="application/ld+json" set:html={projectJsonLd} is:inline />
+
   <article class="wrap">
     <header>
       <p class="crumb"><a href="/projects/">← All projects</a></p>
       <h1>{d.title}</h1>
       <p class="status">
         <span class="dot" data-tone={wip ? 'wip' : undefined} aria-hidden="true"></span>
-        {d.status}{d.builtOn === 'zo' && ' · built on a Zo computer'} · <FormattedDate date={d.date} />
+        {statusLabel}{d.builtOn === 'zo' && ' · built on a Zo computer'} · <FormattedDate date={d.date} />
       </p>
     </header>
 
@@ -47,8 +85,16 @@ const wip = d.status !== 'shipped';
     </div>
 
     <nav class="actions" aria-label="Project links">
-      {d.releaseUrl && <LinkButton href={d.releaseUrl} variant="primary">Download for Windows</LinkButton>}
-      {d.liveUrl && <LinkButton href={d.liveUrl} variant={d.releaseUrl ? 'default' : 'primary'}>Visit live site</LinkButton>}
+      {d.releaseUrl && (
+        <LinkButton href={d.releaseUrl} variant={d.status === 'archived' ? 'default' : 'primary'}>
+          {d.status === 'archived' ? 'View archived release' : 'Download for Windows'}
+        </LinkButton>
+      )}
+      {d.liveUrl && (
+        <LinkButton href={d.liveUrl} variant={d.releaseUrl && d.status !== 'archived' ? 'default' : 'primary'}>
+          Visit live site
+        </LinkButton>
+      )}
       {d.repoUrl && <LinkButton href={d.repoUrl}>Source</LinkButton>}
     </nav>
 

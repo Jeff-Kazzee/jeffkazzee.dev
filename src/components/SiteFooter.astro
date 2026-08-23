@@ -11,34 +11,38 @@ const links = [
 
 <footer>
   <div class="wrap inner">
-    <p class="line">Built on my own terms. Still learning, still here.</p>
-    <nav aria-label="Footer">
-      {links.map((l) => (
-        <a href={l.href} rel={l.href.startsWith('http') ? 'me noopener' : undefined}>{l.label}</a>
-      ))}
-    </nav>
-    <p class="colophon">Built with Astro and AI agents. Hand-rolled CSS, no trackers.</p>
+    <div>
+      <p class="line"><a href="https://jeffkazzee.dev">jeffkazzee.dev</a> is home. My Zo Computer lives at <a href="https://jeffkazzee.zo.space" rel="me noopener">jeffkazzee.zo.space</a>.</p>
+      <nav aria-label="Footer">
+        {links.map((l) => (
+          <a href={l.href} rel={l.href.startsWith('http') ? 'me noopener' : undefined}>{l.label}</a>
+        ))}
+      </nav>
+    </div>
+    <div class="credits">
+      <p>© {new Date().getFullYear()} Jeff Kazzee</p>
+      <p class="colophon">Built with Astro and AI agents. Hand-rolled CSS, no trackers.</p>
+    </div>
   </div>
 </footer>
 
 <style>
   footer {
     border-top: 1px solid var(--line);
-    margin-top: clamp(4rem, 12vh, 7rem);
-    background: var(--bg-raised);
+    margin-top: clamp(3rem, 7vh, 4.5rem);
+    background: var(--bg);
   }
 
   .inner {
-    padding-block: calc(var(--space) * 6);
+    padding-block: calc(var(--space) * 4);
     display: grid;
-    gap: calc(var(--space) * 2.5);
+    gap: calc(var(--space) * 3);
   }
 
   .line {
-    font-family: var(--font-serif);
-    font-style: italic;
-    font-size: 1.05rem;
-    color: var(--ink-soft);
+    font-size: 0.88rem;
+    color: var(--ink-faint);
+    margin-bottom: 0.9rem;
   }
 
   nav {
@@ -60,5 +64,24 @@ const links = [
   .colophon {
     font-size: 0.82rem;
     color: var(--ink-faint);
+  }
+
+  .credits {
+    display: grid;
+    gap: 0.3rem;
+    color: var(--ink-faint);
+    font-size: 0.82rem;
+  }
+
+  @media (min-width: 760px) {
+    .inner {
+      grid-template-columns: 1fr auto;
+      align-items: end;
+    }
+
+    .credits {
+      justify-items: end;
+      text-align: right;
+    }
   }
 </style>

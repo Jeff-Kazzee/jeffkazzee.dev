@@ -1,5 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content';
+import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
 
@@ -14,14 +15,49 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await render(post);
 const d = post.data;
+const localUrl = new URL(`/blog/${post.id}/`, Astro.site).href;
+const canonicalUrl = d.canonicalUrl ?? localUrl;
+const postJsonLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  '@id': `${canonicalUrl}#article`,
+  headline: d.title,
+  description: d.description,
+  url: canonicalUrl,
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': canonicalUrl,
+  },
+  datePublished: d.pubDate.toISOString(),
+  ...(d.updatedDate ? { dateModified: d.updatedDate.toISOString() } : {}),
+  author: {
+    '@type': 'Person',
+    name: 'Jeff Kazzee',
+    url: 'https://jeffkazzee.dev',
+    sameAs: [
+      'https://github.com/Jeff-Kazzee',
+      'https://x.com/jeffkazzee',
+      'https://jeffkazzee.substack.com',
+    ],
+  },
+  isPartOf: {
+    '@type': 'Blog',
+    '@id': 'https://jeffkazzee.dev/blog/#blog',
+    name: 'Writing by Jeff Kazzee',
+    url: 'https://jeffkazzee.dev/blog/',
+  },
+  ...(d.tags.length > 0 ? { keywords: d.tags } : {}),
+}).replaceAll('<', '\\u003c');
 ---
 
 <BaseLayout
-  title={`${d.title} — jeffkazzee.dev`}
+  title={`${d.title} | jeffkazzee.dev`}
   description={d.description}
   ogType="article"
   canonicalUrl={d.canonicalUrl}
 >
+  <script type="application/ld+json" set:html={postJsonLd} is:inline />
+
   <article class="wrap">
     <header>
       <p class="crumb"><a href="/blog/">← All writing</a></p>
@@ -42,6 +78,19 @@ const d = post.data;
         )}
       </p>
     </header>
+
+    {d.heroImage && d.heroAlt && (
+      <Image
+        class="hero-image"
+        src={d.heroImage}
+        alt={d.heroAlt}
+        widths={[640, 960, 1280, 1536]}
+        sizes="(max-width: 900px) 100vw, 800px"
+        quality={78}
+        loading="eager"
+        fetchpriority="high"
+      />
+    )}
 
     <div class="prose">
       <Content />
@@ -79,6 +128,12 @@ const d = post.data;
   .meta {
     font-size: 0.9rem;
     color: var(--ink-faint);
+  }
+
+  .hero-image {
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
   }
 
   .prose {

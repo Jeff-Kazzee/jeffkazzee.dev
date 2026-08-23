@@ -8,20 +8,42 @@ interface Props {
 }
 
 const { post, index = 0 } = Astro.props;
+const postHref = post.data.canonicalUrl ?? `/blog/${post.id}/`;
+const external = Boolean(post.data.canonicalUrl);
 ---
 
 <article class="post reveal" style={`--i: ${index}`}>
-  <p class="date"><FormattedDate date={post.data.pubDate} /></p>
-  <h3><a href={`/blog/${post.id}/`}>{post.data.title}</a></h3>
+  <div class="meta">
+    <p class="date"><FormattedDate date={post.data.pubDate} /></p>
+  </div>
+  <h3><a href={postHref} rel={external ? 'noopener' : undefined}>{post.data.title}</a></h3>
   <p class="desc">{post.data.description}</p>
+  <a class="read" href={postHref} rel={external ? 'noopener' : undefined}>Read note <span aria-hidden="true">→</span></a>
 </article>
 
 <style>
   .post {
+    position: relative;
     display: grid;
-    gap: calc(var(--space) * 0.75);
-    padding-block: calc(var(--space) * 3.5);
-    border-top: 1px solid var(--line);
+    grid-template-rows: auto auto 1fr auto;
+    gap: 0.9rem;
+    min-height: 18rem;
+    padding: clamp(1.4rem, 3vw, 2rem);
+    background: color-mix(in oklab, var(--surface) 72%, transparent);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    transition: border-color var(--t-base) var(--ease-out), transform var(--t-base) var(--ease-out);
+  }
+
+  .post:hover {
+    border-color: color-mix(in oklab, var(--accent) 45%, var(--line));
+    transform: translateY(-2px);
+  }
+
+  .meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
   }
 
   .date {
@@ -40,6 +62,12 @@ const { post, index = 0 } = Astro.props;
     text-decoration: none;
   }
 
+  h3 a::after {
+    position: absolute;
+    inset: 0;
+    content: '';
+  }
+
   h3 a:hover {
     color: var(--accent);
   }
@@ -48,5 +76,15 @@ const { post, index = 0 } = Astro.props;
     color: var(--ink-soft);
     font-size: 0.97rem;
     max-width: 58ch;
+  }
+
+  .read {
+    position: relative;
+    z-index: 1;
+    justify-self: start;
+    color: var(--accent);
+    font-size: 0.78rem;
+    font-weight: 620;
+    text-decoration: none;
   }
 </style>

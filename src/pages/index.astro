@@ -3,27 +3,34 @@ import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
-import ProjectCard from '../components/ProjectCard.astro';
+import OrbitalProjectRow from '../components/OrbitalProjectRow.astro';
 import PostCard from '../components/PostCard.astro';
 import earthrise from '../assets/earthrise.avif';
+import orbitSystem from '../assets/design/orbit-system-hero.png';
+import planetVal from '../assets/design/planet-val.png';
+import planetOpenWorld from '../assets/design/planet-open-world.png';
+import planetZo101 from '../assets/design/planet-zo-101.png';
+import planetDeepDives from '../assets/design/planet-deep-dives.png';
+import planetVivary from '../assets/design/planet-vivary.png';
 
 const projects = await getCollection('projects');
-const byOrder = (a: typeof projects[number], b: typeof projects[number]) =>
-  a.data.order - b.data.order;
+const requireProject = (id: string) => {
+  const project = projects.find((entry) => entry.id === id);
+  if (!project) throw new Error(`Missing homepage project: ${id}`);
+  return project;
+};
 
-const featured = projects.filter((p) => p.data.featured && !p.data.builtOn).sort(byOrder);
-const zoShelf = projects.filter((p) => p.data.builtOn === 'zo').sort(byOrder);
+const orbitingProjects = [
+  { project: requireProject('val'), planet: planetVal },
+  { project: requireProject('open-world-factbook'), planet: planetOpenWorld },
+  { project: requireProject('zo-computer-101'), planet: planetZo101 },
+  { project: requireProject('zo-deep-dive-guides'), planet: planetDeepDives },
+  { project: requireProject('vivary'), planet: planetVivary },
+];
 
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 3);
-
-const links = [
-  { href: 'https://github.com/Jeff-Kazzee', label: 'GitHub' },
-  { href: 'https://x.com/jeffkazzee', label: 'X' },
-  { href: 'https://jeffkazzee.substack.com', label: 'Substack' },
-  { href: 'mailto:jeffkazzee@gmail.com', label: 'Email' },
-];
 
 const jsonLd = JSON.stringify({
   '@context': 'https://schema.org',
@@ -40,216 +47,366 @@ const jsonLd = JSON.stringify({
 ---
 
 <BaseLayout
-  title="Jeff Kazzee — local-first AI tools, agent workspaces, and open data"
-  description="Self-taught builder shipping local-first AI desktop apps, agent-workspace tooling, open data, and practical web experiments."
+  title="Jeff Kazzee: software, writing, and side projects"
+  description="Jeff Kazzee builds software, writes field notes, and follows useful side quests across AI, open data, games, and the web."
 >
   <script type="application/ld+json" set:html={jsonLd} is:inline />
 
-  <section class="hero">
-    <Image
-      class="hero-bg"
-      src={earthrise}
-      alt="A crescent Earth rising over the gray surface of the Moon"
-      widths={[820, 1400, 2000]}
-      sizes="100vw"
-      loading="eager"
-    />
-    <div class="hero-scrim" aria-hidden="true"></div>
-    <div class="wrap hero-inner">
+  <section class="hero wrap">
+    <div class="hero-copy">
       <p class="now rise" style="--i: 0">
         <span class="dot live" aria-hidden="true"></span>
-        Currently building <a href="/projects/obscura/">Obscura</a> and <a href="/projects/vivary/">Vivary</a>
+        Currently building <a href="/projects/val/">Val</a>, a personal AI companion
       </p>
-      <h1 class="rise" style="--i: 1">I build local-first AI tools and useful public systems.</h1>
+      <h1 class="rise" style="--i: 1">I build software, write about it, and follow interesting side quests.</h1>
       <p class="lede rise" style="--i: 2">
-        Self-taught builder focused on <strong>creative software</strong>, agent-workspace
-        infrastructure, and open utilities people can actually inspect.
+        Self-taught builder working across AI tools, agent workspaces, open data, games, language learning,
+        and whatever else seems worth making.
       </p>
-      <nav class="links rise" style="--i: 3" aria-label="Profiles">
-        {links.map((l) => (
-          <a href={l.href} rel={l.href.startsWith('http') ? 'me noopener' : undefined}>{l.label}</a>
-        ))}
-      </nav>
+      <div class="hero-actions rise" style="--i: 3">
+        <a class="btn primary" href="#projects">Explore projects <span aria-hidden="true">→</span></a>
+        <a class="btn" href="/blog/">Read the writing</a>
+      </div>
+    </div>
+
+    <div class="orbit-stage rise" style="--i: 2" data-orbit-stage aria-label="Current projects in orbit">
+      <Image
+        class="orbit-image"
+        src={orbitSystem}
+        alt=""
+        width={960}
+        widths={[640, 960, 1280]}
+        sizes="(max-width: 880px) 100vw, 56vw"
+        quality={76}
+        loading="eager"
+        fetchpriority="high"
+      />
+      <a class="orbit-label label-val" href="/projects/val/">
+        <strong>Val</strong><span class="amber">Coming soon</span>
+      </a>
+      <a class="orbit-label label-open-world" href="/projects/open-world-factbook/">
+        <strong>Open World<br />Factbook</strong><span>Shipped</span>
+      </a>
+      <a class="orbit-label label-zo" href="/projects/zo-computer-101/">
+        <strong>Zo 101</strong><span>Shipped</span>
+      </a>
+      <a class="orbit-label label-deep-dives" href="/projects/zo-deep-dive-guides/">
+        <strong>Zo Deep Dive<br />Guides</strong><span>Shipped</span>
+      </a>
+      <a class="orbit-label label-vivary" href="/projects/vivary/">
+        <strong>Vivary</strong><span class="muted">Deprecated</span>
+      </a>
     </div>
   </section>
 
-  <section class="wrap">
-    <SectionHeading title="Selected work" note="Local-first AI software, agent infrastructure, and open data." />
-    <div class="rows">
-      {featured.map((p, i) => (
-        <ProjectCard project={p} index={i} variant="row" />
-      ))}
-    </div>
-  </section>
-
-  <section class="wrap">
+  <section class="wrap projects" id="projects">
     <SectionHeading
-      title="On Zo Computer"
-      note="Built and hosted on a personal cloud server I actually own."
+      eyebrow="Orbiting projects"
+      title="Systems I build and ship."
+      href="/projects/"
+      linkLabel="View all projects"
     />
-    <div class="grid">
-      {zoShelf.map((p, i) => (
-        <ProjectCard project={p} index={i} />
+    <div class="project-list">
+      {orbitingProjects.map(({ project, planet }, index) => (
+        <OrbitalProjectRow project={project} planet={planet} index={index} />
       ))}
-    </div>
-    <p class="shelf-link">
-      The machine itself lives at <a href="https://jeffkazzee.zo.space" rel="noopener">jeffkazzee.zo.space</a>.
-    </p>
-  </section>
-
-  <section class="wrap cta-band">
-    <div class="cta-inner">
-      <h2>Want to learn this, not just read about it?</h2>
-      <p>
-        I teach people to build with AI, live and screen-shared. Learn to code, use AI on your
-        real job, or ship the thing you keep putting off. One-on-one or in a small group.
-      </p>
-      <a href="/work-with-me/" class="btn primary">Work with me</a>
     </div>
   </section>
 
-  <section class="wrap">
-    <SectionHeading title="Writing" note="Essays and field notes on AI-assisted building." />
-    <div class="posts">
-      {posts.map((post, i) => (
-        <PostCard post={post} index={i} />
+  <section class="wrap writing">
+    <SectionHeading
+      eyebrow="Field notes"
+      title="Recent writing."
+      href="/blog/"
+      linkLabel="All posts"
+    />
+    <div class="post-grid">
+      {posts.map((post, index) => (
+        <PostCard post={post} index={index} />
       ))}
     </div>
-    <p class="more"><a href="/blog/">All posts →</a></p>
   </section>
+
+  <section class="wrap build-band">
+    <div class="build-card">
+      <Image
+        class="build-image"
+        src={earthrise}
+        alt="Earth rising beyond the Moon's horizon"
+        widths={[640, 960, 1400]}
+        sizes="(max-width: 760px) 100vw, 52vw"
+        loading="lazy"
+      />
+      <div class="build-scrim" aria-hidden="true"></div>
+      <div class="build-copy">
+        <p class="eyebrow">// Let's build</p>
+        <h2>Need a builder for your next project or technical partner?</h2>
+        <p>I take on select client work and collaborations. Let's build something useful.</p>
+      </div>
+      <a class="btn primary build-action" href="/work-with-me/">Work with me <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
+
+  <script src="../scripts/orbit.ts"></script>
 </BaseLayout>
 
 <style>
   .hero {
-    position: relative;
-    overflow: hidden;
-    min-height: clamp(36rem, 92vh, 54rem);
-    display: flex;
-    align-items: flex-end;
-  }
-
-  .hero :global(.hero-bg) {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center 70%;
-  }
-
-  .hero-scrim {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      to bottom,
-      var(--bg) 0%,
-      oklch(0% 0 0 / 0) 16%,
-      oklch(0% 0 0 / 0) 52%,
-      oklch(8% 0.01 255 / 0.55) 78%,
-      oklch(8% 0.01 255 / 0.88) 100%
-    );
-  }
-
-  .hero-inner {
-    position: relative;
-    width: 100%;
     display: grid;
-    gap: calc(var(--space) * 3);
-    padding-block: clamp(6rem, 16vh, 9rem) clamp(3rem, 9vh, 5rem);
+    grid-template-columns: minmax(0, 0.98fr) minmax(31rem, 1.02fr);
+    align-items: center;
+    gap: clamp(1.5rem, 2.8vw, 3rem);
+    min-height: min(50rem, calc(100svh - 4.5rem));
+    padding-block: clamp(4.5rem, 10vh, 7rem);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .hero-copy {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    gap: 1.65rem;
   }
 
   .now {
-    font-size: 0.92rem;
-    color: var(--ink-soft);
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    color: var(--accent);
+    font-size: 0.84rem;
   }
 
-  .now .dot {
-    margin-right: 0.35em;
+  .now a {
+    color: inherit;
+    font-weight: 650;
+    text-decoration: none;
   }
 
   h1 {
-    font-size: clamp(2.8rem, 6.5vw, 4.75rem);
     max-width: 15ch;
-    color: var(--ink);
-    text-shadow: 0 1px 24px oklch(5% 0.01 255 / 0.6);
+    font-size: clamp(2.8rem, 4.35vw, 4.65rem);
+    line-height: 0.99;
   }
 
   .lede {
-    font-size: 1.2rem;
-    line-height: 1.7;
-    color: oklch(84% 0.01 95);
-    max-width: 46ch;
+    max-width: 41ch;
+    color: var(--ink-soft);
+    font-size: clamp(1rem, 1.35vw, 1.14rem);
+    line-height: 1.72;
   }
 
-  .lede strong {
-    color: var(--ink);
-  }
-
-  .links {
+  .hero-actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem 1.75rem;
-    padding-top: calc(var(--space) * 1);
+    gap: 0.85rem;
+    padding-top: 0.4rem;
   }
 
-  .links a {
-    font-size: 0.95rem;
-    font-weight: 500;
-    text-decoration: none;
+  .orbit-stage {
+    --orbit-x: 0px;
+    --orbit-y: 0px;
+    position: relative;
+    min-height: 38rem;
+    overflow: hidden;
+    background: #050c12;
+    border: 1px solid color-mix(in oklab, var(--line) 65%, transparent);
+    border-radius: var(--radius);
+    isolation: isolate;
   }
 
-  .rows {
-    border-bottom: 1px solid var(--line);
+  .orbit-stage::after {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    content: '';
+    background: linear-gradient(90deg, color-mix(in srgb, #050c12 35%, transparent), transparent 34%);
   }
 
-  .grid {
+  .orbit-stage :global(.orbit-image) {
+    position: absolute;
+    inset: -2.5%;
+    width: 105%;
+    max-width: none;
+    height: 105%;
+    object-fit: cover;
+    object-position: center;
+    transform: translate3d(var(--orbit-x), var(--orbit-y), 0) scale(1.015);
+    transition: transform 160ms ease-out;
+  }
+
+  .orbit-label {
+    position: absolute;
+    z-index: 3;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
-    gap: calc(var(--space) * 4);
+    color: #f2d49d;
+    font-size: 0.68rem;
+    line-height: 1.2;
+    text-decoration: none;
+    text-shadow: 0 2px 12px #000;
   }
 
-  .shelf-link {
-    margin-top: calc(var(--space) * 4);
-    font-size: 0.95rem;
-    color: var(--ink-faint);
+  .orbit-label strong {
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    font-weight: 540;
   }
 
-  .posts {
+  .orbit-label span {
+    margin-top: 0.2rem;
+    color: #9ddb78;
+    font-size: 0.62rem;
+    font-weight: 650;
+  }
+
+  .orbit-label .amber {
+    color: #efad55;
+  }
+
+  .orbit-label .muted {
+    color: #a4aaa8;
+  }
+
+  .label-val { top: 10%; left: 63%; }
+  .label-open-world { top: 29%; left: 6%; }
+  .label-zo { top: 32%; right: 5%; }
+  .label-deep-dives { right: 5%; bottom: 21%; }
+  .label-vivary { left: 27%; bottom: 4%; }
+
+  .project-list {
     border-bottom: 1px solid var(--line);
   }
 
-  .more {
-    padding-top: calc(var(--space) * 4);
-    font-weight: 500;
+  .post-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
   }
 
-  .more a {
-    text-decoration: none;
+  .build-band {
+    margin-top: clamp(3.5rem, 7vh, 5rem);
   }
 
-  .cta-band {
-    padding-block: clamp(3.5rem, 9vh, 5.5rem);
-  }
-
-  .cta-inner {
-    background: var(--surface);
+  .build-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 2rem;
+    min-height: 17rem;
+    padding: clamp(2rem, 4vw, 3.25rem);
+    overflow: hidden;
+    background: #071017;
     border: 1px solid var(--line);
     border-radius: var(--radius);
-    box-shadow: var(--shadow-soft);
-    padding: clamp(2rem, 5vw, 3.5rem);
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: calc(var(--space) * 2.5);
+    isolation: isolate;
   }
 
-  .cta-inner h2 {
-    max-width: 18ch;
+  .build-card :global(.build-image) {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 78%;
   }
 
-  .cta-inner p {
-    max-width: 44ch;
-    color: var(--ink-soft);
+  .build-scrim {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(90deg, rgb(5 12 18 / 0.98) 0%, rgb(5 12 18 / 0.84) 48%, rgb(5 12 18 / 0.18) 100%);
+  }
+
+  .build-copy {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .eyebrow {
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .build-copy h2 {
+    max-width: 25ch;
+    color: #f0eee7;
+  }
+
+  .build-copy > p:last-child {
+    color: #bac0bd;
+  }
+
+  .build-action {
+    position: relative;
+    z-index: 1;
+  }
+
+  @media (max-width: 980px) {
+    .hero {
+      grid-template-columns: 1fr;
+      min-height: auto;
+      padding-top: clamp(3.5rem, 8vh, 5rem);
+    }
+
+    h1 {
+      max-width: 14ch;
+    }
+
+    .orbit-stage {
+      min-height: clamp(28rem, 68vw, 38rem);
+    }
+  }
+
+  @media (max-width: 760px) {
+    .post-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .build-card {
+      grid-template-columns: 1fr;
+      align-items: end;
+    }
+
+    .build-action {
+      justify-self: start;
+    }
+  }
+
+  @media (max-width: 540px) {
+    .hero {
+      padding-bottom: 3rem;
+    }
+
+    .orbit-stage {
+      min-height: 24rem;
+    }
+
+    .orbit-label {
+      font-size: 0.6rem;
+    }
+
+    .orbit-label strong {
+      font-size: 0.8rem;
+    }
+
+    .orbit-label span {
+      font-size: 0.55rem;
+    }
+
+    .label-open-world { left: 4%; }
+    .label-zo { right: 3%; }
+    .label-deep-dives { right: 3%; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .orbit-stage :global(.orbit-image) {
+      transform: none;
+    }
   }
 </style>

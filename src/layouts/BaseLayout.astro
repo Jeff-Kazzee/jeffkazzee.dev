@@ -10,13 +10,29 @@ interface Props {
   ogImage?: string;
   ogType?: string;
   canonicalUrl?: string;
+  robots?: string;
 }
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
-    <script is:inline>document.documentElement.classList.add('js');</script>
+    <script is:inline>
+      (() => {
+        document.documentElement.classList.add('js');
+        try {
+          const stored = localStorage.getItem('theme');
+          const theme = stored === 'light' || stored === 'dark'
+            ? stored
+            : matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch {
+          document.documentElement.dataset.theme = 'dark';
+          document.documentElement.style.colorScheme = 'dark';
+        }
+      })();
+    </script>
     <BaseHead {...Astro.props} />
   </head>
   <body>
@@ -38,7 +54,7 @@ interface Props {
     background: var(--accent);
     color: var(--bg);
     padding: 0.5rem 1rem;
-    border-radius: 0 0 var(--radius) 0;
+    border-radius: 0 0 var(--radius-sm) 0;
     z-index: 10;
   }
 

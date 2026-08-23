@@ -6,13 +6,13 @@ canonicalUrl: https://jeffkazzee.substack.com/p/five-zo-cookbook-recipes-worth-r
 tags: []
 ---
 
-![](https://substackcdn.com/image/fetch/$s_!QVCL!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F29a176c9-71dd-4b95-8330-81fbcfac108d_1536x1024.png)
+![Line drawing of a wooden recipe-card box beside a coffee mug](../../assets/blog/zo-cookbook-recipe-box.png)
 
 Zo Computer can do a lot. The hard part is figuring out what it can do for you on a given Tuesday night.
 
 You open it. You see a workspace that will basically do anything you can describe to it. Your brain freezes on the question of what to describe first. You close the tab. A week later you tell a friend “I tried it but I didn’t really see what it could do for me.”
 
-That is the gap the Zo Cookbook fills, and I just shipped a big refresh to it. The catalog now holds 1,162 recipes. Each one is a specific job Zo can do for you, with the words or setup already written. The cookbook itself is free. Running a recipe needs a Zo Computer account, and my referral link is at the bottom if you want one.
+That is the gap the [Zo Cookbook](/projects/zo-cookbook/) fills, and I just shipped a big refresh to it. The catalog now holds 1,162 recipes. Each one is a specific job Zo can do for you, with the words or setup already written. The cookbook itself is free. Running a recipe needs a Zo Computer account, and my referral link is at the bottom if you want one.
 
 Start with one of these five from the new batch. Each recipe page has a copy button and an open-Zo button. Click both, paste, run. Pick the one that matches the problem already sitting in your inbox, your wallet, your kid’s backpack, or your own body.
 
@@ -34,7 +34,7 @@ You feed it the carrier, the current rate, when you signed up, and what you want
 
 The payoff is often $10 to $40 a month off a bill that crept up while you weren’t watching. The setup takes about ten minutes. The call takes fifteen. If it saves you $20 a month, it beats most household chores.
 
-![](https://substackcdn.com/image/fetch/$s_!5cON!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F937ae425-e512-4b78-8996-fdef321e08f2_1254x1254.png)
+![A hand pulls a blank index card from a wooden recipe box](../../assets/blog/zo-cookbook-recipe-card.png)
 
 ### 3. The “Is This A Scam?” Email Checker
 
@@ -62,7 +62,7 @@ A catcher for school papers, the kind that come home in a backpack and disappear
 
 You know the failure mode. The form comes home in the backpack on Tuesday. You move it to the counter. It moves to the table. By Friday it is lost under three other things and you are scribbling a signature in the carpool line.
 
-This recipe builds a small app inside Zo. You give it a photo; it gives back a clean PDF and a tracked due date. The morning the form has to go back, you get a text. The cookbook lists the underlying tools (React, Hono, OCR, Twilio for the SMS). You do not need to know those tools; the recipe wires them up for you.
+This recipe builds a small app inside Zo. You give it a photo, and it gives back a clean PDF and a tracked due date. The morning the form has to go back, you get a text. The cookbook lists the underlying tools (React, Hono, OCR, Twilio for the SMS). You do not need to know those tools because the recipe wires them up for you.
 
 ### A note on the copy button
 

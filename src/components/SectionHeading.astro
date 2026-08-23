@@ -5,24 +5,33 @@ interface Props {
   id?: string;
   /** Short secondary line set beside/below the heading. */
   note?: string;
+  eyebrow?: string;
+  href?: string;
+  linkLabel?: string;
 }
 
-const { title, level = 'h2', id, note } = Astro.props;
+const { title, level = 'h2', id, note, eyebrow, href, linkLabel } = Astro.props;
 const Tag = level;
 ---
 
 <div class="heading">
-  <Tag id={id}>{title}</Tag>
-  {note && <p class="note">{note}</p>}
+  <div class="title-group">
+    {eyebrow && <p class="eyebrow">// {eyebrow}</p>}
+    <Tag id={id}>{title}</Tag>
+  </div>
+  <div class="aside">
+    {note && <p class="note">{note}</p>}
+    {href && linkLabel && <a href={href}>{linkLabel} <span aria-hidden="true">→</span></a>}
+  </div>
 </div>
 
 <style>
   .heading {
-    margin-block: clamp(3.5rem, 9vh, 5.5rem) calc(var(--space) * 4);
+    margin-block: clamp(3rem, 7vh, 4.5rem) calc(var(--space) * 3);
     display: flex;
-    align-items: baseline;
+    align-items: end;
     justify-content: space-between;
-    gap: 1rem 2rem;
+    gap: 1.5rem 2rem;
     flex-wrap: wrap;
   }
 
@@ -30,10 +39,50 @@ const Tag = level;
     margin-block-start: clamp(2.5rem, 7vh, 4rem);
   }
 
+  .title-group {
+    display: grid;
+    gap: 0.8rem;
+  }
+
+  .eyebrow {
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .aside {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
   .note {
     font-size: 0.92rem;
     color: var(--ink-faint);
     max-width: 38ch;
     text-wrap: balance;
+  }
+
+  .aside a {
+    color: var(--accent);
+    font-size: 0.83rem;
+    font-weight: 620;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 640px) {
+    .heading,
+    .aside {
+      align-items: flex-start;
+    }
+
+    .aside {
+      width: 100%;
+      justify-content: space-between;
+    }
   }
 </style>

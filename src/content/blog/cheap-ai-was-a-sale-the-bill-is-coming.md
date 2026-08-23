@@ -6,7 +6,7 @@ canonicalUrl: https://jeffkazzee.substack.com/p/cheap-ai-was-a-sale-the-bill-is-
 tags: []
 ---
 
-![](https://substackcdn.com/image/fetch/$s_!Cb9w!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F340e8f79-a034-48bf-b3e5-f298e0377fbd_1536x1024.png)
+![Line drawing of a closed laptop with a blank price tag attached](../../assets/blog/cheap-ai-price-tag.png)
 
 I live on a low income, under the federal poverty line. Every recurring cost is one I have to justify to myself, and AI is on that list. It earned its place because right now it is cheap. It is not free, but it is cheap enough that someone on my budget can run a capable model and get the work done, and that low price is the only reason it fits at all.
 
@@ -26,7 +26,7 @@ So that cheap deal is a sale. The companies set it low on purpose, to take the m
 
 Look at what the buildout costs. Their 2026 earnings guidance has the five largest cloud companies spending around $725 billion on capacity, roughly two-thirds more than the year before, with about $450 billion of it going to AI hardware. They are increasingly borrowing to do it: more than $100 billion in debt was raised in 2025, and analysts expect far more to come. OpenAI alone projects spending $121 billion on compute in a single year by 2028.
 
-Spending on that scale has to be earned back, and with borrowing costs still high, the math only works if the price of the product goes up. At the same time, the way we use AI is getting heavier. A quick chat is cheap; a Microsoft Research analysis found that an agent reading a codebase, writing across it, running tests, and trying again can burn on the order of a thousand times the tokens of that chat, sometimes more than a week of ordinary use in a single run. So even as the price of a token keeps falling, the number of tokens a single task takes has climbed fast enough to swamp the savings.
+Spending on that scale has to be earned back, and with borrowing costs still high, the math only works if the price of the product goes up. At the same time, the way we use AI is getting heavier. A quick chat is cheap, but a Microsoft Research analysis found that an agent reading a codebase, writing across it, running tests, and trying again can burn on the order of a thousand times the tokens of that chat, sometimes more than a week of ordinary use in a single run. So even as the price of a token keeps falling, the number of tokens a single task takes has climbed fast enough to swamp the savings.
 
 ### The free era is already being priced
 
@@ -40,11 +40,11 @@ The people whose job is to watch this agree on the shape, and not just in Americ
 
 ### The worst of it is forecast to be temporary
 
-![](https://substackcdn.com/image/fetch/$s_!4gGt!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fd835d5fc-a682-4221-a322-66b0e4580794_1254x1254.png)
+![Top-down line drawing of a laptop, notebook, and pencil on a desk](../../assets/blog/cheap-ai-desk-tools.png)
 
 Almost everyone forecasting this expects the worst of it to be temporary. The IMF, the OECD, and the European Central Bank all assume the energy spike fades through 2026 and inflation eases back toward normal in 2027. Nobody can promise the timing, and they all say so plainly, but the baseline is a bad year, not a permanent one.
 
-For AI specifically, access will not vanish; it will split into tiers, and the cheaper tiers are already good. Open models from DeepSeek, Qwen, Google’s Gemma, and Microsoft’s Phi handle most of what I need for a fraction of the price, and some run on an ordinary laptop with no monthly bill at all. For someone in my spot, that is the part that matters most. When the frontier gets too expensive, I still have somewhere to go, and the cheaper place I land keeps getting better.
+For AI specifically, access will not vanish. It will split into tiers, and the cheaper tiers are already good. Open models from DeepSeek, Qwen, Google’s Gemma, and Microsoft’s Phi handle most of what I need for a fraction of the price, and some run on an ordinary laptop with no monthly bill at all. For someone in my spot, that is the part that matters most. When the frontier gets too expensive, I still have somewhere to go, and the cheaper place I land keeps getting better.
 
 And closer to home, there is a cushion a lot of the world lacks. The US grows much of its own food, so when fuel makes imports pricier, we have more room to absorb it than places that depend on shipping their food in. It will not erase the squeeze, but it gives us more room than most have.
 

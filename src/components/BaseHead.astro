@@ -1,5 +1,7 @@
 ---
 import { ClientRouter } from 'astro:transitions';
+import hankenNormalUrl from '../assets/fonts/hanken-grotesk-latin-wght-normal.woff2';
+import literataNormalUrl from '../assets/fonts/literata-latin-opsz-wght-normal.woff2';
 
 interface Props {
   title: string;
@@ -8,9 +10,17 @@ interface Props {
   ogType?: string;
   /** Override for mirrored content (e.g. Substack originals). */
   canonicalUrl?: string;
+  robots?: string;
 }
 
-const { title, description, ogImage = '/og-default.png', ogType = 'website', canonicalUrl } = Astro.props;
+const {
+  title,
+  description,
+  ogImage = '/og-default.png',
+  ogType = 'website',
+  canonicalUrl,
+  robots,
+} = Astro.props;
 const canonical = canonicalUrl ?? new URL(Astro.url.pathname, Astro.site).href;
 const ogImageAbs = new URL(ogImage, Astro.site).href;
 ---
@@ -20,29 +30,40 @@ const ogImageAbs = new URL(ogImage, Astro.site).href;
 <meta name="generator" content={Astro.generator} />
 <title>{title}</title>
 <meta name="description" content={description} />
+{robots && <meta name="robots" content={robots} />}
 <link rel="canonical" href={canonical} />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<meta name="theme-color" content="#15171f" />
+<meta name="theme-color" content="#081017" media="(prefers-color-scheme: dark)" />
+<meta name="theme-color" content="#f5f2e9" media="(prefers-color-scheme: light)" />
 
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link
-  rel="stylesheet"
-  href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400..700;1,7..72,400..700&family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&display=swap"
+  rel="preload"
+  href={hankenNormalUrl}
+  as="font"
+  type="font/woff2"
+  crossorigin="anonymous"
+/>
+<link
+  rel="preload"
+  href={literataNormalUrl}
+  as="font"
+  type="font/woff2"
+  crossorigin="anonymous"
 />
 
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:type" content={ogType} />
-<meta property="og:url" content={new URL(Astro.url.pathname, Astro.site).href} />
+<meta property="og:url" content={canonical} />
 <meta property="og:image" content={ogImageAbs} />
 <meta property="og:site_name" content="jeffkazzee.dev" />
+<meta property="og:locale" content="en_US" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={ogImageAbs} />
 
-<link rel="alternate" type="application/rss+xml" title="jeffkazzee.dev" href={new URL('rss.xml', Astro.site).href} />
+<link rel="alternate" type="application/rss+xml" title="jeffkazzee.dev" href={new URL('/rss.xml', Astro.site).href} />
 <link rel="sitemap" href="/sitemap-index.xml" />
 
 <ClientRouter />

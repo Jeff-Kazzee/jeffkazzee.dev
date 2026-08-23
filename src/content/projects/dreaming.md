@@ -9,4 +9,4 @@ status: prototype
 order: 12
 ---
 
-What if your computer noticed patterns in your work while you weren't looking? Dreaming runs background pattern-finding over a Zo Computer workspace — surfacing connections and recurring themes the way Anthropic's Dreaming feature does for Claude Managed Agents, but on infrastructure you own.
+Dreaming scans a Zo Computer workspace in the background for recurring themes and connections. It adapts the idea behind Anthropic's Dreaming feature for Claude Managed Agents to infrastructure you control.

@@ -1,44 +1,97 @@
-/* ============================================================
-   jeffkazzee.dev — night gallery design system
-   Hand-rolled. No framework. Night sky, moonlight ink, one jade accent.
-   ============================================================ */
+/* jeffkazzee.dev orbital field-notes design system */
 
-:root {
-  /* color */
-  --bg: oklch(15% 0.012 255);
-  --bg-raised: oklch(18% 0.014 255);
-  --surface: oklch(19.5% 0.015 257);
-  --ink: oklch(93% 0.008 95);
-  --ink-soft: oklch(76% 0.012 95);
-  --ink-faint: oklch(62% 0.014 95);
-  --line: oklch(30% 0.015 255);
-  --accent: oklch(78% 0.11 155);
-  --accent-bright: oklch(86% 0.1 152);
-  --accent-vivid: oklch(72% 0.17 150);
-  --accent-tint: oklch(30% 0.05 155);
-  --amber: oklch(76% 0.12 80);
-
-  /* type */
-  --font-serif: "Literata", Georgia, "Times New Roman", serif;
-  --font-sans: "Hanken Grotesk", system-ui, "Segoe UI", sans-serif;
-  --font-mono: ui-monospace, Consolas, Menlo, monospace;
-
-  /* structure */
-  --space: 0.5rem; /* 8px scale */
-  --measure: 66ch;
-  --site-max: 70rem;
-  --radius: 10px;
-  --shadow-soft: 0 1px 2px oklch(5% 0.01 255 / 0.5),
-    0 12px 32px oklch(5% 0.01 255 / 0.45);
-  --shadow-rest: 0 1px 2px oklch(5% 0.01 255 / 0.35);
-
-  /* motion */
-  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --t-fast: 180ms;
-  --t-base: 320ms;
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('../assets/fonts/hanken-grotesk-latin-wght-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-/* ---------- base ---------- */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: italic;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('../assets/fonts/hanken-grotesk-latin-wght-italic.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Literata';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('../assets/fonts/literata-latin-opsz-wght-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Literata';
+  font-style: italic;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('../assets/fonts/literata-latin-opsz-wght-italic.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root,
+:root[data-theme='dark'] {
+  --bg: #081017;
+  --bg-raised: #0c151d;
+  --surface: #0d171f;
+  --surface-strong: #111c24;
+  --ink: #f0eee7;
+  --ink-soft: #bac0bd;
+  --ink-faint: #7e8987;
+  --line: #263138;
+  --line-strong: #3b474d;
+  --accent: #9ddb78;
+  --accent-bright: #c2f19f;
+  --accent-vivid: #70cc7f;
+  --accent-tint: #193327;
+  --amber: #efad55;
+  --danger: #dd7f6c;
+  --shadow-soft: 0 24px 60px rgb(0 0 0 / 0.28);
+  --shadow-rest: 0 12px 30px rgb(0 0 0 / 0.18);
+  color-scheme: dark;
+}
+
+:root[data-theme='light'] {
+  --bg: #f5f2e9;
+  --bg-raised: #eeeade;
+  --surface: #faf8f1;
+  --surface-strong: #ffffff;
+  --ink: #17201f;
+  --ink-soft: #46514e;
+  --ink-faint: #5f6966;
+  --line: #d4d2c9;
+  --line-strong: #aaa9a2;
+  --accent: #2d6f46;
+  --accent-bright: #1d5834;
+  --accent-vivid: #2f7d4b;
+  --accent-tint: #d9ead9;
+  --amber: #9d611e;
+  --danger: #9d4638;
+  --shadow-soft: 0 24px 60px rgb(35 42 39 / 0.12);
+  --shadow-rest: 0 12px 30px rgb(35 42 39 / 0.08);
+  color-scheme: light;
+}
+
+:root {
+  --font-serif: 'Literata', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Hanken Grotesk', system-ui, 'Segoe UI', sans-serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', Consolas, monospace;
+  --space: 0.5rem;
+  --measure: 66ch;
+  --site-max: 75rem;
+  --radius: 5px;
+  --radius-sm: 3px;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --t-fast: 160ms;
+  --t-base: 300ms;
+}
 
 *,
 *::before,
@@ -49,52 +102,56 @@
 
 html {
   background: var(--bg);
-  color-scheme: dark;
+  color: var(--ink);
+  scroll-behavior: smooth;
 }
 
 body {
+  min-height: 100vh;
   font-family: var(--font-sans);
-  font-size: 1.0625rem;
-  /* light type on dark reads lighter; extra leading compensates */
-  line-height: 1.75;
+  font-size: 1rem;
+  line-height: 1.68;
   color: var(--ink);
   background: var(--bg);
-  min-height: 100vh;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color var(--t-base) var(--ease-out), color var(--t-base) var(--ease-out);
 }
 
 ::selection {
+  color: var(--ink);
   background: var(--accent-tint);
-  color: var(--accent-bright);
 }
 
 :focus-visible {
   outline: 2px solid var(--accent);
-  outline-offset: 3px;
-  border-radius: 2px;
+  outline-offset: 4px;
+  border-radius: 1px;
 }
 
 h1,
 h2,
 h3,
 h4 {
+  color: var(--ink);
   font-family: var(--font-serif);
   font-weight: 560;
   font-optical-sizing: auto;
-  line-height: 1.12;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.025em;
+  line-height: 1.08;
   text-wrap: balance;
 }
 
 h1 {
-  font-size: clamp(2.4rem, 5.5vw, 3.75rem);
+  font-size: clamp(2.65rem, 6vw, 5rem);
 }
 
 h2 {
-  font-size: clamp(1.6rem, 3.2vw, 2.2rem);
+  font-size: clamp(1.75rem, 3.4vw, 2.55rem);
 }
 
 h3 {
-  font-size: 1.25rem;
+  font-size: 1.28rem;
 }
 
 p {
@@ -102,145 +159,133 @@ p {
 }
 
 img {
+  display: block;
   max-width: 100%;
   height: auto;
-  display: block;
 }
 
 code {
-  font-family: var(--font-mono);
-  background: var(--bg-raised);
-  border-radius: 4px;
   padding: 0.1em 0.35em;
+  font-family: var(--font-mono);
   font-size: 0.88em;
+  background: var(--bg-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
 }
 
 pre {
+  margin-block: calc(var(--space) * 3);
+  padding: calc(var(--space) * 2.5);
+  overflow-x: auto;
+  font-size: 0.9rem;
+  line-height: 1.6;
   background: var(--bg-raised);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: calc(var(--space) * 2.5);
-  overflow-x: auto;
-  margin-block: calc(var(--space) * 3);
-  font-size: 0.9rem;
-  line-height: 1.6;
 }
 
 pre code {
-  background: none;
-  border: none;
   padding: 0;
   font-size: 1em;
+  background: none;
+  border: 0;
 }
 
 hr {
-  border: none;
-  border-top: 1px solid var(--line);
   margin-block: calc(var(--space) * 6);
+  border: 0;
+  border-top: 1px solid var(--line);
 }
 
 blockquote {
+  margin-block: calc(var(--space) * 3);
+  padding-inline-start: calc(var(--space) * 3);
+  color: var(--ink-soft);
   font-family: var(--font-serif);
   font-style: italic;
-  color: var(--ink-soft);
-  padding-inline-start: calc(var(--space) * 3);
-  margin-block: calc(var(--space) * 3);
+  border-inline-start: 2px solid var(--accent);
 }
-
-/* ---------- links ---------- */
 
 a {
   color: var(--accent);
-  text-decoration: underline;
+  text-decoration-color: color-mix(in oklab, var(--accent) 45%, transparent);
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
-  text-decoration-color: oklch(78% 0.11 155 / 0.4);
-  transition: color var(--t-fast) var(--ease-out),
-    text-decoration-color var(--t-fast) var(--ease-out);
+  transition: color var(--t-fast) var(--ease-out), text-decoration-color var(--t-fast) var(--ease-out);
 }
 
 a:hover {
   color: var(--accent-bright);
-  text-decoration-color: var(--accent-bright);
+  text-decoration-color: currentColor;
 }
 
-/* ---------- layout helpers ---------- */
-
 .wrap {
-  max-width: var(--site-max);
+  width: min(100%, var(--site-max));
   margin-inline: auto;
-  padding-inline: clamp(1.25rem, 5vw, 3rem);
+  padding-inline: clamp(1.1rem, 4vw, 3rem);
 }
 
 .flow > * + * {
   margin-block-start: calc(var(--space) * 2);
 }
 
-/* ---------- buttons ---------- */
-
 .btn {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.8rem;
+  padding: 0.65rem 1.25rem;
+  color: var(--ink);
   font-family: var(--font-sans);
-  font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.84rem;
+  font-weight: 650;
   letter-spacing: 0.01em;
   text-decoration: none;
-  padding: 0.6rem 1.35rem;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  color: var(--ink);
-  background: var(--surface);
-  transition: border-color var(--t-fast) var(--ease-out),
-    color var(--t-fast) var(--ease-out),
-    background-color var(--t-fast) var(--ease-out),
-    box-shadow var(--t-fast) var(--ease-out);
+  background: transparent;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  transition: color var(--t-fast) var(--ease-out), background-color var(--t-fast) var(--ease-out), border-color var(--t-fast) var(--ease-out), transform var(--t-fast) var(--ease-out);
 }
 
 .btn:hover {
-  border-color: var(--accent);
   color: var(--accent-bright);
-  box-shadow: var(--shadow-rest);
+  border-color: var(--accent);
+  transform: translateY(-1px);
 }
 
 .btn.primary {
+  color: var(--bg);
   background: var(--accent);
   border-color: var(--accent);
-  color: var(--bg);
 }
 
 .btn.primary:hover {
+  color: var(--bg);
   background: var(--accent-bright);
   border-color: var(--accent-bright);
-  color: var(--bg);
 }
-
-/* ---------- card surface ---------- */
 
 .surface {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  box-shadow: var(--shadow-rest);
-  transition: border-color var(--t-base) var(--ease-out),
-    box-shadow var(--t-base) var(--ease-out),
-    transform var(--t-base) var(--ease-out);
+  transition: border-color var(--t-base) var(--ease-out), box-shadow var(--t-base) var(--ease-out), transform var(--t-base) var(--ease-out);
 }
 
 .surface:hover {
-  border-color: oklch(78% 0.11 155 / 0.45);
-  box-shadow: var(--shadow-soft);
+  border-color: color-mix(in oklab, var(--accent) 50%, var(--line));
+  box-shadow: var(--shadow-rest);
   transform: translateY(-2px);
 }
 
-/* ---------- status dot ---------- */
-
 .dot {
   display: inline-block;
-  width: 0.5em;
-  height: 0.5em;
-  border-radius: 50%;
+  width: 0.45em;
+  height: 0.45em;
+  flex: 0 0 auto;
   background: var(--accent);
-  vertical-align: 0.05em;
+  border-radius: 50%;
+  vertical-align: 0.08em;
 }
 
 .dot[data-tone='wip'] {
@@ -255,14 +300,12 @@ a:hover {
 @keyframes breathe {
   0%,
   100% {
-    box-shadow: 0 0 0 0 oklch(72% 0.17 150 / 0.5);
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--accent-vivid) 50%, transparent);
   }
   55% {
-    box-shadow: 0 0 0 6px oklch(72% 0.17 150 / 0);
+    box-shadow: 0 0 0 6px transparent;
   }
 }
-
-/* ---------- scroll reveal (src/scripts/reveal.ts) ---------- */
 
 html.js .reveal {
   opacity: 0;
@@ -273,13 +316,12 @@ html.js .reveal.in {
   opacity: 1;
   transform: none;
   transition: opacity 0.55s var(--ease-out), transform 0.55s var(--ease-out);
-  transition-delay: calc(var(--i, 0) * 70ms);
+  transition-delay: calc(var(--i, 0) * 65ms);
 }
 
-/* staggered entrance for hero lines: set --i per element */
 .rise {
   animation: rise 0.6s var(--ease-out) both;
-  animation-delay: calc(var(--i, 0) * 110ms);
+  animation-delay: calc(var(--i, 0) * 95ms);
 }
 
 @keyframes rise {
@@ -293,9 +335,11 @@ html.js .reveal.in {
   }
 }
 
-/* ---------- reduced motion: everything settles ---------- */
-
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   *,
   *::before,
   *::after {
@@ -308,10 +352,6 @@ html.js .reveal.in {
   html.js .reveal {
     opacity: 1;
     transform: none;
-    animation: none;
-  }
-
-  .dot.live {
     animation: none;
   }
 }

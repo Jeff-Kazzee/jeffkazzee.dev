@@ -1,0 +1,22 @@
+# jeffkazzee.dev
+
+> Jeff Kazzee's personal portfolio and blog about software, AI-assisted building, open data, games, learning, and side projects.
+
+Canonical site: https://jeffkazzee.dev/
+
+## Main pages
+
+- [Home](https://jeffkazzee.dev/)
+- [Projects](https://jeffkazzee.dev/projects/)
+- [Writing](https://jeffkazzee.dev/blog/)
+- [Work with me](https://jeffkazzee.dev/work-with-me/)
+
+## Feeds and discovery
+
+- [RSS feed](https://jeffkazzee.dev/rss.xml)
+- [XML sitemap](https://jeffkazzee.dev/sitemap-index.xml)
+- [Crawler rules](https://jeffkazzee.dev/robots.txt)
+
+## Current capabilities
+
+This is a public static website. It does not expose an API, MCP server, agent authentication flow, or agent payment endpoint.

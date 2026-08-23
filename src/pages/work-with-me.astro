@@ -3,258 +3,120 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import LinkButton from '../components/LinkButton.astro';
 
-// ============================================================
-// Booking + payment links. Public URLs, safe to commit.
-// The half hour is the only self-serve path: pay, then book a slot.
-// Anything longer than 30 minutes or for a group is arranged by email.
-// ============================================================
-const BOOKING_URL = 'https://calendar.app.google/HnkQMCj9ykUGUhoi6';
-const STRIPE_HALF_HOUR = 'https://buy.stripe.com/9B6dR92WvcoZ4Vw8BS08g09';
 const EMAIL = 'jeffkazzee@gmail.com';
+const inquiryUrl = `mailto:${EMAIL}?subject=${encodeURIComponent('Project inquiry')}`;
 
-// Payment links to send after someone emails for a longer or group session:
-//   One hour ($65):            https://buy.stripe.com/fZu4gzeFddt3fAa6tK08g0a
-//   Three-session pack ($100): https://buy.stripe.com/7sYbJ168H74Few69FW08g08
-
-const bookingEmail = (subject: string) =>
-  `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(
-    'What do you want to work on?\nHow many people?\nWhich days and times work for you?\n',
-  )}`;
-
-const tracks = [
+const offers = [
   {
-    title: 'Learn to code with AI',
-    desc: 'From zero, or close to it. Real tools, Cursor, Claude, and Zo Computer, on a real project instead of a toy exercise. You leave able to read code, change it, and ship it with an AI pair.',
+    title: 'Websites',
+    desc: 'A clear, fast site for a product, a small business, or a project that needs a home. I can help shape the content, build the site, and hand over the source.',
   },
   {
-    title: 'Use AI for real work',
-    desc: 'Your actual job. Research, writing, data, docs, and automating the boring parts. Done faster, and understood well enough that you can trust the output instead of guessing at it.',
+    title: 'Small tools',
+    desc: 'A focused internal tool or small app that removes a repeated bit of work. We keep the scope narrow enough to finish.',
   },
   {
-    title: 'Build something real',
-    desc: 'Bring an idea. Leave with a working, shippable thing: a tool, a site, an automation. Step by step, screen-shared. You drive, I guide.',
-  },
-];
-
-const pricing = [
-  {
-    name: 'Half hour',
-    price: '$40',
-    desc: 'One session, one screen, one problem. The fastest way to find out if this works for you.',
-    cta: 'Pay and book',
-    href: STRIPE_HALF_HOUR,
-    selfServe: true,
-  },
-  {
-    name: 'One hour',
-    price: '$65',
-    desc: 'Two thirty-minute blocks, back to back. Send a note first so we can line up the time.',
-    cta: 'Email to book an hour',
-    href: bookingEmail('Booking an hour session'),
-    selfServe: false,
-  },
-  {
-    name: 'Three-session pack',
-    price: '$100',
-    desc: 'Three half-hour sessions. The best value, because the second and third are usually where it clicks.',
-    cta: 'Email to arrange',
-    href: bookingEmail('Three-session pack'),
-    selfServe: false,
-  },
-  {
-    name: 'Groups and workshops',
-    price: 'from $25 / person',
-    desc: 'Small group of two to four at $35 a person per hour. Workshop of five to ten at $25 a person per hour. Tell me the group and the topic.',
-    cta: 'Email about a group',
-    href: bookingEmail('Group session or workshop'),
-    selfServe: false,
-  },
-];
-
-const shipped = [
-  { name: 'Zo Cookbook', href: 'https://www.zo-cookbook.space/' },
-  { name: 'Launchling', href: 'https://www.launchling.app/' },
-  { name: 'Ukrainian Trainer', href: 'https://ukrainian-trainer-jeffkazzee.zocomputer.io/' },
-  { name: 'Zo Computer 101', href: 'https://zo-101-jeffkazzee.zocomputer.io/' },
-  { name: 'Stack Replacer', href: 'https://zo-stack-replacer-jeffkazzee.zocomputer.io/' },
-];
-
-const faqs = [
-  {
-    q: 'Do I need experience?',
-    a: 'No. Plenty of people start at zero. That is a normal place to start.',
-  },
-  {
-    q: 'What do I need installed?',
-    a: 'Nothing to begin. If we need a tool, we set it up together on the call.',
-  },
-  {
-    q: 'Can my team book together?',
-    a: 'Yes. Two to four is a small group, five to ten is a workshop, both at a lower rate per person.',
-  },
-  {
-    q: 'Can I reschedule?',
-    a: 'Yes. Give me at least 24 hours notice and we will find a new time.',
-  },
-  {
-    q: 'Refunds?',
-    a: 'If your first session is not useful, tell me and I refund it. That is the whole policy.',
+    title: 'AI workflows',
+    desc: 'A practical workflow around research, writing, data, or a repetitive task. The point is a system you can understand and change, not a magic button.',
   },
 ];
 ---
 
 <BaseLayout
-  title="Learn to build with AI, live with Jeff Kazzee"
-  description="Live, screen-shared coaching. Learn to code with AI, use AI for your real work, or build something real. One-on-one and small-group sessions."
+  title="Work with me: Jeff Kazzee"
+  description="Jeff Kazzee builds small websites, tools, and AI workflows for people with a concrete problem."
 >
   <section class="hero wrap">
     <p class="now rise" style="--i: 0">
       <span class="dot" aria-hidden="true"></span>
-      One-on-one and group sessions, live and screen-shared
+      Paid websites, small tools, and AI workflows
     </p>
-    <h1 class="rise" style="--i: 1">You don't need a degree to build with AI. You need an hour and someone who has done it.</h1>
+    <h1 class="rise" style="--i: 1">I build the first useful version.</h1>
     <p class="lede rise" style="--i: 2">
-      This is live teaching, not a course you watch alone. We get on a call, share a screen, and
-      work on your thing: your first program, your real job, or the idea you keep not shipping. You
-      leave with something that runs, and the skill to keep going without me.
+      Have a clear problem, a rough idea, or a process that is wasting your time? I can help turn
+      it into a small website, tool, or workflow. Start with an email. I will reply with whether I
+      am the right person, the scope I would suggest, and what it would cost.
     </p>
     <div class="cta rise" style="--i: 3">
-      <LinkButton href="#pricing" variant="primary">Reserve a session</LinkButton>
-      <LinkButton href="#tracks">See what you'll learn</LinkButton>
+      <LinkButton href={inquiryUrl} variant="primary">Start a conversation</LinkButton>
+      <LinkButton href="/projects/">See the work</LinkButton>
     </div>
   </section>
 
-  <section class="wrap">
+  <section class="wrap" id="offers">
     <SectionHeading
-      title="Who this is for"
-      note="Learners and working professionals, not people who need their code cleaned up."
-    />
-    <ul class="who flow">
-      <li>People who want to build something real and keep bouncing off tutorials.</li>
-      <li>Working professionals who want to use AI on the actual job, not a toy demo.</li>
-      <li>Small teams who want to get better together.</li>
-    </ul>
-    <p class="pull">If you have been meaning to learn this for a year, an hour with a person beats another month of open tabs.</p>
-  </section>
-
-  <section class="wrap" id="tracks">
-    <SectionHeading
-      title="What you'll learn"
-      note="Three tracks. Pick one, or mix them across sessions."
+      title="What I can help build"
+      note="These are the things I build now."
     />
     <div class="grid">
-      {tracks.map((t, i) => (
+      {offers.map((offer, i) => (
         <article class="surface card reveal" style={`--i: ${i}`}>
-          <h3>{t.title}</h3>
-          <p>{t.desc}</p>
+          <h3>{offer.title}</h3>
+          <p>{offer.desc}</p>
         </article>
       ))}
     </div>
   </section>
 
   <section class="wrap">
-    <SectionHeading title="Formats" />
-    <ul class="formats flow">
-      <li><strong>One-on-one.</strong> Live, screen-shared, your pace.</li>
-      <li><strong>Small group, two to four.</strong> Learn with your team or your friends at a lower cost per person.</li>
-      <li><strong>Workshop, five to ten.</strong> One focused topic for a group.</li>
-      <li><strong>More than once.</strong> Most people book again, because skills compound. Recurring is the point, not the exception.</li>
-    </ul>
-  </section>
-
-  <section class="wrap">
     <SectionHeading
-      title="What I've built with these tools"
-      note="No testimonials yet. Here is the work instead."
+      title="How I work"
+      note="Each project differs. The order usually does not."
     />
-    <p class="proof-lede">
-      I teach the tools I use every day. Here is what I have shipped with them, live right now. I
-      will teach you to build like this.
-    </p>
-    <div class="proof-grid">
-      {shipped.map((p) => (
-        <a class="surface proof-card" href={p.href} target="_blank" rel="noopener">
-          <span class="dot live" aria-hidden="true"></span>
-          <span class="proof-name">{p.name}</span>
-          <span class="proof-arrow" aria-hidden="true">&rarr;</span>
-        </a>
-      ))}
-    </div>
-    <p class="proof-more"><a href="/projects/">More on the projects page.</a></p>
-  </section>
-
-  <section class="wrap" id="pricing">
-    <SectionHeading
-      title="What it costs"
-      note="The half hour books itself. Everything else, send a note and I set it up with you."
-    />
-    <div class="prices">
-      {pricing.map((p) => (
-        <article class="surface price-row">
-          <div class="price-head">
-            <h3>{p.name}</h3>
-            <span class="amount">{p.price}</span>
-          </div>
-          <p>{p.desc}</p>
-          <LinkButton href={p.href} variant={p.selfServe ? 'primary' : 'default'}>
-            {p.cta}
-          </LinkButton>
-        </article>
-      ))}
-    </div>
-    <p class="boundary">
-      Sessions run from a half hour up to four hours. Anything longer than a single half hour,
-      spread across days, or for a group needs a quick email first so I can block the right time.
-      Every engagement gets scoped to fit. Already paid for your half hour?
-      <a href={BOOKING_URL} target="_blank" rel="noopener">Book your slot here.</a>
-    </p>
-  </section>
-
-  <section class="wrap">
-    <SectionHeading title="How it works" />
     <ol class="steps flow">
-      <li><strong>Pick your session.</strong> The half hour is ready to book right now. For anything longer or for a group, send me a note and I get you set up.</li>
-      <li><strong>Pay.</strong> Secure Stripe checkout. You and I both get an emailed receipt, and that receipt confirms your spot.</li>
-      <li><strong>Book your time.</strong> After payment, grab a slot on my calendar. You get a calendar invite and a reminder.</li>
+      <li>
+        <strong>Start with the problem.</strong> Send a few lines about what you want to change,
+        who uses it, and what you have tried already.
+      </li>
+      <li>
+        <strong>Cut the scope.</strong> I will suggest the smallest version worth building and say
+        what I would leave out for now.
+      </li>
+      <li>
+        <strong>Build and review.</strong> We work in short checkpoints and review working pieces
+        as we go.
+      </li>
+      <li>
+        <strong>Hand it over.</strong> You get the source, practical notes, and a walkthrough of
+        what is there and what could come next.
+      </li>
     </ol>
   </section>
 
   <section class="wrap">
-    <SectionHeading title="Is this a fit?" />
+    <SectionHeading title="A good first note" />
     <div class="flow">
       <p>
-        Good fit if you want to learn by building real things, you like a patient person who
-        explains the why, and you would rather understand the tool than buy a shortcut.
+        You do not need a polished brief. Tell me what is frustrating, what the current workaround
+        looks like, and what you need the first version to do.
       </p>
-      <p>
-        One honest thing. If your problem is bigger than a session can solve, I will say so, and I
-        will point you somewhere better.
-      </p>
+      <ul class="formats">
+        <li>What are you trying to make or fix?</li>
+        <li>Who needs to use it?</li>
+        <li>What would make the first version useful?</li>
+        <li>Is there a deadline or a constraint I should know about?</li>
+      </ul>
     </div>
-    <p class="pull">I don't fix your mistakes. I teach you to not need me.</p>
+    <p class="pull">A rough problem is enough to start. We can make the brief clearer together.</p>
   </section>
 
   <section class="wrap">
-    <SectionHeading title="Questions" />
-    <dl class="faq">
-      {faqs.map((f) => (
-        <div class="faq-item">
-          <dt>{f.q}</dt>
-          <dd>{f.a}</dd>
-        </div>
-      ))}
-    </dl>
+    <SectionHeading title="When it is not a fit" />
+    <p class="boundary">
+      I am not a 24/7 support desk or a full product team. If the project needs a large build,
+      ongoing operations, or too many unknowns to define a first deliverable, I will say that early.
+    </p>
   </section>
 
   <section class="wrap final">
-    <SectionHeading title="Bring the thing you keep meaning to learn" />
+    <SectionHeading title="Have a project in mind?" />
     <p class="final-copy">
-      We will build it together, and you will leave able to keep building. Start with a half hour.
-      If you want the longer version or a group, email me first.
+      Send the rough version. I will reply with whether I can help and what I would suggest doing
+      first.
     </p>
     <div class="cta">
-      <LinkButton href={STRIPE_HALF_HOUR} variant="primary">Book a half hour</LinkButton>
-      <LinkButton href={bookingEmail('Session question')}>Email me first</LinkButton>
+      <LinkButton href={inquiryUrl} variant="primary">Email about a project</LinkButton>
+      <LinkButton href="/projects/">Browse projects</LinkButton>
     </div>
   </section>
 </BaseLayout>
@@ -278,7 +140,7 @@ const faqs = [
   .lede {
     font-size: 1.2rem;
     line-height: 1.7;
-    color: oklch(84% 0.01 95);
+    color: var(--ink-soft);
     max-width: 52ch;
   }
 
@@ -286,48 +148,6 @@ const faqs = [
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
-  }
-
-  .who,
-  .formats {
-    list-style: none;
-    padding: 0;
-    max-width: var(--measure);
-  }
-
-  .who li {
-    padding-inline-start: 1.5rem;
-    position: relative;
-    color: var(--ink-soft);
-  }
-
-  .who li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0.75em;
-    width: 0.5rem;
-    height: 0.5rem;
-    border-radius: 50%;
-    background: var(--accent);
-  }
-
-  .formats li {
-    color: var(--ink-soft);
-  }
-
-  .formats strong {
-    color: var(--ink);
-  }
-
-  .pull {
-    font-family: var(--font-serif);
-    font-size: 1.35rem;
-    line-height: 1.4;
-    color: var(--ink);
-    max-width: 30ch;
-    margin-top: calc(var(--space) * 5);
-    text-wrap: balance;
   }
 
   .grid {
@@ -356,90 +176,40 @@ const faqs = [
     line-height: 1.65;
   }
 
-  .proof-lede {
+  .formats {
+    list-style: none;
+    padding: 0;
+    max-width: var(--measure);
     color: var(--ink-soft);
-    max-width: 48ch;
   }
 
-  .proof-grid {
-    margin-top: calc(var(--space) * 4);
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
-    gap: calc(var(--space) * 2);
+  .formats li {
+    padding-inline-start: 1.5rem;
+    position: relative;
   }
 
-  .proof-card {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    padding: calc(var(--space) * 2.5) calc(var(--space) * 3);
-    text-decoration: none;
+  .formats li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.75em;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .pull {
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+    line-height: 1.4;
     color: var(--ink);
-  }
-
-  .proof-name {
-    font-weight: 600;
-    font-size: 0.98rem;
-  }
-
-  .proof-arrow {
-    margin-left: auto;
-    color: var(--ink-faint);
-  }
-
-  .proof-more {
-    margin-top: calc(var(--space) * 3);
-    font-size: 0.95rem;
-  }
-
-  .prices {
-    display: grid;
-    gap: calc(var(--space) * 2.5);
-  }
-
-  .price-row {
-    padding: calc(var(--space) * 3.5) calc(var(--space) * 4);
-    display: grid;
-    gap: calc(var(--space) * 1.5);
-    align-items: start;
-  }
-
-  .price-head {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-
-  .price-head h3 {
-    font-family: var(--font-sans);
-    font-weight: 600;
-    font-size: 1.1rem;
-    color: var(--ink);
-  }
-
-  .amount {
-    font-family: var(--font-mono);
-    font-size: 1.05rem;
-    color: var(--accent);
-    white-space: nowrap;
-  }
-
-  .price-row p {
-    font-size: 0.95rem;
-    color: var(--ink-soft);
-    line-height: 1.65;
-    max-width: 52ch;
-  }
-
-  .price-row :global(.btn) {
-    justify-self: start;
-    margin-top: calc(var(--space) * 1);
+    max-width: 30ch;
+    margin-top: calc(var(--space) * 5);
+    text-wrap: balance;
   }
 
   .boundary {
-    margin-top: calc(var(--space) * 5);
     padding: calc(var(--space) * 3) calc(var(--space) * 4);
     border-inline-start: 3px solid var(--amber);
     background: var(--bg-raised);
@@ -484,23 +254,6 @@ const faqs = [
 
   .steps strong {
     color: var(--ink);
-  }
-
-  .faq {
-    display: grid;
-    gap: calc(var(--space) * 3);
-    max-width: var(--measure);
-  }
-
-  .faq-item dt {
-    font-weight: 600;
-    color: var(--ink);
-    margin-bottom: calc(var(--space) * 0.5);
-  }
-
-  .faq-item dd {
-    margin: 0;
-    color: var(--ink-soft);
   }
 
   .final {

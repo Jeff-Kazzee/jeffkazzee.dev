@@ -9,11 +9,11 @@ status: alpha
 order: 7
 ---
 
-Braincheck is a lint-and-typecheck layer for Markdown knowledge bases. It exists for the unglamorous but important work of keeping front matter consistent enough that agents, scripts, and humans can trust it.
+Braincheck checks Markdown knowledge bases before inconsistent front matter breaks scripts or confuses agents. It keeps metadata predictable for people and the tools that read it.
 
 ## What it does
 
 - Checks YAML front matter across a Markdown workspace
-- Helps keep one schema instead of twenty almost-schemas
+- Flags front matter that drifts from the workspace schema
 - Runs as a lightweight Python CLI
-- Supports the practical maintenance work behind agent-readable notes
+- Keeps agent-readable notes consistent without adding a runtime dependency

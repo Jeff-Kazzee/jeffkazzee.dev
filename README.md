@@ -1,8 +1,8 @@
 # jeffkazzee.dev
 
-Personal portfolio — projects from [GitHub](https://github.com/Jeff-Kazzee) and things built on my [Zo computer](https://jeffkazzee.zo.space), plus writing mirrored from [Substack](https://jeffkazzee.substack.com).
+Personal portfolio with projects from [GitHub](https://github.com/Jeff-Kazzee), things built on my [Zo computer](https://jeffkazzee.zo.space), and writing published on this site.
 
-Built with [Astro](https://astro.build), hand-rolled brutalist CSS (no framework), deployed on Cloudflare Pages.
+Built with [Astro](https://astro.build), hand-rolled editorial CSS, and deployed on Vercel.
 
 ## Commands
 
@@ -15,9 +15,12 @@ Built with [Astro](https://astro.build), hand-rolled brutalist CSS (no framework
 
 ## Content
 
-- Projects: `src/content/projects/*.md` — one file per project
-- Blog: `src/content/blog/*.md` — Substack mirrors carry `canonicalUrl` pointing at the original
+- Project entries live in `src/content/projects/*.md`, with one file per project.
+- Blog posts live in `src/content/blog/*.md`. Older Substack imports keep `canonicalUrl` pointing at the original edition.
 
 ## Deploy
 
-Cloudflare Pages: framework preset **Astro**, build `npm run build`, output `dist`, `NODE_VERSION=22`.
+Vercel deploys pushes to `main` through its GitHub integration. `vercel.json`
+pins the Astro preset, `npm run build`, the `dist` output directory, and the
+site's cache and security headers. Use a branch deployment as the preview gate
+before merging to `main`.

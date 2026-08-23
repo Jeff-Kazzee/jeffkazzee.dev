@@ -1,6 +1,6 @@
 ---
 title: Loam
-description: "The filesystem is the schema: a zero-dependency Python CLI for treating folders as typed Markdown knowledge."
+description: A zero-dependency Python CLI that uses folder paths as types for Markdown knowledge bases.
 tags: [agents, tooling, open-source]
 stack: [Python, Markdown, YAML]
 repoUrl: https://github.com/Jeff-Kazzee/loam
@@ -9,13 +9,13 @@ status: alpha
 order: 6
 ---
 
-Loam is small infrastructure for a bigger idea: folders can be types, and Markdown notes can have a real schema without needing a database or a heavy app.
+Loam uses folder paths as types and validates the Markdown and YAML files inside them. This gives a file-based knowledge base a schema without adding a database or application.
 
-It is practical, boring in the good way, and useful for agent workspaces where the file tree needs to tell both humans and machines what kind of knowledge lives where.
+It fits agent workspaces where the file tree needs to tell people and tools what kind of knowledge belongs in each folder.
 
 ## What it does
 
 - Treats folder paths as knowledge types
 - Validates Markdown/YAML structure
 - Keeps the source files plain and portable
-- Gives agents a more reliable map than a flat pile of notes
+- Gives agents folder-level type information instead of one flat collection of notes

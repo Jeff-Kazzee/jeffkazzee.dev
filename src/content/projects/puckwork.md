@@ -1,19 +1,19 @@
 ---
 title: Puckwork
-description: Physics-first air hockey. The air is simulated, and the air is the game. Zero-dep canvas game in a single file.
+description: A single-file, zero-dependency canvas air-hockey game that simulates the air cushion beneath the puck.
 tags: [game, web, experiment]
 stack: [JavaScript, Canvas, zero dependencies]
 liveUrl: https://puckwork.vercel.app
 screenshots:
   - src: ./_images/puckwork.png
-    alt: PUCKWORK gameplay — the simulated air cushion rendered on canvas
+    alt: PUCKWORK gameplay with the simulated air cushion rendered on canvas
 date: 2026-04-20
 status: demo
 order: 8
 ---
 
-Air hockey, except the air is real — simulated, anyway. PUCKWORK models the air cushion itself, so the puck rides a field of pressure instead of faking it with friction constants.
+PUCKWORK models the air cushion beneath the puck, so the puck moves across a simulated pressure field instead of relying only on friction constants.
 
-It's a zero-dependency canvas game delivered as a single file. No build step, no framework, no install. Open it and play.
+It ships as a single file with no framework, dependencies, install, or build step. Open it in a browser and play.
 
-A small demo, built for the joy of it.
+It is a small physics demo, built for the fun of it.

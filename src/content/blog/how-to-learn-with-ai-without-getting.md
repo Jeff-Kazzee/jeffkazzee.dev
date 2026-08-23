@@ -6,7 +6,7 @@ canonicalUrl: https://jeffkazzee.substack.com/p/how-to-learn-with-ai-without-get
 tags: []
 ---
 
-![](https://substackcdn.com/image/fetch/$s_!sLNe!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F13faba53-966b-457d-b1fd-17835b9950b7_1448x1086.png)
+![Line drawing of a person taking notes beside a laptop](../../assets/blog/learning-ai-note-taking.png)
 
 AI has made a lot of knowledge workers faster and a little worse at thinking alone. A first draft, a spreadsheet formula, or a meeting summary that used to take an hour now takes ten minutes. The tradeoff is practice: people are doing fewer hard reps. You can’t quite remember the last time you sat with a hard question for an hour. The blank page feels more unfamiliar than it used to. You send the plan after the model has cleaned it up, and when someone in the meeting asks about the second recommendation, you cannot quite explain why it’s there.
 
@@ -53,7 +53,7 @@ Push back when the model gets too polite. After three or four questions, paste: 
 
 When you’re done, keep every question that made you hesitate. That list is your study plan. It is a better first plan than a generic course outline, because it starts from the gaps you actually have instead of the ones a textbook author predicted you would have.
 
-![](https://substackcdn.com/image/fetch/$s_!qPQV!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F37e7d416-98a9-4fb8-abf4-23d3fca5d978_1254x1254.png)
+![Nine question-mark cards spread across a desk](../../assets/blog/learning-ai-question-cards.png)
 
 ### Step 3. Try first
 
@@ -61,11 +61,11 @@ This is the step most people skip, and the method falls apart when they do. If y
 
 Trying first feels slow, but the useful questions usually appear during the slow minutes. Twenty minutes spent staring at a blank page, writing a sentence, deleting it, writing another, deleting that one too. Those are the minutes when the useful questions start to appear. Skip the twenty minutes and you skip the part where the learning happens.
 
-> **Exercise 3 (5 min).** Pick the smallest item from your gap list. Set a timer. Close the chat tab. Write the answer cold — three sentences, three bullet points, a rough sketch, a list of numbers. For this workshop, five minutes is enough. In real life, the cold work takes fifteen to thirty.
+> **Exercise 3 (5 min).** Pick the smallest item from your gap list. Set a timer. Close the chat tab. Write the answer cold: three sentences, three bullet points, a rough sketch, a list of numbers. For this workshop, five minutes is enough. In real life, the cold work takes fifteen to thirty.
 
 A confused first attempt gives the model something concrete to diagnose. If yours came out clean, you picked a question you already knew. Pick a harder one next round.
 
-![](https://substackcdn.com/image/fetch/$s_!Q2ei!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fb32c28e1-4641-40d6-9cb9-cecf1c5e07cd_1254x1254.png)
+![Line drawing of a clipboard and three checkboxes, with the last box marked in red](../../assets/blog/learning-ai-checklist.png)
 
 ### Step 4. Grade second
 
@@ -85,7 +85,7 @@ Don't be encouraging. Be useful. Find the weakest part.
 Tell me the single most important problem to fix first, and why.`
 ```
 
-A useful response names the most important problem first, in specific language, with a fix attached. *“The second paragraph claims X without evidence — either drop it or add the source”* is the kind of feedback you want. By contrast, *“Great start! Consider adding more detail to paragraph two”* tells you nothing, which means the model did not take the be-blunt instruction. Re-run with: *“That was too soft. What is actually wrong here? Be blunt.”*
+A useful response names the most important problem first, in specific language, with a fix attached. *“The second paragraph claims X without evidence. Either drop it or add the source”* is the kind of feedback you want. By contrast, *“Great start! Consider adding more detail to paragraph two”* tells you nothing, which means the model did not take the be-blunt instruction. Re-run with: *“That was too soft. What is actually wrong here? Be blunt.”*
 
 Read what comes back slowly, and don’t fix anything yet. Add each item the model caught to your gap list. Only after the list is updated, decide whether to repair this draft or start over. Starting over is often faster than patching, especially early on.
 
@@ -105,7 +105,7 @@ accomplish, what we've tried, what's worked, what hasn't, where we
 are right now, and the next step. Keep it tight.`
 ```
 
-**Cross-check what matters.** When an answer is important, paste it into a different chatbot and ask where the first one was wrong. If two models give you the same answer, that is weak evidence; they can share an error. If they give you different answers, you have found a question that needs more investigation than either chatbot is giving it.
+**Cross-check what matters.** When an answer is important, paste it into a different chatbot and ask where the first one was wrong. If two models give you the same answer, that is weak evidence because they can share an error. If they give you different answers, you have found a question that needs more investigation than either chatbot is giving it.
 
 Two prompts worth keeping in a notes file. Use them on any answer you would act on:
 

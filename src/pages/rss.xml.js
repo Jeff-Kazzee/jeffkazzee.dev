@@ -15,7 +15,7 @@ export async function GET(context) {
       title: post.data.title,
       description: post.data.description,
       pubDate: post.data.pubDate,
-      link: `/blog/${post.id}/`,
+      link: post.data.canonicalUrl ?? `/blog/${post.id}/`,
     })),
   });
 }

@@ -1,6 +1,6 @@
 ---
 title: Dumpling Cafe
-description: A small cafe site demo — quick build, served hot.
+description: A small cafe website demo published to a working URL.
 tags: [web, demo]
 stack: [TypeScript]
 liveUrl: https://dumpling-cafe-kilo.vercel.app
@@ -12,4 +12,4 @@ status: demo
 order: 14
 ---
 
-A small cafe website demo. One of the quick builds — made fast, shipped to a URL, lessons folded into the next thing.
+A small cafe website demo published to a working URL. I used it to finish a focused site, record what worked, and carry those lessons into the next build.

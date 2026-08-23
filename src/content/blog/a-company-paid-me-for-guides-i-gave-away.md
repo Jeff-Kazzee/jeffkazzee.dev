@@ -3,9 +3,9 @@ title: "How I got paid for free guides I wrote about an AI tool"
 description: "Zo Computer licensed my free beginner guides for real money. How publishing free documentation under your own name turns into income, and how to do it yourself."
 pubDate: 2026-08-22
 tags: ["ai", "writing", "income", "documentation"]
+heroImage: ../../assets/blog/a-company-paid-me-for-guides-i-gave-away.png
+heroAlt: "An open notebook on a dark desk, pages of light rising toward a beam of golden light"
 ---
-
-![An open notebook on a dark desk, pages of light rising toward a beam of golden light](/images/a-company-paid-me-for-guides-i-gave-away.png)
 
 **Yes, companies pay for free content.** Last month Zo Computer, the company behind the AI computer I use every day, licensed a set of beginner guides I had published for free, to use as direct inspiration for their official tutorials. The guides stay free. My name stays on them. And I got paid enough that I now treat public documentation as a real income source instead of a hobby.
 
@@ -13,7 +13,7 @@ This is the full story, plus the exact steps to do it with whatever tool you use
 
 ## What exactly did they pay for?
 
-The collection is [Zo Computer 101: the field guide](https://zo-101-jeffkazzee.zocomputer.io), sixty-six plain-English walkthroughs of Zo Computer: how to set up an account, what the AI agent can actually do, where beginners get stuck, and what breaks along the way. I wrote them because I was using the tool constantly and nobody had written the guide I wished existed when I started.
+The collection is [Zo Computer 101: the field guide](/projects/zo-computer-101/), sixty-six plain-English walkthroughs of Zo Computer: how to set up an account, what the AI agent can actually do, where beginners get stuck, and what breaks along the way. I wrote them because I was using the tool constantly and nobody had written the guide I wished existed when I started.
 
 I published them publicly, under my own name, free to read, no login.
 
@@ -54,7 +54,7 @@ That second half is the part that made the work worth licensing. If you publish 
 
 ### Do you need a big audience to license your content?
 
-No. I had no email list for these guides and no sponsorship deals. The company found the work itself because it was public, indexed, and useful. Discoverability mattered; follower count didn't.
+No. I had no email list for these guides and no sponsorship deals. The company found the work itself because it was public, indexed, and useful. Discoverability mattered more than follower count.
 
 ### How do companies find free guides to license?
 
@@ -62,7 +62,7 @@ The same ways users do: search engines, AI assistants that cite sources, and com
 
 ### Can you use AI to write guides and still get paid for them?
 
-Yes, if you verify everything before it ships. AI handles drafting and volume; you supply the daily product experience, the fact-checking, and the voice. Companies are paying for accuracy and lived detail, and those come from you.
+Yes, if you verify everything before it ships. AI handles drafting and volume while you supply the daily product experience, the fact-checking, and the voice. Companies are paying for accuracy and lived detail, and those come from you.
 
 ### What did this cost to start?
 
@@ -79,61 +79,39 @@ GitHub: https://github.com/jeff-kazzee
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@graph": [
+  "@type": "FAQPage",
+  "mainEntity": [
     {
-      "@type": "BlogPosting",
-      "headline": "How I got paid for free guides I wrote about an AI tool",
-      "description": "Zo Computer licensed my free beginner guides for real money. How publishing free documentation under your own name turns into income, and how to do it yourself.",
-      "datePublished": "2026-08-22",
-      "author": {
-        "@type": "Person",
-        "name": "Jeff Kazzee",
-        "url": "https://jeffkazzee.dev",
-        "sameAs": [
-          "https://x.com/jeffkazzee",
-          "https://github.com/jeff-kazzee",
-          "https://www.linkedin.com/in/jeff-kazzee-759208373/",
-          "https://jeffkazzee.substack.com"
-        ]
-      },
-      "mainEntityOfPage": "https://jeffkazzee.dev/blog/a-company-paid-me-for-guides-i-gave-away/"
+      "@type": "Question",
+      "name": "Do you need a big audience to license your content?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. The company found the work itself because it was public, indexed, and useful. Discoverability mattered more than follower count."
+      }
     },
     {
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Do you need a big audience to license your content?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No. The company found the work itself because it was public, indexed, and useful. Discoverability mattered; follower count didn't."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How do companies find free guides to license?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "The same ways users do: search engines, AI assistants that cite sources, and community spaces where their users ask questions. Publish where those systems can crawl and use the product's real name in your writing."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can you use AI to write guides and still get paid for them?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes, if you verify everything before it ships. AI handles drafting and volume; the writer supplies daily product experience, fact-checking, and voice."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What did this cost to start?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Zero dollars. A free account, a text editor, and opinions backed by actual use."
-          }
-        }
-      ]
+      "@type": "Question",
+      "name": "How do companies find free guides to license?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The same ways users do: search engines, AI assistants that cite sources, and community spaces where their users ask questions. Publish where those systems can crawl and use the product's real name in your writing."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can you use AI to write guides and still get paid for them?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, if you verify everything before it ships. AI handles drafting and volume while the writer supplies daily product experience, fact-checking, and voice."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What did this cost to start?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Zero dollars. A free account, a text editor, and opinions backed by actual use."
+      }
     }
   ]
 }

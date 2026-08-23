@@ -11,35 +11,82 @@ const isActive = (href: string) => path.startsWith(href);
 <header>
   <div class="wrap bar">
     <a class="mark" href="/">Jeff Kazzee</a>
-    <nav aria-label="Main">
-      {items.map((item) => (
-        <a href={item.href} class:list={['nav-link', { active: isActive(item.href) }]} aria-current={isActive(item.href) ? 'page' : undefined}>
-          {item.label}
-        </a>
-      ))}
-    </nav>
+    <div class="controls">
+      <nav aria-label="Main">
+        {items.map((item) => (
+          <a href={item.href} class:list={['nav-link', { active: isActive(item.href) }]} aria-current={isActive(item.href) ? 'page' : undefined}>
+            {item.label}
+          </a>
+        ))}
+      </nav>
+      <div class="theme-switch" aria-label="Color theme">
+        <button type="button" data-theme-choice="dark" aria-pressed="false">Dark</button>
+        <button type="button" data-theme-choice="light" aria-pressed="false">Light</button>
+      </div>
+    </div>
   </div>
 </header>
+
+<script>
+  const selectedTheme = () => {
+    const stored = localStorage.getItem('theme');
+    if (stored === 'light' || stored === 'dark') return stored;
+    return matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  };
+
+  const applyTheme = (root = document.documentElement) => {
+    const theme = selectedTheme();
+    root.dataset.theme = theme;
+    root.style.colorScheme = theme;
+  };
+
+  const syncThemeControls = () => {
+    const theme = document.documentElement.dataset.theme ?? 'dark';
+    document.querySelectorAll<HTMLButtonElement>('[data-theme-choice]').forEach((button) => {
+      button.setAttribute('aria-pressed', String(button.dataset.themeChoice === theme));
+      if (button.dataset.themeBound === 'true') return;
+      button.dataset.themeBound = 'true';
+      button.addEventListener('click', () => {
+        const nextTheme = button.dataset.themeChoice === 'light' ? 'light' : 'dark';
+        document.documentElement.dataset.theme = nextTheme;
+        document.documentElement.style.colorScheme = nextTheme;
+        localStorage.setItem('theme', nextTheme);
+        syncThemeControls();
+      });
+    });
+  };
+
+  document.addEventListener('astro:before-swap', (event) => {
+    applyTheme(event.newDocument.documentElement);
+  });
+
+  syncThemeControls();
+  document.addEventListener('astro:page-load', () => {
+    applyTheme();
+    syncThemeControls();
+  });
+</script>
 
 <style>
   header {
     border-bottom: 1px solid var(--line);
-    background: var(--bg);
+    background: color-mix(in oklab, var(--bg) 94%, transparent);
+    position: relative;
+    z-index: 20;
   }
 
   .bar {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     justify-content: space-between;
-    gap: 1rem;
-    padding-block: calc(var(--space) * 2.5);
-    flex-wrap: wrap;
+    gap: 1.25rem;
+    min-height: 4.5rem;
   }
 
   .mark {
     font-family: var(--font-serif);
     font-weight: 600;
-    font-size: 1.15rem;
+    font-size: 1.2rem;
     letter-spacing: -0.01em;
     color: var(--ink);
     text-decoration: none;
@@ -49,9 +96,18 @@ const isActive = (href: string) => path.startsWith(href);
     color: var(--accent);
   }
 
+  .controls,
   nav {
     display: flex;
+    align-items: center;
+  }
+
+  .controls {
     gap: clamp(1rem, 3vw, 2rem);
+  }
+
+  nav {
+    gap: clamp(0.85rem, 2.2vw, 1.75rem);
   }
 
   .nav-link {
@@ -59,7 +115,7 @@ const isActive = (href: string) => path.startsWith(href);
     font-weight: 500;
     color: var(--ink-soft);
     text-decoration: none;
-    padding-block: 0.2rem;
+    padding-block: 0.35rem;
   }
 
   .nav-link:hover {
@@ -68,8 +124,54 @@ const isActive = (href: string) => path.startsWith(href);
 
   .nav-link.active {
     color: var(--accent);
-    text-decoration: underline;
-    text-decoration-thickness: 1.5px;
-    text-underline-offset: 6px;
+  }
+
+  .theme-switch {
+    border: 1px solid var(--line-strong);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 2px;
+  }
+
+  .theme-switch button {
+    border: 0;
+    background: transparent;
+    color: var(--ink-faint);
+    font: 600 0.72rem/1 var(--font-sans);
+    letter-spacing: 0.04em;
+    min-height: 2rem;
+    padding: 0.48rem 0.58rem;
+    cursor: pointer;
+  }
+
+  .theme-switch button[aria-pressed='true'] {
+    color: var(--bg);
+    background: var(--ink);
+  }
+
+  @media (max-width: 700px) {
+    .bar {
+      align-items: flex-start;
+      padding-block: 1rem;
+    }
+
+    .controls {
+      align-items: flex-end;
+      flex-direction: column-reverse;
+      gap: 0.65rem;
+    }
+
+    nav {
+      gap: 0.8rem;
+    }
+
+    .nav-link {
+      font-size: 0.82rem;
+    }
+
+    .theme-switch button {
+      padding: 0.42rem 0.48rem;
+      font-size: 0.66rem;
+    }
   }
 </style>

@@ -19,8 +19,18 @@ const projects = defineCollection({
       date: z.coerce.date(),
       featured: z.boolean().default(false),
       builtOn: z.enum(['zo']).optional(),
+      visibility: z.enum(['active', 'archived']).default('active'),
       status: z
-        .enum(['shipped', 'alpha', 'prototype', 'demo', 'wip'])
+        .enum([
+          'shipped',
+          'alpha',
+          'prototype',
+          'demo',
+          'wip',
+          'coming-soon',
+          'deprecated',
+          'archived',
+        ])
         .default('wip'),
       order: z.number().default(99),
     }),
@@ -28,15 +38,18 @@ const projects = defineCollection({
 
 const blog = defineCollection({
   loader: glob({ pattern: '**/[^_]*.md', base: './src/content/blog' }),
-  schema: z.object({
-    title: z.string(),
-    description: z.string(),
-    pubDate: z.coerce.date(),
-    updatedDate: z.coerce.date().optional(),
-    tags: z.array(z.string()).default([]),
-    canonicalUrl: z.url().optional(),
-    draft: z.boolean().default(false),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      description: z.string(),
+      pubDate: z.coerce.date(),
+      updatedDate: z.coerce.date().optional(),
+      tags: z.array(z.string()).default([]),
+      canonicalUrl: z.url().optional(),
+      heroImage: image().optional(),
+      heroAlt: z.string().optional(),
+      draft: z.boolean().default(false),
+    }),
 });
 
 export const collections = { projects, blog };

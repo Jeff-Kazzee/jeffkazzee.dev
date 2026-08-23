@@ -1,6 +1,6 @@
 ---
 title: Flywheel
-description: Bootstrap, maintain, and continuously improve a coding-agent workspace so each session adds momentum the next session inherits.
+description: Bootstrap and maintain coding-agent workspace context so later sessions inherit project conventions and lessons.
 tags: [agents, tooling, open-source]
 stack: [Claude Code, Codex CLI]
 repoUrl: https://github.com/Jeff-Kazzee/flywheel
@@ -9,4 +9,4 @@ status: wip
 order: 5
 ---
 
-Coding agents start every session with amnesia. Flywheel is the fix: a workspace pattern for Claude Code and Codex CLI where conventions, context, and lessons learned accumulate — so each session adds momentum the next session inherits, instead of re-explaining the project from zero.
+Coding agents start sessions without the context behind earlier decisions. Flywheel stores project conventions, context, and lessons in the workspace so later Claude Code and Codex CLI sessions can reuse them instead of starting explanations from scratch.

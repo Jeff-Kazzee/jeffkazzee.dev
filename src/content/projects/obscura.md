@@ -1,41 +1,44 @@
 ---
 title: Obscura
-description: Local-first desktop media studio for AI asset work. Your files, your database, your machine — with the costs visible.
+description: Archived local-first desktop media studio for AI asset work.
 tags: [desktop, windows, ai]
 stack: [Electron, React 19, TypeScript, Vite, SQLite, OpenRouter]
 repoUrl: https://github.com/Jeff-Kazzee/obscura
 releaseUrl: https://github.com/Jeff-Kazzee/obscura/releases/latest
 screenshots:
   - src: ./_images/obscura-studio.png
-    alt: The Studio — compose a prompt, pick a model, and see the cost before you generate
+    alt: The Studio showing a prompt, model choice, and estimated cost before generation
   - src: ./_images/obscura-models.png
-    alt: Live OpenRouter model catalog with per-image pricing
+    alt: OpenRouter model catalog with per-image pricing
   - src: ./_images/obscura-gallery.png
-    alt: The local gallery — every asset on your own disk, searchable
+    alt: The local gallery showing assets stored on disk and ready to search
 date: 2026-05-15
-featured: true
-status: alpha
+featured: false
+visibility: archived
+status: archived
 order: 1
 ---
 
-Obscura is a digital darkroom: a desktop app for generating and managing AI images and media that keeps everything **local-first**. Files live on your disk, metadata lives in a SQLite database you own, and every generation shows you what it actually costs before you run it.
+Obscura was a local-first desktop app for generating and managing AI images and media. Files stayed on your disk, metadata lived in a SQLite database, and each generation showed its estimated cost before it ran.
 
-## Why it exists
+I am no longer working on Obscura. I am keeping this page and the repository as a record of the project.
 
-Most AI image tools live in someone else's cloud, with your library held hostage to a subscription. Obscura flips that: the app talks to OpenRouter's live model catalog, but everything it produces lands on your machine, organized and searchable, with no lock-in.
+## Why I built it
 
-## What it does
+Most AI image tools keep your library in someone else's cloud. Obscura put the files on your machine instead. The app used OpenRouter's model catalog while keeping the generated assets and their metadata local.
 
-- Live OpenRouter image-model catalog with model-specific controls
-- Prompt improvement flow with configurable models
-- Chat surface with streamed reasoning channels
-- Cost visibility on every call — no surprise bills
-- Local file storage + SQLite metadata, fully portable
+## What it included
 
-## For Windows users
+- An OpenRouter image-model catalog with model-specific controls
+- A prompt improvement flow with configurable models
+- A chat view with streamed reasoning channels
+- Cost estimates before generation
+- Local file storage and SQLite metadata
 
-Obscura ships as a Windows installer and a portable EXE — grab either from the releases page. It's early alpha and moving fast.
+## The last build
+
+The repository still has the Windows installer and portable build from the project. See the [release archive](https://github.com/Jeff-Kazzee/obscura/releases/latest) if you want to inspect them.
 
 ## How it was built
 
-Built AI-assisted with a docs-first workflow: PRD, design system, decision logs, and multiple coding agents working defined lanes (UI/renderer vs backend), coordinated through DEVLOGs and handoff protocols.
+I built it with a docs-first workflow, a small design system, decision logs, and separate UI and backend work. The project was also an experiment in coordinating coding agents without losing track of the work.

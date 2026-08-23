@@ -6,7 +6,7 @@ canonicalUrl: https://jeffkazzee.substack.com/p/whose-computer-are-you-building-
 tags: []
 ---
 
-![](https://substackcdn.com/image/fetch/$s_!Nf11!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F6074b245-42c2-4b2e-b399-f12a19d0658d_1536x1024.png)
+![Graphic with the words "You're just renting" above a plugged-in laptop](../../assets/blog/whose-computer-renting-laptop.png)
 
 I write code in more languages than I can read, and I ship it anyway.
 
@@ -22,7 +22,7 @@ An economist named Yanis Varoufakis calls where this goes [technofeudalism](http
 
 And landlords have habits. The first stretch is cheap, free if they can swing it, because the point is to get you moved in. Then your work grows roots, the rent climbs the way rent does, and leaving means tearing out everything you planted. Read the lease, too: most of these products keep the right to feed whatever you make into their next model. You’re the tenant and the raw material at once. That never makes the homepage.
 
-![](https://substackcdn.com/image/fetch/$s_!WwM7!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F85a2602e-cbb9-46ed-8392-eab324fe7e4d_1254x1254.png)
+![Line drawing of a small red bird perched on a windowsill](../../assets/blog/whose-computer-red-bird.png)
 
 ### So who should you build on?
 

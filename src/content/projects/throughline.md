@@ -1,6 +1,6 @@
 ---
 title: Throughline
-description: The Agent OS for keeping AI work visible, grounded, and alive.
+description: Files and habits for keeping AI-assisted work visible and easy to pick up again.
 tags: [agents, tooling, open-source]
 stack: [Markdown, agent workflows]
 repoUrl: https://github.com/Jeff-Kazzee/throughline
@@ -9,6 +9,6 @@ status: wip
 order: 4
 ---
 
-Throughline is an operating system for AI-assisted work: a structure that keeps what agents are doing **visible** (storyboards, kanbans, decision logs), **grounded** (PRDs and specs agents actually follow), and **alive** (DEVLOGs and handoffs so each session inherits momentum instead of starting cold).
+Throughline is a set of files and habits for AI-assisted work. It keeps plans visible with storyboards, kanbans, and decision logs. It keeps the work grounded with PRDs and specs. It keeps the next session moving with DEVLOGs and handoffs.
 
-It's the system behind how I build — Obscura was shipped with it.
+I am not presenting it as a finished product. It is an ongoing experiment in how I work with coding agents.

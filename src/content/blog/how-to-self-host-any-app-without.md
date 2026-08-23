@@ -6,7 +6,7 @@ canonicalUrl: https://jeffkazzee.substack.com/p/how-to-self-host-any-app-without
 tags: []
 ---
 
-![](https://substackcdn.com/image/fetch/$s_!K_Bz!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Feb73ab3c-7107-47f9-808c-2d89fa60d2ef_1376x768.jpeg)
+![A broken padlock floating in front of server racks](../../assets/blog/self-host-broken-padlock.jpeg)
 
 Last week I installed a design app on my own server. It runs at a private web address only I can reach. It restarts itself when it crashes. I never opened a terminal. I do not write code. I asked for it in a chat window and ten minutes later it was running.
 
@@ -16,15 +16,15 @@ If you have ever read a blog post about “self hosting” and bounced off becau
 
 A self-hosted app is software you run on your own server instead of paying somebody else to run it for you. Notion is hosted by Notion. Dropbox is hosted by Dropbox. The self-hosted equivalents (AppFlowy, Nextcloud, and so on) run on a server you control. You pay for the server once. The software is usually free or close to it.
 
-For most of the last twenty years, this was a hobby for people who liked operating systems. You had to rent a Linux server, learn how to administer it, write configuration files, manage security certificates, restart things by hand. The software was free; the time cost was high.
+For most of the last twenty years, this was a hobby for people who liked operating systems. You had to rent a Linux server, learn how to administer it, write configuration files, manage security certificates, restart things by hand. The software was free. The time cost was high.
 
-That has shifted. The server I use is called Zo Computer. It is a Linux server with a chat window stapled to the front. I do not configure anything by hand. I ask. The point of this post is to show what that actually looks like.
+That has shifted. The server I use is called Zo Computer. It is a Linux server with a chat window stapled to the front. I do not configure anything by hand. I ask. The point of this post is to show what that actually looks like. My [Zo 101 guide](/projects/zo-computer-101/) covers the basics if you are starting there.
 
 ### **What I was trying to install**
 
 The app is [Open Design](https://github.com/nexu-io/open-design), made by a small team called nexu-io. It is a design tool that uses AI coding assistants to generate prototypes, slides, and other artifacts. The relevant detail is that I already had several coding assistants installed on Zo (Claude Code, Codex, Pi), and Open Design knows how to use whichever ones it finds.
 
-![](https://substackcdn.com/image/fetch/$s_!_KQJ!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Ff2709ec4-4c0a-4d0d-bf9a-344a1de7cf3a_1090x2258.png)
+![Diagram showing a website loading Open Design on a private Zo server, which sends build requests to Claude, Codex, Gemini, or Pi](../../assets/blog/self-host-architecture.png)
 
 If Open Design is not your thing, this post is still useful. Substitute any of the apps in this list: Linkding (bookmarks), Memos (notes), Miniflux (RSS), Vaultwarden (passwords), Forgejo (a private GitHub), n8n (Zapier in self-hosted form), Penpot (Figma), NocoDB (Airtable). They all install the same way. Same five sentences in chat.
 
@@ -54,7 +54,7 @@ https://open-design-yourname.zo.computer
 
  and a note that everything was running.
 
-![](https://substackcdn.com/image/fetch/$s_!hWqU!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F2b083d15-7662-4388-817c-7b4a70f3c9d1_1280x577.png)
+![Open Design dashboard with a privacy choice about sharing anonymous metrics and tool content](../../assets/blog/self-host-privacy.png)
 
 This is the part of every self-hosting blog post where the author says “and now you have your own app running, congratulations!” That is rarely where it actually ends. Three things broke after Zo declared success, and each one taught me something I now apply to every install.
 
@@ -62,7 +62,7 @@ This is the part of every self-hosting blog post where the author says “and no
 
 I opened the URL. The page loaded. Claude Code appeared in the dropdown of available coding assistants. I typed a request. Nothing happened.
 
-![](https://substackcdn.com/image/fetch/$s_!eBDI!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Ff3cdde5a-3bd5-44f1-8477-85cbb6836e39_1280x577.png)
+![Open Design setup dialog listing local coding tools, including Claude Code, Codex CLI, Gemini CLI, and OpenCode](../../assets/blog/self-host-tools.png)
 
 I asked Zo to check the error log. It came back with one line:
 
@@ -164,7 +164,7 @@ The real benefit of having a chat-driven server is that it removes the apprentic
 
 ### **Try it yourself**
 
-![](https://substackcdn.com/image/fetch/$s_!pDop!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fdfbfaed0-706d-4389-9050-1c98642fae5d_1280x577.png)
+![Open Design dashboard after setup, with a pet companion in the right sidebar](../../assets/blog/self-host-dashboard.png)
 
 If you have an app you have meant to run yourself, open your Zo chat and try the prompt at the top of this post with the app’s GitHub URL substituted. Read the report when it finishes. If something breaks, paste the symptom into chat and follow the conversation.
 

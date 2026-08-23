@@ -14,6 +14,7 @@ interface Props {
 const { project, index = 0, variant = 'card' } = Astro.props;
 const { title, description, stack, status, builtOn, screenshots } = project.data;
 const wip = status !== 'shipped';
+const statusLabel = status.replaceAll('-', ' ');
 const thumb = screenshots[0];
 ---
 
@@ -24,7 +25,7 @@ const thumb = screenshots[0];
         <h3><a href={`/projects/${project.id}/`}>{title}</a></h3>
         <p class="status">
           <span class="dot" data-tone={wip ? 'wip' : undefined} aria-hidden="true"></span>
-          {status}
+          {statusLabel}
         </p>
       </header>
       <p class="desc">{description}</p>
@@ -46,7 +47,7 @@ const thumb = screenshots[0];
       <Image
         class="thumb"
         src={thumb.src}
-        alt=""
+        alt={thumb.alt}
         widths={[480, 960]}
         sizes="(max-width: 768px) 100vw, 420px"
       />
@@ -56,7 +57,7 @@ const thumb = screenshots[0];
         <h3><a href={`/projects/${project.id}/`}>{title}</a></h3>
         <p class="status">
           <span class="dot" data-tone={wip ? 'wip' : undefined} aria-hidden="true"></span>
-          {status}{builtOn === 'zo' && ' · on Zo'}
+          {statusLabel}{builtOn === 'zo' && ' · on Zo'}
         </p>
       </header>
       <p class="desc">{description}</p>
