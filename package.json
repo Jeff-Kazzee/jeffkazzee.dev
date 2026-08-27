@@ -13,7 +13,8 @@
     "astro": "astro",
     "verify": "node scripts/verify-agent-surface.mjs",
     "dns:aid": "node scripts/publish-dns-aid.mjs",
-    "verify:projects": "node scripts/verify-projects.mjs"
+    "verify:projects": "node scripts/verify-projects.mjs",
+    "audit:properties": "node scripts/audit-properties.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "4.0.18",

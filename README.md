@@ -113,6 +113,16 @@ curl -s -D- -o /dev/null -H 'Accept: text/markdown' https://jeffkazzee.dev | gre
 The DNS-AID records are the one part of the agent surface that does not deploy
 with the site. See [docs/dns-aid.md](docs/dns-aid.md).
 
+## The other sites
+
+Four of the other public sites ship an empty shell and publish almost nothing a
+crawler or agent can read. Findings, priority, and the work each one needs:
+[docs/agent-readiness-audit.md](docs/agent-readiness-audit.md).
+
+```bash
+npm run audit:properties
+```
+
 ## Deploy
 
 Vercel, framework preset **Astro**, build `npm run build`, output `dist`,
