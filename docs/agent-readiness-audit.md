@@ -32,6 +32,11 @@ Cookbook serves 47 bytes of text for 1,162 recipes. Zo Computer 101 serves 33
 bytes for 203 items. Nothing indexes them, and no agent reads them without
 driving a browser.
 
+Two of them go further and return the same `<title>` on every route, so a
+search engine sees one page repeated rather than a library. `npm run
+audit:properties` samples four pages per site and reports this, because a
+single page checked by hand always looks fine.
+
 Zo Deep Dives is the exception, and it is the exception because it already
 renders a crawler fallback into `#root`. Same stack, same host, 21KB of real
 text. **The pattern is already solved in your own work.** The other sites need
@@ -63,24 +68,54 @@ Work:
 
 ### 2. Zo Cookbook
 
-The largest corpus and the thinnest exposure. 1,237 URLs in the sitemap, a
-976-byte `llms.txt`, and 47 bytes of HTML. The sitemap says the pages exist and
-nothing says what is in them.
+The largest corpus, and the only site here with a duplicate-content problem on
+top of an invisibility problem.
 
-Work:
+The sitemap lists 1,237 unique URLs, 1,232 of them recipe pages, and every one
+returns 200. Six sampled pages spread across the set returned **byte-identical
+HTML**: same SHA-256, same 1,361 bytes, same 49 bytes of text, and the same
+title on all of them.
 
+```
+Zo Cookbook — 1162 Ideas, Automations & Prompts
+```
+
+A recipe about invoice automation and one about decoding TypeScript errors are
+indistinguishable to anything that does not run JavaScript. Search engines treat
+1,232 URLs sharing one title as duplicate content, which is worse than being
+unseen. Every social share of every recipe also previews identically, because
+there is no per-page description.
+
+Work, in order:
+
+- Give each recipe its own `<title>` and meta description. This is the highest
+  value change on any site in this audit and it does not require rendering the
+  body.
 - Render recipe content into the HTML.
-- Expand `llms.txt` and generate a real `llms-full.txt` from the recipe source.
+- Generate a real `llms-full.txt` from the recipe source. The current one is
+  1KB for 1,162 recipes.
 - Add Content Signals and Link headers.
+
+Verify with a sample rather than one page, because a single check looks fine:
+
+```bash
+for p in /ideas/apps/invoice-autopilot-1-app /ideas/prompts/the-typescript-error-decoder-291-prompt; do
+  curl -s "https://www.zo-cookbook.space$p" | grep -o '<title>[^<]*</title>'
+done
+```
 
 ### 3. Zo Computer 101
 
-Half solved. 429KB of `llms-full.txt` means an agent can already read the
-corpus. 33 bytes of HTML means a search engine cannot, and only 67 of roughly
-203 items are in the sitemap.
+Half solved, with the same duplicate-title problem as the Cookbook.
 
-Work:
+429KB of `llms-full.txt` means an agent can already read the corpus, which puts
+it ahead of the Cookbook. But 33 bytes of HTML means a search engine cannot,
+only 67 of roughly 203 items are in the sitemap, and all four sampled pages
+returned one shared title.
 
+Work, in order:
+
+- Give each guide its own `<title>` and meta description.
 - Render guides into the HTML.
 - Extend the sitemap to every guide and recipe.
 - Add Content Signals and Link headers.

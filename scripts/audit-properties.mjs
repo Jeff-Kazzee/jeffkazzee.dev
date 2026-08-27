@@ -78,6 +78,40 @@ async function countSitemap(robotsBody, base) {
   return total;
 }
 
+/**
+ * Sample pages from the sitemap and see whether they differ.
+ *
+ * A client-rendered site returns the same shell for every route, so 1,232
+ * recipes can share one title. Search engines read that as duplicate content,
+ * which is worse than being unseen. One page checked by hand looks fine, so
+ * this samples across the set.
+ */
+async function sampleDistinctness(robotsBody, base) {
+  const declared = [...robotsBody.matchAll(/^Sitemap:\s*(\S+)/gim)].map((m) => m[1]);
+  const first = declared[0] ?? `${base}/sitemap.xml`;
+
+  const r = await get(first);
+  if (!r.ok) return null;
+
+  const body = await r.response.text();
+  if (/<sitemapindex/i.test(body)) return null; // nested, not worth the extra hops here
+
+  const urls = [...body.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+  if (urls.length < 4) return null;
+
+  const picks = [0, 0.2, 0.5, 0.8].map((f) => urls[Math.floor(f * (urls.length - 1))]);
+  const titles = new Set();
+
+  for (const url of picks) {
+    const page = await get(url);
+    if (!page.ok) continue;
+    const html = await page.response.text();
+    titles.add(/<title>([^<]*)<\/title>/i.exec(html)?.[1]?.trim() ?? '');
+  }
+
+  return { sampled: picks.length, distinctTitles: titles.size, total: urls.length };
+}
+
 async function audit(site) {
   const robots = await get(`${site.url}/robots.txt`);
   const robotsBody = robots.ok ? await robots.response.text() : '';
@@ -100,6 +134,7 @@ async function audit(site) {
     linkHeader: Boolean(home.headers.get('link')),
     markdown: (md.headers.get('content-type') ?? '').includes('text/markdown'),
     text: await crawlableText(site.url),
+    distinct: await sampleDistinctness(robotsBody, site.url),
   };
 }
 
@@ -134,6 +169,21 @@ if (invisible.length > 0) {
     console.log(`    ${r.name}: ${kb(r.text)} of text, ${r.note}`);
   }
   console.log('\n  Fix by rendering the content into the HTML, as Zo Deep Dives already does.');
+}
+
+// Every route returning the same <title> reads to a search engine as duplicate
+// content, which is worse than being unseen. One page checked by hand looks
+// fine, so this only shows up when you sample across the set.
+const duplicated = results.filter(
+  (r) => r.distinct && r.distinct.distinctTitles === 1 && r.distinct.total > 20,
+);
+
+if (duplicated.length > 0) {
+  console.log('\n  Every sampled page shares one <title> (reads as duplicate content):');
+  for (const r of duplicated) {
+    const d = r.distinct;
+    console.log(`    ${r.name}: ${d.total} URLs, 1 distinct title across ${d.sampled} samples`);
+  }
 }
 
 console.log('\n  Full findings and priority order: docs/agent-readiness-audit.md\n');
