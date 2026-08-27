@@ -38,6 +38,7 @@ export const LINK_HEADERS = [
   { href: '/.well-known/api-catalog', rel: 'api-catalog', type: 'application/linkset+json' },
   { href: '/.well-known/mcp/server-card.json', rel: 'service-desc', type: 'application/json' },
   { href: '/.well-known/agent-skills/index.json', rel: 'describedby', type: 'application/json' },
+  { href: '/for-agents/', rel: 'service-doc', type: 'text/html' },
   { href: '/llms.txt', rel: 'service-doc', type: 'text/plain' },
 ];
 

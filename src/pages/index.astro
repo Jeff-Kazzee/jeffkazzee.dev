@@ -126,6 +126,32 @@ const jsonLd = JSON.stringify({
   </section>
 
   <section class="wrap">
+    <div class="agent-note reveal">
+      <div class="agent-text">
+        <p class="eyebrow">
+          <span class="dot live" aria-hidden="true"></span>
+          For agents
+        </p>
+        <h2>This site answers to machines, not just browsers.</h2>
+        <p class="say">
+          Ask any page for <code>Accept: text/markdown</code> and it returns Markdown. There is an
+          MCP server, an A2A agent card, WebMCP tools registered in the page, a published set of
+          agent skills, and DNS records that point agents here before they fetch anything.
+        </p>
+      </div>
+      <div class="agent-links">
+        <ul role="list">
+          <li><a href="/llms.txt">llms.txt</a></li>
+          <li><a href="/api/mcp">mcp</a></li>
+          <li><a href="/.well-known/agent-card.json">a2a</a></li>
+          <li><a href="/.well-known/agent-skills/index.json">skills</a></li>
+        </ul>
+        <a class="agent-more" href="/for-agents/">How it works &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap">
     <SectionHeading title="Writing" note="Essays and field notes on AI-assisted building." />
     <div class="posts">
       {posts.map((post, i) => (
@@ -277,6 +303,85 @@ const jsonLd = JSON.stringify({
   }
 
   .more a {
+    text-decoration: none;
+  }
+
+  /* ---------- for agents ---------- */
+
+  .agent-note {
+    border-block: 1px solid var(--line);
+    padding-block: clamp(2.25rem, 6vh, 3.25rem);
+    margin-top: clamp(3rem, 8vh, 4.5rem);
+    display: grid;
+    gap: calc(var(--space) * 3.5);
+    align-items: start;
+  }
+
+  @media (min-width: 860px) {
+    .agent-note {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+      gap: clamp(2rem, 6vw, 4.5rem);
+    }
+  }
+
+  .eyebrow {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: calc(var(--space) * 2);
+  }
+
+  .agent-note h2 {
+    font-size: clamp(1.4rem, 2.8vw, 1.9rem);
+    max-width: 22ch;
+  }
+
+  .say {
+    margin-top: calc(var(--space) * 2);
+    color: var(--ink-soft);
+    max-width: 58ch;
+    font-size: 0.98rem;
+  }
+
+  .agent-links {
+    display: grid;
+    gap: calc(var(--space) * 2.5);
+    justify-items: start;
+  }
+
+  .agent-links ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .agent-links li a {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    text-decoration: none;
+    color: var(--ink-soft);
+    background: var(--bg-raised);
+    border: 1px solid transparent;
+    border-radius: 999px;
+    padding: 0.28rem 0.75rem;
+    transition: border-color var(--t-fast) var(--ease-out), color var(--t-fast) var(--ease-out);
+  }
+
+  .agent-links li a:hover {
+    color: var(--accent-bright);
+    border-color: oklch(78% 0.11 155 / 0.4);
+  }
+
+  .agent-more {
+    font-size: 0.95rem;
+    font-weight: 500;
     text-decoration: none;
   }
 
