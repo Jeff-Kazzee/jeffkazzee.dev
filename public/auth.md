@@ -1,4 +1,4 @@
-# Authentication
+# auth.md
 
 **This site requires no authentication. Nothing here is behind a credential.**
 

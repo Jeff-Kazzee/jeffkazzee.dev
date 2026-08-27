@@ -207,6 +207,8 @@ function ardEntries() {
 async function ardCatalog() {
   const manifest = {
     '@context': 'https://agenticresourcediscovery.org/context/v1',
+    // Required by the manifest envelope, and matches the v1 context above.
+    specVersion: '1.0',
     version: SURFACE_VERSION,
     publisher: { name: OWNER, url: SITE },
     entries: ardEntries(),
