@@ -71,6 +71,18 @@ if (!apikey || !secretapikey) {
   process.exit(1);
 }
 
+if (apikey.startsWith('REPLACE_ME') || secretapikey.startsWith('REPLACE_ME')) {
+  console.error(
+    [
+      '.env.local still holds the placeholder values.',
+      '',
+      'Open it and replace the text after each = with the real key from',
+      'https://porkbun.com/account/api, then run this again.',
+    ].join('\n'),
+  );
+  process.exit(1);
+}
+
 /**
  * The entrypoints, per draft-mozleywilliams-dnsop-dnsaid.
  *
