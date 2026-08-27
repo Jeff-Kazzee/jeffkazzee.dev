@@ -135,7 +135,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
       path: 'index',
       title: 'Jeff Kazzee',
       description:
-        'Free guides for building real systems on a computer you own, an arcade where AI agents wrote every line, and a few open tools.',
+        '1,450 free guides and recipes for building real systems on a computer you own, plus open tools and side projects.',
       canonical: `${SITE}/`,
       body: homeMarkdown(featured),
     },
