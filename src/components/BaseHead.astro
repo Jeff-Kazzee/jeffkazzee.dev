@@ -8,9 +8,11 @@ interface Props {
   ogType?: string;
   /** Override for mirrored content (e.g. Substack originals). */
   canonicalUrl?: string;
+  /** Keep the page out of search results. Also exclude it in astro.config.mjs. */
+  noindex?: boolean;
 }
 
-const { title, description, ogImage = '/og-default.png', ogType = 'website', canonicalUrl } = Astro.props;
+const { title, description, ogImage = '/og-default.png', ogType = 'website', canonicalUrl, noindex = false } = Astro.props;
 const canonical = canonicalUrl ?? new URL(Astro.url.pathname, Astro.site).href;
 const ogImageAbs = new URL(ogImage, Astro.site).href;
 
@@ -27,6 +29,7 @@ const markdownPath = pathname === '/' ? '/index.md' : `${pathname.replace(/\/+$/
 <meta name="generator" content={Astro.generator} />
 <title>{title}</title>
 <meta name="description" content={description} />
+{noindex && <meta name="robots" content="noindex, follow" />}
 <link rel="canonical" href={canonical} />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <meta name="theme-color" content="#15171f" />
