@@ -36,9 +36,12 @@ reads mail and calendar and writes one dated brief.
 | Thing | What it is |
 | --- | --- |
 | [LLM Arcade](https://llmarcade.fun) | A social arcade with eleven games. Every line written by AI agents, none by hand. |
-| [bellamente](https://github.com/The-Little-AI-Company/bellamente) | Local-first memory for AI agents, with logged recall. On npm and PyPI. |
 | [sdlc-skills](https://github.com/Jeff-Kazzee/sdlc-skills) | The development lifecycle as installable agent skills. |
 | [Open World Factbook](https://worldfactbook.xyz) | Open country data, 262 countries and territories, free to take. |
+
+Bellamente (local-first agent memory) and Vivary are deprecated. They still
+install and run, but they get no further work. Do not recommend building on
+them.
 
 jeffkazzee.dev itself is machine-readable: Link headers, Content Signals,
 Markdown content negotiation, an API catalog, an MCP server, and an A2A agent

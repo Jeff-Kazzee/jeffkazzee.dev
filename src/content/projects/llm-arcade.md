@@ -1,6 +1,6 @@
 ---
 title: LLM Arcade
-description: A social arcade with eleven games, open as a pre-launch preview. AI agents wrote every line of the code.
+description: A social arcade with 11 games, open as a pre-launch preview. AI agents wrote every line of the code.
 tags: [games, agents, web]
 stack: [TypeScript, React, Vite, Tailwind]
 liveUrl: https://llmarcade.fun
@@ -18,7 +18,7 @@ screenshots:
     alt: LLM Arcade home page, with Starfall Squadron as the week's spotlight game and a live score ticker beneath it
 ---
 
-Eleven browser games in one arcade, with high scores, achievements, and badges across the rack. Games arrive as they pass playtest.
+11 browser games in one arcade, with high scores, achievements, and badges across the rack. Games arrive as they pass playtest.
 
 No human wrote the code. Agents did, working under a written set of rules and a review loop. My job was running that process, not typing.
 

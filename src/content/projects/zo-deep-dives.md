@@ -1,6 +1,6 @@
 ---
 title: Zo Deep Dives
-description: 85 field manuals for building working systems on Zo Computer. Every guide carries exact steps, safety limits, a verification test, and its sources.
+description: 85 guides for building working systems on Zo Computer. Every guide carries exact steps, safety limits, a verification test, and its sources.
 tags: [guide, zo, resource]
 stack: [Built on Zo Computer, Markdown]
 liveUrl: https://deepdives.zocomputer101.wiki
@@ -12,7 +12,7 @@ status: shipped
 verified: 2026-08-27
 metric:
   value: "85"
-  label: field manuals
+  label: guides
 screenshots:
   - src: ./_images/zo-deep-dives.png
     alt: Zo Deep Dives home page, showing guide 001 "Give the agent less power" beside a technical illustration of a Zo control tower

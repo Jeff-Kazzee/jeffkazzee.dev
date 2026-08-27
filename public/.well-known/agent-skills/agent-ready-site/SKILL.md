@@ -30,10 +30,17 @@ Work through this list and mark each one real or not applicable:
 | `/.well-known/agent-card.json` | An A2A endpoint answers |
 | `/.well-known/agent-skills/index.json` | You publish skills of your own |
 | `/.well-known/ard.json` | You have resources worth cataloguing |
-| `auth.md`, OAuth metadata | The site has accounts and issues credentials |
+| `auth.md` | Always. State the auth model, even when it is "none" |
+| OAuth metadata | The site actually protects a resource |
 
-A portfolio or documentation site usually has no accounts. Skipping the auth
-documents is the correct answer, not a gap.
+A portfolio or documentation site usually has no accounts. Publish an `auth.md`
+that says so plainly and lists the open endpoints: an agent then stops probing
+for a login instead of guessing. Give it an H1 containing "auth.md", which is
+what scanners look for.
+
+Skip the OAuth documents entirely. They describe how to obtain and present
+credentials for a protected resource, so publishing them for an open site
+describes a handshake that cannot complete.
 
 ## Link headers, RFC 8288
 
@@ -121,6 +128,9 @@ Agentmap: https://example.com/.well-known/ard.json
 <link rel="ard" href="/.well-known/ard.json">
 <link rel="ai-catalog" href="/.well-known/ai-catalog.json">
 ```
+
+The manifest envelope requires a `specVersion` string. Without it a validator
+rejects the whole document even when every entry inside it is correct.
 
 Give every entry two to five `representativeQueries`. They are what semantic
 retrieval matches against, so write the questions a user would actually ask, not

@@ -30,9 +30,8 @@ const link = (label: string, href: string) => `[${label}](${href})`;
 function homeMarkdown(featured: { title: string; slug: string; description: string }[]): string {
   return `# I give away the guides, and build the things I'm learning on.
 
-Field manuals for building real systems on a computer you own, an arcade where
-AI agents wrote every line, and a few open tools. Self-taught, still learning in
-public.
+Field manuals and recipes for building real systems on a computer you own, plus
+open tools and a few side projects. Self-taught, still learning in public.
 
 ## Free guides
 
@@ -97,10 +96,12 @@ curl -sX POST ${SITE}/api/mcp \\
 
 ## What is deliberately not published
 
-This site has no user accounts and issues no credentials, so it publishes no
-\`auth.md\` and no OAuth metadata. Publishing a registration protocol for
-registration that does not exist would send agents into a flow that cannot
-complete.
+This site has no user accounts and issues no credentials. \`/auth.md\` says so
+directly, so an agent does not have to probe for a login.
+
+There is no OAuth metadata, because those documents describe how to obtain and
+present credentials for a protected resource. Nothing here is protected, so
+publishing them would describe a handshake that cannot complete.
 `;
 }
 

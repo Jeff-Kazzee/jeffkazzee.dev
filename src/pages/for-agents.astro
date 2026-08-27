@@ -96,10 +96,15 @@ const markdownExample = `curl -s -H 'Accept: text/markdown' ${SITE}/projects/llm
       <SectionHeading title="What is deliberately missing" note="Knowing which standards do not apply is part of implementing them." />
       <div class="omitted">
         <p>
-          This site has no user accounts and issues no credentials. So it publishes no
-          <code>auth.md</code>, no OAuth authorization-server metadata, and no protected-resource
-          metadata. Publishing a registration protocol for registration that does not exist would
-          send an agent into a flow that cannot complete, which is worse than publishing nothing.
+          This site has no user accounts and issues no credentials.
+          <a href="/auth.md">/auth.md</a> says so directly, and lists every open endpoint, so an
+          agent never has to probe for a login that isn't there.
+        </p>
+        <p>
+          There is no OAuth authorization-server metadata and no protected-resource metadata.
+          Those documents describe how to obtain and present credentials for a protected resource.
+          Nothing here is protected, so publishing them would describe a handshake that cannot
+          complete.
         </p>
         <p>
           There is no commerce surface either. No x402, no UCP, no ACP. Nothing here is for sale to
