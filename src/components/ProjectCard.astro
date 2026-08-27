@@ -12,8 +12,9 @@ interface Props {
 }
 
 const { project, index = 0, variant = 'card' } = Astro.props;
-const { title, description, stack, status, builtOn, screenshots } = project.data;
-const wip = status !== 'shipped';
+const { title, description, stack, status, builtOn, screenshots, metric } = project.data;
+const retired = status === 'deprecated';
+const wip = status !== 'shipped' && !retired;
 const thumb = screenshots[0];
 ---
 
@@ -23,7 +24,7 @@ const thumb = screenshots[0];
       <header>
         <h3><a href={`/projects/${project.id}/`}>{title}</a></h3>
         <p class="status">
-          <span class="dot" data-tone={wip ? 'wip' : undefined} aria-hidden="true"></span>
+          <span class="dot" data-tone={retired ? 'retired' : wip ? 'wip' : undefined} aria-hidden="true"></span>
           {status}
         </p>
       </header>
@@ -42,7 +43,7 @@ const thumb = screenshots[0];
   </article>
 ) : (
   <article class="card surface reveal" style={`--i: ${index}`}>
-    {thumb && (
+    {thumb ? (
       <Image
         class="thumb"
         src={thumb.src}
@@ -50,12 +51,17 @@ const thumb = screenshots[0];
         widths={[480, 960]}
         sizes="(max-width: 768px) 100vw, 420px"
       />
-    )}
+    ) : metric ? (
+      <p class="metric" aria-hidden="true">
+        <span class="metric-value">{metric.value}</span>
+        <span class="metric-label">{metric.label}</span>
+      </p>
+    ) : null}
     <div class="body">
       <header>
         <h3><a href={`/projects/${project.id}/`}>{title}</a></h3>
         <p class="status">
-          <span class="dot" data-tone={wip ? 'wip' : undefined} aria-hidden="true"></span>
+          <span class="dot" data-tone={retired ? 'retired' : wip ? 'wip' : undefined} aria-hidden="true"></span>
           {status}{builtOn === 'zo' && ' · on Zo'}
         </p>
       </header>
@@ -157,6 +163,38 @@ const thumb = screenshots[0];
     display: grid;
     align-content: start;
     height: 100%;
+  }
+
+  /* Stands in for a screenshot, in the same slot and the same proportions,
+     so a shelf of mixed cards still reads as one row. */
+  .metric {
+    aspect-ratio: 16 / 10;
+    margin: 0;
+    max-width: none;
+    background: var(--bg-raised);
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.15rem;
+  }
+
+  .metric-value {
+    font-family: var(--font-serif);
+    font-size: clamp(2.75rem, 7vw, 3.75rem);
+    font-weight: 560;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+
+  .metric-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
   }
 
   .thumb {

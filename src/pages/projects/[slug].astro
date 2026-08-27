@@ -17,16 +17,17 @@ export async function getStaticPaths() {
 const { project } = Astro.props;
 const { Content } = await render(project);
 const d = project.data;
-const wip = d.status !== 'shipped';
+const retired = d.status === 'deprecated';
+const wip = d.status !== 'shipped' && !retired;
 ---
 
-<BaseLayout title={`${d.title} — jeffkazzee.dev`} description={d.description}>
+<BaseLayout title={`${d.title} · jeffkazzee.dev`} description={d.description}>
   <article class="wrap">
     <header>
       <p class="crumb"><a href="/projects/">← All projects</a></p>
       <h1>{d.title}</h1>
       <p class="status">
-        <span class="dot" data-tone={wip ? 'wip' : undefined} aria-hidden="true"></span>
+        <span class="dot" data-tone={retired ? 'retired' : wip ? 'wip' : undefined} aria-hidden="true"></span>
         {d.status}{d.builtOn === 'zo' && ' · built on a Zo computer'} · <FormattedDate date={d.date} />
       </p>
     </header>

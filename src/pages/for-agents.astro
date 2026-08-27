@@ -1,0 +1,234 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import { MCP_PROTOCOL_VERSION, SITE, documents, tools } from '../data/agent-surface.mjs';
+
+const groups = [
+  {
+    id: 'interface',
+    title: 'Interfaces',
+    note: 'Endpoints that answer. Both accept JSON-RPC over POST.',
+  },
+  {
+    id: 'discovery',
+    title: 'Discovery',
+    note: 'Documents that tell an agent what is here and how to call it.',
+  },
+  { id: 'content', title: 'Content', note: 'The whole site, flattened for reading.' },
+  { id: 'policy', title: 'Policy', note: 'What crawlers and models may do with it.' },
+] as const;
+
+const inGroup = (id: string) => documents.filter((doc) => doc.group === id);
+
+const mcpExample = `curl -sX POST ${SITE}/api/mcp \\
+  -H 'Content-Type: application/json' \\
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/call",
+       "params":{"name":"list_guide_libraries"}}'`;
+
+const markdownExample = `curl -s -H 'Accept: text/markdown' ${SITE}/projects/llm-arcade/`;
+---
+
+<BaseLayout
+  title="For agents · Jeff Kazzee"
+  description="Every machine-readable interface jeffkazzee.dev publishes: Link headers, Content Signals, Markdown negotiation, an API catalog, agent skills, an MCP server, and an A2A agent card."
+>
+  <article>
+    <header class="wrap intro">
+      <p class="crumb"><a href="/">← Home</a></p>
+      <h1>This site has a machine interface.</h1>
+      <p class="lede">
+        Most sites are built for a browser and leave agents to scrape the HTML. This one publishes
+        the same content in the formats agents already read, and exposes two endpoints that answer
+        questions directly. The most useful thing here is the guide libraries, so the tools lead
+        with those.
+      </p>
+      <p class="sub">
+        It is also the working example behind the
+        <a href="/.well-known/agent-skills/agent-ready-site/SKILL.md">agent-ready-site</a> skill, so
+        every claim on this page is a request you can run.
+      </p>
+    </header>
+
+    {
+      groups.map((group) => (
+        <section class="wrap">
+          <SectionHeading title={group.title} note={group.note} />
+          <ul class="docs" role="list">
+            {inGroup(group.id).map((doc, i) => (
+              <li class="reveal" style={`--i: ${i}`}>
+                <div class="doc-head">
+                  <a class="path" href={doc.path}>{doc.path}</a>
+                  <a class="spec" href={doc.specUrl} rel="noopener">{doc.spec}</a>
+                </div>
+                <p class="desc">{doc.description}</p>
+                <p class="ctype">{doc.contentType}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+
+    <section class="wrap">
+      <SectionHeading title="Any page, as Markdown" note="Content negotiation on Accept, with the twin generated from source rather than scraped from the HTML." />
+      <p class="para">
+        Send <code>Accept: text/markdown</code> to any URL here and you get Markdown back, with an
+        estimated <code>X-Markdown-Tokens</code> count. Appending <code>.md</code> to a path works
+        too, if setting a header is inconvenient.
+      </p>
+      <pre><code>{markdownExample}</code></pre>
+    </section>
+
+    <section class="wrap">
+      <SectionHeading title="MCP tools" note={`Streamable HTTP, protocol revision ${MCP_PROTOCOL_VERSION}. Clients that still open with initialize are answered too.`} />
+      <ul class="tools" role="list">
+        {tools.map((tool, i) => (
+          <li class="reveal" style={`--i: ${i}`}>
+            <p class="tool-name">{tool.name}</p>
+            <p class="desc">{tool.description}</p>
+          </li>
+        ))}
+      </ul>
+      <pre><code>{mcpExample}</code></pre>
+    </section>
+
+    <section class="wrap">
+      <SectionHeading title="What is deliberately missing" note="Knowing which standards do not apply is part of implementing them." />
+      <div class="omitted">
+        <p>
+          This site has no user accounts and issues no credentials. So it publishes no
+          <code>auth.md</code>, no OAuth authorization-server metadata, and no protected-resource
+          metadata. Publishing a registration protocol for registration that does not exist would
+          send an agent into a flow that cannot complete, which is worse than publishing nothing.
+        </p>
+        <p>
+          There is no commerce surface either. No x402, no UCP, no ACP. Nothing here is for sale to
+          a machine.
+        </p>
+      </div>
+    </section>
+  </article>
+</BaseLayout>
+
+<style>
+  .intro {
+    padding-block: clamp(2.5rem, 7vh, 4rem) 0;
+    display: grid;
+    gap: calc(var(--space) * 3);
+  }
+
+  .crumb a {
+    font-size: 0.9rem;
+    color: var(--ink-faint);
+    text-decoration: none;
+  }
+
+  .crumb a:hover {
+    color: var(--accent);
+  }
+
+  h1 {
+    max-width: 16ch;
+  }
+
+  .lede {
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    line-height: 1.75;
+    color: var(--ink-soft);
+    max-width: 56ch;
+  }
+
+  .sub {
+    color: var(--ink-faint);
+    font-size: 0.98rem;
+    max-width: 58ch;
+  }
+
+  .para {
+    color: var(--ink-soft);
+  }
+
+  /* ---------- document rows ---------- */
+
+  .docs,
+  .tools {
+    list-style: none;
+    padding: 0;
+    display: grid;
+  }
+
+  .docs li,
+  .tools li {
+    display: grid;
+    gap: calc(var(--space) * 0.75);
+    padding-block: calc(var(--space) * 2.5);
+    border-top: 1px solid var(--line);
+  }
+
+  .docs li:last-child,
+  .tools li:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .doc-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    flex-wrap: wrap;
+  }
+
+  .path,
+  .tool-name {
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    color: var(--accent);
+    text-decoration: none;
+    word-break: break-all;
+  }
+
+  .path:hover {
+    color: var(--accent-bright);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .spec {
+    font-size: 0.78rem;
+    letter-spacing: 0.03em;
+    color: var(--ink-faint);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .spec:hover {
+    color: var(--ink-soft);
+  }
+
+  .desc {
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+    max-width: 64ch;
+  }
+
+  .ctype {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    color: var(--ink-faint);
+    opacity: 0.8;
+  }
+
+  /* ---------- omitted ---------- */
+
+  .omitted {
+    border-left: 1px solid var(--line);
+    padding-left: clamp(1rem, 3vw, 1.75rem);
+    display: grid;
+    gap: calc(var(--space) * 2);
+  }
+
+  .omitted p {
+    color: var(--ink-soft);
+  }
+</style>

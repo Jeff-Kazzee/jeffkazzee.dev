@@ -13,6 +13,13 @@ interface Props {
 const { title, description, ogImage = '/og-default.png', ogType = 'website', canonicalUrl } = Astro.props;
 const canonical = canonicalUrl ?? new URL(Astro.url.pathname, Astro.site).href;
 const ogImageAbs = new URL(ogImage, Astro.site).href;
+
+/**
+ * Path of this page's Markdown twin. Same rule the middleware applies when a
+ * request arrives with `Accept: text/markdown`.
+ */
+const { pathname } = Astro.url;
+const markdownPath = pathname === '/' ? '/index.md' : `${pathname.replace(/\/+$/, '')}.md`;
 ---
 
 <meta charset="utf-8" />
@@ -44,5 +51,15 @@ const ogImageAbs = new URL(ogImage, Astro.site).href;
 
 <link rel="alternate" type="application/rss+xml" title="jeffkazzee.dev" href={new URL('rss.xml', Astro.site).href} />
 <link rel="sitemap" href="/sitemap-index.xml" />
+
+<!-- Machine-readable entry points. See /for-agents/ for the full surface. -->
+<link rel="alternate" type="text/markdown" href={markdownPath} title="This page as Markdown" />
+<link rel="api-catalog" href="/.well-known/api-catalog" />
+<link rel="service-desc" type="application/json" href="/.well-known/mcp/server-card.json" />
+<link rel="describedby" type="application/json" href="/.well-known/agent-skills/index.json" />
+<link rel="ard" href="/.well-known/ard.json" />
+<link rel="ai-catalog" href="/.well-known/ai-catalog.json" />
+
+<script src="../scripts/webmcp.ts"></script>
 
 <ClientRouter />

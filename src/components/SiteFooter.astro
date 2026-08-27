@@ -6,6 +6,8 @@ const links = [
   { href: 'https://jeffkazzee.zo.space', label: 'zo.space' },
   { href: 'mailto:jeffkazzee@gmail.com', label: 'Email' },
   { href: '/rss.xml', label: 'RSS' },
+  { href: '/llms.txt', label: 'llms.txt' },
+  { href: '/for-agents/', label: 'For agents' },
 ];
 ---
 
@@ -17,7 +19,10 @@ const links = [
         <a href={l.href} rel={l.href.startsWith('http') ? 'me noopener' : undefined}>{l.label}</a>
       ))}
     </nav>
-    <p class="colophon">Built with Astro and AI agents. Hand-rolled CSS, no trackers.</p>
+    <p class="colophon">
+      Built with Astro and AI agents. Hand-rolled CSS, no trackers. Every page is also
+      <a href="/for-agents/">readable as Markdown</a>.
+    </p>
   </div>
 </footer>
 

@@ -7,10 +7,12 @@ repoUrl: https://github.com/Jeff-Kazzee/Neon-Noir-Detective-Agency
 liveUrl: https://neon-noir-detective-agency.vercel.app
 screenshots:
   - src: ./_images/neon-noir.png
-    alt: Neon Noir Detective Agency — pure HTML and CSS noir atmosphere
+    alt: Neon Noir Detective Agency, pure HTML and CSS noir atmosphere
 date: 2025-11-01
 status: demo
-order: 13
+order: 10
+shelf: side
+featured: false
+verified: 2026-08-27
 ---
-
-A fictional detective agency rendered in pure HTML and CSS — neon-soaked noir atmosphere with zero JavaScript. A constraint exercise: how much mood can you build with stylesheets alone?
+A fictional detective agency rendered in pure HTML and CSS, neon-soaked noir atmosphere with zero JavaScript. A constraint exercise: how much mood can you build with stylesheets alone?

@@ -14,7 +14,7 @@ const overlay = Buffer.from(`<svg width="${W}" height="${H}" xmlns="http://www.w
   </defs>
   <rect width="${W}" height="${H}" fill="url(#shade)"/>
   <text x="72" y="500" font-family="Georgia, 'Times New Roman', serif" font-size="64" font-weight="600" fill="#f6f2e7">Jeff Kazzee</text>
-  <text x="72" y="556" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-size="30" fill="#d8d2c2">Tools, games, and weird useful things.</text>
+  <text x="72" y="556" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-size="30" fill="#d8d2c2">Free guides, games, and open tools.</text>
 </svg>`);
 
 await sharp('src/assets/earthrise.avif')

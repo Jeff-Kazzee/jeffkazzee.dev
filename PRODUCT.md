@@ -10,7 +10,17 @@ People deciding whether to hire or work with Jeff: recruiters, founders, potenti
 
 ## Product Purpose
 
-Personal portfolio and blog at jeffkazzee.dev. It exists to prove, with shipped work, that Jeff is a self-taught builder who makes real tools (Windows desktop apps, web experiments, things hosted on his own Zo computer) with AI assistance. Success: a visitor leaves convinced the work is real and reaches out, or subscribes to the writing.
+Personal site and blog at jeffkazzee.dev. It exists to show, with work anyone can open, that Jeff builds useful things with AI and gives most of it away.
+
+The evidence leads, in this order:
+
+1. **Community resources.** 1,450 free guides and recipes for Zo Computer, across Zo Deep Dives, Zo Computer 101, and the Zo Cookbook. This is the largest and most checkable body of work.
+2. **Open tools.** Small things built out of need, then released.
+3. **Side projects.** LLM Arcade, where AI agents wrote every line, plus games and demos.
+
+Nothing on the site claims expertise in a sentence. The work carries the claim, and a build-time check refuses to ship a project whose links do not resolve.
+
+Success: a visitor leaves convinced the work is real and reaches out, or subscribes to the writing. For the machine audience, success is an agent answering a question about Jeff correctly, and handing a reader the right guide, without scraping.
 
 ## Brand Personality
 

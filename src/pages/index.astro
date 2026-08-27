@@ -6,17 +6,26 @@ import SectionHeading from '../components/SectionHeading.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import PostCard from '../components/PostCard.astro';
 import earthrise from '../assets/earthrise.avif';
+import { SITE } from '../data/agent-surface.mjs';
+import { totalItems } from '../data/libraries.mjs';
 
 const projects = await getCollection('projects');
-const byOrder = (a: typeof projects[number], b: typeof projects[number]) =>
-  a.data.order - b.data.order;
+type Project = (typeof projects)[number];
 
-const featured = projects.filter((p) => p.data.featured && !p.data.builtOn).sort(byOrder);
-const zoShelf = projects.filter((p) => p.data.builtOn === 'zo').sort(byOrder);
+const byOrder = (a: Project, b: Project) => a.data.order - b.data.order;
+const shelf = (name: string) =>
+  projects.filter((p) => p.data.shelf === name && !p.data.archived).sort(byOrder);
+
+const community = shelf('community');
+const tools = shelf('tools');
+const side = shelf('side');
 
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 3);
+
+/** This post makes the case for the guides better than any copy could. */
+const paidPost = posts.find((p) => p.id === 'a-company-paid-me-for-guides-i-gave-away');
 
 const links = [
   { href: 'https://github.com/Jeff-Kazzee', label: 'GitHub' },
@@ -29,7 +38,9 @@ const jsonLd = JSON.stringify({
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: 'Jeff Kazzee',
-  url: 'https://jeffkazzee.dev',
+  url: SITE,
+  description:
+    'Writes free guides for building real systems on a computer you own, and builds software with AI agents.',
   sameAs: [
     'https://github.com/Jeff-Kazzee',
     'https://x.com/jeffkazzee',
@@ -40,8 +51,8 @@ const jsonLd = JSON.stringify({
 ---
 
 <BaseLayout
-  title="Jeff Kazzee — local-first AI tools, agent workspaces, and open data"
-  description="Self-taught builder shipping local-first AI desktop apps, agent-workspace tooling, open data, and practical web experiments."
+  title="Jeff Kazzee"
+  description="1,450 free guides and recipes for building real systems on a computer you own, plus open tools and side projects from Jeff Kazzee."
 >
   <script type="application/ld+json" set:html={jsonLd} is:inline />
 
@@ -58,12 +69,13 @@ const jsonLd = JSON.stringify({
     <div class="wrap hero-inner">
       <p class="now rise" style="--i: 0">
         <span class="dot live" aria-hidden="true"></span>
-        Currently building <a href="/projects/obscura/">Obscura</a> and <a href="/projects/vivary/">Vivary</a>
+        Building <a href="https://llmarcade.fun" rel="noopener">LLM Arcade</a>
       </p>
-      <h1 class="rise" style="--i: 1">I build local-first AI tools and useful public systems.</h1>
+      <h1 class="rise" style="--i: 1">I give away the guides, and build the things I'm learning on.</h1>
       <p class="lede rise" style="--i: 2">
-        Self-taught builder focused on <strong>creative software</strong>, agent-workspace
-        infrastructure, and open utilities people can actually inspect.
+        <strong>{totalItems.toLocaleString('en-US')} free guides and recipes</strong> for building
+        real systems on a computer you own, plus open tools and a few side projects. Self-taught,
+        still learning in public.
       </p>
       <nav class="links rise" style="--i: 3" aria-label="Profiles">
         {links.map((l) => (
@@ -74,27 +86,53 @@ const jsonLd = JSON.stringify({
   </section>
 
   <section class="wrap">
-    <SectionHeading title="Selected work" note="Local-first AI software, agent infrastructure, and open data." />
-    <div class="rows">
-      {featured.map((p, i) => (
-        <ProjectCard project={p} index={i} variant="row" />
+    <SectionHeading
+      title="Community resources"
+      note="Free libraries for Zo Computer users. No email gate, no upsell."
+    />
+    <div class="grid">
+      {community.map((p, i) => (
+        <ProjectCard project={p} index={i} />
+      ))}
+    </div>
+    {paidPost && (
+      <p class="aside">
+        Someone once paid me for guides I had already given away.
+        <a href={`/blog/${paidPost.id}/`}>That story is here</a>.
+      </p>
+    )}
+  </section>
+
+  <section class="wrap">
+    <SectionHeading title="Open tools" note="Built because I needed them, then given away." />
+    <div class="grid">
+      {tools.map((p, i) => (
+        <ProjectCard project={p} index={i} />
       ))}
     </div>
   </section>
 
   <section class="wrap">
     <SectionHeading
-      title="On Zo Computer"
-      note="Built and hosted on a personal cloud server I actually own."
+      title="Side projects"
+      note="Built for the fun of it. AI agents wrote every line of LLM Arcade."
     />
     <div class="grid">
-      {zoShelf.map((p, i) => (
+      {side.map((p, i) => (
         <ProjectCard project={p} index={i} />
       ))}
     </div>
-    <p class="shelf-link">
-      The machine itself lives at <a href="https://jeffkazzee.zo.space" rel="noopener">jeffkazzee.zo.space</a>.
-    </p>
+    <p class="more"><a href="/projects/">Everything else, including the archive →</a></p>
+  </section>
+
+  <section class="wrap">
+    <SectionHeading title="Writing" note="Essays and field notes on AI-assisted building." />
+    <div class="posts">
+      {posts.map((post, i) => (
+        <PostCard post={post} index={i} />
+      ))}
+    </div>
+    <p class="more"><a href="/blog/">All posts →</a></p>
   </section>
 
   <section class="wrap cta-band">
@@ -106,16 +144,6 @@ const jsonLd = JSON.stringify({
       </p>
       <a href="/work-with-me/" class="btn primary">Work with me</a>
     </div>
-  </section>
-
-  <section class="wrap">
-    <SectionHeading title="Writing" note="Essays and field notes on AI-assisted building." />
-    <div class="posts">
-      {posts.map((post, i) => (
-        <PostCard post={post} index={i} />
-      ))}
-    </div>
-    <p class="more"><a href="/blog/">All posts →</a></p>
   </section>
 </BaseLayout>
 
@@ -137,17 +165,32 @@ const jsonLd = JSON.stringify({
     object-position: center 70%;
   }
 
+  /*
+   * Two passes. The vertical one seals the header seam at the top and carries
+   * the page colour back in at the bottom. The horizontal one keeps the text
+   * column dark wherever the Earth happens to sit, because the headline runs
+   * straight across its bright limb without it.
+   */
   .hero-scrim {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      to bottom,
-      var(--bg) 0%,
-      oklch(0% 0 0 / 0) 16%,
-      oklch(0% 0 0 / 0) 52%,
-      oklch(8% 0.01 255 / 0.55) 78%,
-      oklch(8% 0.01 255 / 0.88) 100%
-    );
+    background:
+      linear-gradient(
+        to right,
+        oklch(8% 0.01 255 / 0.9) 0%,
+        oklch(8% 0.01 255 / 0.82) 32%,
+        oklch(8% 0.01 255 / 0.5) 52%,
+        oklch(8% 0.01 255 / 0.16) 70%,
+        oklch(0% 0 0 / 0) 84%
+      ),
+      linear-gradient(
+        to bottom,
+        var(--bg) 0%,
+        oklch(0% 0 0 / 0) 18%,
+        oklch(0% 0 0 / 0) 55%,
+        oklch(8% 0.01 255 / 0.5) 80%,
+        oklch(8% 0.01 255 / 0.88) 100%
+      );
   }
 
   .hero-inner {
@@ -161,6 +204,7 @@ const jsonLd = JSON.stringify({
   .now {
     font-size: 0.92rem;
     color: var(--ink-soft);
+    text-shadow: 0 1px 10px oklch(5% 0.01 255 / 0.7);
   }
 
   .now .dot {
@@ -168,17 +212,22 @@ const jsonLd = JSON.stringify({
   }
 
   h1 {
-    font-size: clamp(2.8rem, 6.5vw, 4.75rem);
-    max-width: 15ch;
+    font-size: clamp(2.6rem, 5.6vw, 4.25rem);
+    max-width: 14ch;
     color: var(--ink);
-    text-shadow: 0 1px 24px oklch(5% 0.01 255 / 0.6);
+    /* A tight shadow plus a wide one: the first holds the letterforms against
+       cloud, the second sinks the whole line into the sky. */
+    text-shadow:
+      0 1px 3px oklch(5% 0.01 255 / 0.75),
+      0 2px 32px oklch(5% 0.01 255 / 0.7);
   }
 
   .lede {
     font-size: 1.2rem;
     line-height: 1.7;
-    color: oklch(84% 0.01 95);
-    max-width: 46ch;
+    color: oklch(88% 0.008 95);
+    max-width: 44ch;
+    text-shadow: 0 1px 12px oklch(5% 0.01 255 / 0.6);
   }
 
   .lede strong {
@@ -208,10 +257,14 @@ const jsonLd = JSON.stringify({
     gap: calc(var(--space) * 4);
   }
 
-  .shelf-link {
+  .aside {
     margin-top: calc(var(--space) * 4);
     font-size: 0.95rem;
     color: var(--ink-faint);
+  }
+
+  .aside a {
+    margin-left: 0.35em;
   }
 
   .posts {

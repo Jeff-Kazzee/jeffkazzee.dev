@@ -3,6 +3,7 @@ const path = Astro.url.pathname;
 const items = [
   { href: '/projects/', label: 'Projects' },
   { href: '/blog/', label: 'Writing' },
+  { href: '/for-agents/', label: 'For agents' },
   { href: '/work-with-me/', label: 'Work with me' },
 ];
 const isActive = (href: string) => path.startsWith(href);
@@ -51,7 +52,8 @@ const isActive = (href: string) => path.startsWith(href);
 
   nav {
     display: flex;
-    gap: clamp(1rem, 3vw, 2rem);
+    flex-wrap: wrap;
+    gap: 0.35rem clamp(0.9rem, 2.4vw, 1.75rem);
   }
 
   .nav-link {

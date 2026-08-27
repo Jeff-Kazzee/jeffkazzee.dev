@@ -1,4 +1,6 @@
 ---
+import { getCollection } from 'astro:content';
+
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import LinkButton from '../components/LinkButton.astro';
@@ -71,13 +73,13 @@ const pricing = [
   },
 ];
 
-const shipped = [
-  { name: 'Zo Cookbook', href: 'https://www.zo-cookbook.space/' },
-  { name: 'Launchling', href: 'https://www.launchling.app/' },
-  { name: 'Ukrainian Trainer', href: 'https://ukrainian-trainer-jeffkazzee.zocomputer.io/' },
-  { name: 'Zo Computer 101', href: 'https://zo-101-jeffkazzee.zocomputer.io/' },
-  { name: 'Stack Replacer', href: 'https://zo-stack-replacer-jeffkazzee.zocomputer.io/' },
-];
+// Derived from the project collection, never hand-listed. Two entries here
+// were dead links for months because nothing checked them. Anything shown
+// carries a `verified` date from `npm run verify:projects`.
+const shipped = (await getCollection('projects'))
+  .filter((p) => p.data.status === 'shipped' && !p.data.archived && p.data.liveUrl)
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((p) => ({ name: p.data.title, href: p.data.liveUrl as string }));
 
 const faqs = [
   {

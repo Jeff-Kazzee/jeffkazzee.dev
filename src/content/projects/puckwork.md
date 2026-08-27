@@ -6,13 +6,15 @@ stack: [JavaScript, Canvas, zero dependencies]
 liveUrl: https://puckwork.vercel.app
 screenshots:
   - src: ./_images/puckwork.png
-    alt: PUCKWORK gameplay — the simulated air cushion rendered on canvas
+    alt: PUCKWORK gameplay, with the simulated air cushion rendered on canvas
 date: 2026-04-20
 status: demo
-order: 8
+order: 9
+shelf: side
+featured: false
+verified: 2026-08-27
 ---
-
-Air hockey, except the air is real — simulated, anyway. PUCKWORK models the air cushion itself, so the puck rides a field of pressure instead of faking it with friction constants.
+Air hockey, except the air is real, simulated, anyway. PUCKWORK models the air cushion itself, so the puck rides a field of pressure instead of faking it with friction constants.
 
 It's a zero-dependency canvas game delivered as a single file. No build step, no framework, no install. Open it and play.
 

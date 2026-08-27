@@ -4,14 +4,21 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "agent-surface": "node scripts/build-agent-surface.mjs",
+    "predev": "npm run agent-surface",
     "dev": "astro dev",
+    "prebuild": "npm run agent-surface",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "verify": "node scripts/verify-agent-surface.mjs",
+    "dns:aid": "node scripts/publish-dns-aid.mjs",
+    "verify:projects": "node scripts/verify-projects.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "4.0.18",
     "@astrojs/sitemap": "3.7.3",
+    "@vercel/functions": "3.9.5",
     "astro": "6.4.6"
   },
   "devDependencies": {

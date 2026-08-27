@@ -9,11 +9,14 @@ screenshots:
   - src: ./_images/vivary.png
     alt: Vivary landing page showing the agent-workspace scaffold and typed graph concept
 date: 2026-06-15
-featured: true
-status: alpha
-order: 2
+featured: false
+status: deprecated
+order: 40
+archived: true
+verified: 2026-08-27
 ---
 
+**Deprecated.** Vivary is no longer under development. It stays here for the record.
 Vivary is the installable workspace shell for serious agent work: run the scaffold, pick a preset, and get a small world with state, memory boundaries, gates, and a typed Markdown graph.
 
 ## Why it exists
