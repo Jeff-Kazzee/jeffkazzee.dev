@@ -21,6 +21,42 @@ const bookingEmail = (subject: string) =>
     'What do you want to work on?\nHow many people?\nWhich days and times work for you?\n',
   )}`;
 
+const projectEmail = `mailto:${EMAIL}?subject=${encodeURIComponent(
+  'Project inquiry',
+)}&body=${encodeURIComponent(
+  'What do you want built?\nWho is it for?\nWhat should be true when it is done?\nIs there a deadline or budget I should know about?\n',
+)}`;
+
+const services = [
+  {
+    title: 'Sites that do a job',
+    desc: 'A new site or a focused rebuild for a small business, creator, product, or event. Clear structure, strong copy, responsive pages, and the forms, booking, or payments the site actually needs.',
+  },
+  {
+    title: 'Small apps and internal tools',
+    desc: 'A useful first version of the dashboard, browser tool, content system, or workflow your team keeps trying to hold together with tabs and spreadsheets.',
+  },
+  {
+    title: 'AI workflows and automations',
+    desc: 'Turn a repeated process into a workflow with clear inputs, review steps, and a handoff your team can understand. No mystery box that only works while I am in the room.',
+  },
+];
+
+const buildSteps = [
+  {
+    title: 'Tell me the outcome.',
+    desc: 'Send the problem, who it is for, and what done should look like. A rough note is enough.',
+  },
+  {
+    title: 'I make the scope small and clear.',
+    desc: 'You get the deliverable, exclusions, checkpoints, price, and handoff in writing before the build starts.',
+  },
+  {
+    title: 'We review working software.',
+    desc: 'You see the real thing at useful checkpoints. At handoff, you get the source, setup notes, and a walkthrough.',
+  },
+];
+
 const tracks = [
   {
     title: 'Learn to code with AI',
@@ -106,30 +142,68 @@ const faqs = [
 ---
 
 <BaseLayout
-  title="Learn to build with AI, live with Jeff Kazzee"
-  description="Live, screen-shared coaching. Learn to code with AI, use AI for your real work, or build something real. One-on-one and small-group sessions."
+  title="Hire Jeff Kazzee to build a site, app, or AI workflow"
+  description="Focused sites, small apps, AI workflows, and live build-with-me sessions for founders, creators, and small teams."
 >
   <section class="hero wrap">
     <p class="now rise" style="--i: 0">
       <span class="dot" aria-hidden="true"></span>
-      One-on-one and group sessions, live and screen-shared
+      Done-for-you builds and live working sessions
     </p>
-    <h1 class="rise" style="--i: 1">You don't need a degree to build with AI. You need an hour and someone who has done it.</h1>
+    <h1 class="rise" style="--i: 1">I build practical sites, apps, and AI workflows. Or I help you build them.</h1>
     <p class="lede rise" style="--i: 2">
-      This is live teaching, not a course you watch alone. We get on a call, share a screen, and
-      work on your thing: your first program, your real job, or the idea you keep not shipping. You
-      leave with something that runs, and the skill to keep going without me.
+      Bring me the process your business keeps doing by hand, the site that no longer fits, or the
+      app you cannot quite get shipped. I can scope it, build it, and hand it over. If you want to
+      learn the tools instead, we can work side by side.
     </p>
     <div class="cta rise" style="--i: 3">
-      <LinkButton href="#pricing" variant="primary">Reserve a session</LinkButton>
-      <LinkButton href="#tracks">See what you'll learn</LinkButton>
+      <LinkButton href={projectEmail} variant="primary">Tell me what you need built</LinkButton>
+      <LinkButton href="#coaching">Book a working session</LinkButton>
+    </div>
+  </section>
+
+  <section class="wrap" id="services">
+    <SectionHeading
+      title="Hire me to build it"
+      note="Small, useful software with a clear handoff."
+    />
+    <div class="grid services-grid">
+      {services.map((service, i) => (
+        <article class="surface card reveal" style={`--i: ${i}`}>
+          <h3>{service.title}</h3>
+          <p>{service.desc}</p>
+        </article>
+      ))}
+    </div>
+    <div class="service-fit surface">
+      <div>
+        <h3>Good fit</h3>
+        <p>A focused build with one clear owner, a real user, and a finish line we can name.</p>
+      </div>
+      <div>
+        <h3>Probably not a fit</h3>
+        <p>An enterprise rewrite, an open-ended staff-augmentation role, or high-stakes automation with no human review.</p>
+      </div>
     </div>
   </section>
 
   <section class="wrap">
+    <SectionHeading title="How a build works" />
+    <ol class="steps flow build-steps">
+      {buildSteps.map((step) => (
+        <li><strong>{step.title}</strong> {step.desc}</li>
+      ))}
+    </ol>
+    <div class="cta section-cta">
+      <LinkButton href={projectEmail} variant="primary">Start with a project note</LinkButton>
+      <LinkButton href="/projects/">See what I have shipped</LinkButton>
+    </div>
+  </section>
+
+  <section class="wrap" id="coaching">
     <SectionHeading
-      title="Who this is for"
-      note="Learners and working professionals, not people who need their code cleaned up."
+      title="Want to build it with me instead?"
+      note="Live teaching on your real work, not a course you watch alone."
     />
     <ul class="who flow">
       <li>People who want to build something real and keep bouncing off tutorials.</li>
@@ -356,6 +430,38 @@ const faqs = [
     font-size: 0.95rem;
     color: var(--ink-soft);
     line-height: 1.65;
+  }
+
+  .services-grid {
+    align-items: stretch;
+  }
+
+  .service-fit {
+    margin-top: calc(var(--space) * 3);
+    padding: calc(var(--space) * 3.5) calc(var(--space) * 4);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+    gap: calc(var(--space) * 4);
+  }
+
+  .service-fit h3 {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: calc(var(--space) * 1);
+  }
+
+  .service-fit p {
+    color: var(--ink-soft);
+    line-height: 1.65;
+  }
+
+  .build-steps {
+    max-width: 52rem;
+  }
+
+  .section-cta {
+    margin-top: calc(var(--space) * 4);
   }
 
   .proof-lede {
