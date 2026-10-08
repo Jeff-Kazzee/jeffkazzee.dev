@@ -10,9 +10,9 @@ type Project = (typeof allProjects)[number];
 const hasScreenshots = (project: Project) => project.data.screenshots.length > 0;
 
 const rank = (a: Project, b: Project) => {
-  if (hasScreenshots(a) !== hasScreenshots(b)) return hasScreenshots(a) ? -1 : 1;
   if (a.data.featured !== b.data.featured) return a.data.featured ? -1 : 1;
   if (a.data.order !== b.data.order) return a.data.order - b.data.order;
+  if (hasScreenshots(a) !== hasScreenshots(b)) return hasScreenshots(a) ? -1 : 1;
   return b.data.date.valueOf() - a.data.date.valueOf();
 };
 
@@ -22,13 +22,13 @@ const archived = allProjects.filter((p) => p.data.archived).sort(rank);
 
 <BaseLayout
   title="Projects · Jeff Kazzee"
-  description="Games built by AI agents, free guide libraries, open tools and data, web experiments, and things built on a Zo computer."
+  description="Vivary, experimental Context Engine tooling, Zo technical guides, and earlier projects by Jeff Kazzee. Status and source links for each project."
 >
   <section class="wrap">
     <SectionHeading
       title="Projects"
       level="h1"
-      note={`${active.length} active, ${archived.length} archived. The arcade and the guides first, then tooling, experiments, and demos.`}
+      note={`${active.length} active, ${archived.length} archived. Current agent tools and technical writing first, with each project's status shown.`}
     />
     <div class="grid">
       {active.map((p, i) => (

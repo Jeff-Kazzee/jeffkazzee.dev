@@ -28,20 +28,24 @@ ${twin.body.trim()}
 const link = (label: string, href: string) => `[${label}](${href})`;
 
 function homeMarkdown(featured: { title: string; slug: string; description: string }[]): string {
-  return `# I give away the guides, and build the things I'm learning on.
+  return `# I build tools for working with AI.
 
-Field manuals and recipes for building real systems on a computer you own, plus
-open tools and a few side projects. Self-taught, still learning in public.
-
-## Free guides
-
-${totalItems.toLocaleString('en-US')} guides and recipes. No email gate, no upsell.
-
-${libraries.map((l) => `- ${link(l.name, l.url)} (${l.count}): ${l.summary}`).join('\n')}
+I'm a self-taught developer working with AI coding agents and looking for developer roles.
+My current projects are [Vivary](${SITE}/projects/vivary/), an agent workspace with
+V1 alpha acceptance underway, and [Context Engine](${SITE}/projects/context-engine/),
+experimental, opt-in tooling for Claude Code and Codex. Release review and live
+acceptance for Context Engine remain open.
 
 ## Selected work
 
 ${featured.map((p) => `- ${link(p.title, `${SITE}/projects/${p.slug}/`)}: ${p.description}`).join('\n')}
+
+## Zo guides and technical writing
+
+My Zo ambassador work includes beginner guides, technical field manuals, and
+reusable recipes. Free to read.
+
+${libraries.map((l) => `- ${link(l.name, l.url)}: ${l.summary}`).join('\n')}
 
 ## For agents
 
@@ -136,7 +140,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
       path: 'index',
       title: 'Jeff Kazzee',
       description:
-        '1,450 free guides and recipes for building real systems on a computer you own, plus open tools and side projects.',
+        'Jeff Kazzee builds agent tools with AI-assisted workflows. Vivary, experimental Context Engine tooling, and Zo technical guides. Open to developer roles.',
       canonical: `${SITE}/`,
       body: homeMarkdown(featured),
     },

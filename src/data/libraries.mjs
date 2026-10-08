@@ -3,7 +3,7 @@
  *
  * This is the site's most useful structured data, so it is published to agents
  * as well as rendered for people. An agent that lands here can hand a reader
- * 1,450 free guides and recipes instead of a paragraph about who Jeff is.
+ * the free guides and recipes instead of a paragraph about who Jeff is.
  *
  * Counts come from each site's own published metadata. Re-check them when a
  * library grows, and update `verified`.
@@ -56,9 +56,9 @@ export const libraries = [
     url: 'https://www.zo-cookbook.space',
     summary:
       'App ideas, space configurations, automation recipes, and prompts, browsable by category and searchable.',
-    count: '1,162 recipes',
-    items: 1162,
-    verified: '2026-08-26',
+    count: '1,229 recipes',
+    items: 1229,
+    verified: '2026-10-08',
     examples: [],
   },
 ];
