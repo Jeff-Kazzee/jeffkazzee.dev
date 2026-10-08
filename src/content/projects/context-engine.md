@@ -8,6 +8,7 @@ date: 2026-10-08
 featured: true
 status: prototype
 order: 0.5
+screenshots: [{"src":"./_images/context-engine-concept.png","alt":"AI-generated concept illustration: an agent reads working context, edits it, and passes updated context to the next model request. Tool names are illustrative, not an implemented API. Context delivery remains experimental and under testing.","fit":"contain"}]
 ---
 Context Engine explores file-based working context for coding agents. It is based on the [Context Language Models paper](https://arxiv.org/abs/2609.37725), which treats context as a file the model can update.
 

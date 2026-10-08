@@ -37,7 +37,10 @@ const thumb = screenshots[0];
         src={thumb.src}
         alt={thumb.alt}
         widths={[640, 1280]}
-        sizes="(max-width: 820px) 100vw, 540px"
+        sizes="auto, (max-width: 820px) 100vw, 540px"
+        format="webp"
+        loading="lazy"
+        decoding="async"
       />
     )}
   </article>
@@ -46,10 +49,12 @@ const thumb = screenshots[0];
     {thumb ? (
       <Image
         class="thumb"
+        data-fit={thumb.fit}
         src={thumb.src}
         alt={thumb.alt}
         widths={[480, 960]}
-        sizes="(max-width: 768px) 100vw, 420px"
+        sizes="auto, (max-width: 768px) 100vw, 420px"
+        format="webp"
         loading="lazy"
         decoding="async"
       />
@@ -205,6 +210,12 @@ const thumb = screenshots[0];
     object-fit: cover;
     object-position: top;
     border-bottom: 1px solid var(--line);
+  }
+
+  .thumb[data-fit='contain'] {
+    object-fit: contain;
+    object-position: center;
+    background: var(--bg-raised);
   }
 
   .body {
