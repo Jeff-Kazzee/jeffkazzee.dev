@@ -11,6 +11,7 @@ order: 0
 archived: false
 shelf: tools
 verified: 2026-10-08
+screenshots: [{"src":"./_images/vivary-workspace-20260922.png","alt":"Vivary development screenshot from September 22, 2026, showing the project sidebar and a new agent conversation. Historical capture; V1 alpha acceptance is ongoing."}]
 ---
 Vivary is my active agent workspace project. It brings project files, agent conversations, tools, and memory into one desktop app, with a self-hosted web client as part of the product target.
 

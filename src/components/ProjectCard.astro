@@ -47,9 +47,11 @@ const thumb = screenshots[0];
       <Image
         class="thumb"
         src={thumb.src}
-        alt=""
+        alt={thumb.alt}
         widths={[480, 960]}
         sizes="(max-width: 768px) 100vw, 420px"
+        loading="lazy"
+        decoding="async"
       />
     ) : metric ? (
       <p class="metric" aria-hidden="true">
