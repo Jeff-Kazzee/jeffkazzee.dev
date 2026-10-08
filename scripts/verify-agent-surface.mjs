@@ -114,6 +114,7 @@ check('read_page(/projects/llm-arcade/) returns the twin', j.result?.content?.[0
 r = await post(handleMcp, { jsonrpc: '2.0', id: 6, method: 'initialize', params: { protocolVersion: '2025-06-18' } });
 j = await r.json();
 check('legacy initialize negotiates', j.result?.protocolVersion === '2025-06-18', JSON.stringify(j));
+check('initialize guide total matches the catalog', j.result?.instructions?.includes('1,517'));
 
 r = await post(handleMcp, { jsonrpc: '2.0', id: 7, method: 'nope/nope' });
 check('unknown method is 404', r.status === 404);
