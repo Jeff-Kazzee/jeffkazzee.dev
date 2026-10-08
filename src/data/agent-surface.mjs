@@ -8,6 +8,8 @@
  * real surface cannot drift apart.
  */
 
+import { totalItems } from './libraries.mjs';
+
 export const SITE = 'https://jeffkazzee.dev';
 export const OWNER = 'Jeff Kazzee';
 
@@ -238,7 +240,7 @@ export const a2aSkills = [
     id: 'find-a-guide',
     name: 'Find a guide',
     description:
-      'Point a person at the right free guide for what they are trying to build on their own machine, drawn from 1,450 published guides and recipes.',
+      `Point a person at the right free guide for what they are trying to build on their own machine, drawn from ${totalItems.toLocaleString('en-US')} published guides and recipes.`,
     tags: ['guides', 'how-to', 'zo computer', 'automation'],
     examples: [
       'How do I stop chasing invoices by hand?',

@@ -18,13 +18,15 @@ const DIR = fileURLToPath(new URL('../src/content/projects', import.meta.url));
 
 /** [shelf, order, featured]. A null shelf keeps the project off the home page. */
 const PLAN = {
+  'vivary.md': ['tools', 0, true],
+  'context-engine.md': [null, 0.5, true],
   // Community resources: the Zo Computer libraries the community actually uses
   'zo-deep-dives.md': ['community', 1, true],
   'zo-computer-101.md': ['community', 2, true],
   'zo-cookbook.md': ['community', 3, true],
   // Open tools
   'bellamente.md': ['tools', 4, true],
-  'sdlc-skills.md': ['tools', 5, true],
+  'sdlc-skills.md': [null, 5, true],
   'open-world-factbook.md': ['tools', 6, true],
   // Side projects, below everything else
   'llm-arcade.md': ['side', 7, true],
@@ -41,7 +43,7 @@ const PLAN = {
 };
 
 /** Earlier work, kept for the record. */
-const ARCHIVED = new Set(['obscura.md', 'vivary.md']);
+const ARCHIVED = new Set(['obscura.md']);
 
 for (const [name, [shelf, order, featured]] of Object.entries(PLAN)) {
   const path = join(DIR, name);

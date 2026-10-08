@@ -14,11 +14,11 @@ Personal site and blog at jeffkazzee.dev. It exists to show, with work anyone ca
 
 The evidence leads, in this order:
 
-1. **Community resources.** 1,450 free guides and recipes for Zo Computer, across Zo Deep Dives, Zo Computer 101, and the Zo Cookbook. This is the largest and most checkable body of work.
-2. **Open tools.** Small things built out of need, then released.
+1. **Current development and open tools.** Vivary is an active agent workspace with V1 alpha acceptance underway. Context Engine is experimental, opt-in tooling, linked with its release and live-acceptance limits. Project status must distinguish development from a shipped release.
+2. **Community resources.** Zo ambassador and technical-writing work across Zo Deep Dives, Zo Computer 101, and Zo Cookbook. Descriptions should explain the work even if the hosted libraries later become unavailable.
 3. **Side projects.** LLM Arcade, where AI agents wrote every line, plus games and demos.
 
-Nothing on the site claims expertise in a sentence. The work carries the claim, and a build-time check refuses to ship a project whose links do not resolve.
+The profile is project-led and explicit about AI-assisted development. The project verifier checks links and repository contents; homepage cards require a recorded verification date. A passing link check does not establish release readiness.
 
 Success: a visitor leaves convinced the work is real and reaches out, or subscribes to the writing. For the machine audience, success is an agent answering a question about Jeff correctly, and handing a reader the right guide, without scraping.
 

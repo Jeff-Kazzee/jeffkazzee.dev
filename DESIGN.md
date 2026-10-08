@@ -51,7 +51,7 @@ Full-bleed Earthrise: an absolutely positioned `<Image>` cover at object-positio
 
 ## Layout & Spacing
 
-Site max 70rem. The home page is three shelves of image-led cards: community resources, open tools, then side projects. Cards without a screenshot fall back to the metric panel. Sections breathe: `clamp(3.5rem, 9vh, 5.5rem)` heading margins.
+Site max 70rem. The home page is three shelves using the existing cards: agent workspaces and tools, Zo guides and technical writing, then side projects. Cards without a current screenshot use a metric panel when a verified metric is available, or remain text-only. Sections breathe: `clamp(3.5rem, 9vh, 5.5rem)` heading margins.
 
 ## Motion
 

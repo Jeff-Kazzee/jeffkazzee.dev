@@ -14,7 +14,7 @@ const projects = defineCollection({
       liveUrl: z.url().optional(),
       releaseUrl: z.url().optional(),
       screenshots: z
-        .array(z.object({ src: image(), alt: z.string() }))
+        .array(z.object({ src: image(), alt: z.string(), fit: z.enum(['cover', 'contain']).default('cover') }))
         .default([]),
       date: z.coerce.date(),
       featured: z.boolean().default(false),

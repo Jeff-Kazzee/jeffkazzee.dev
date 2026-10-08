@@ -1,15 +1,15 @@
 ---
 title: Zo Deep Dives
-description: 85 guides for building working systems on Zo Computer. Every guide carries exact steps, safety limits, a verification test, and its sources.
+description: Technical field manuals for building systems on Zo Computer, with step-by-step instructions, safety limits, verification checks, and sources.
 tags: [guide, zo, resource]
 stack: [Built on Zo Computer, Markdown]
-liveUrl: https://deepdives.zocomputer101.wiki
+liveUrl: https://deepdives.zocomputer101.wiki/
 date: 2026-08-15
 shelf: community
 featured: true
 order: 1
 status: shipped
-verified: 2026-08-27
+verified: 2026-10-08
 metric:
   value: "85"
   label: guides
@@ -17,31 +17,16 @@ screenshots:
   - src: ./_images/zo-deep-dives.png
     alt: Zo Deep Dives home page, showing guide 001 "Give the agent less power" beside a technical illustration of a Zo control tower
 ---
+Zo Deep Dives is a library of technical guides for building systems on Zo Computer. It is part of my Zo ambassador and technical-writing work.
 
-Most AI guides show you a clever prompt and stop there. These go as far as a system that runs, then tell you how to check that it works.
+## What the guides cover
 
-Eighty-five guides, free, with no email gate.
+Examples include a daily brief from mail and calendar, an invoice ledger, a research folder that retains its sources, and a job-search command center. Each guide explains the workflow and how a reader can check the result.
 
-## What you can build
+## The writing approach
 
-The guides cover working systems rather than demos:
+The guides pair step-by-step instructions with explicit safety limits, verification checks, sources, and notes on what remains unverified. Diagrams support the explanations. The aim is to help a reader understand and inspect the system they are building.
 
-- A personal chief of staff that reads your mail and calendar, then writes one dated brief.
-- An invoice ledger that calculates due dates and drafts the follow-ups.
-- A research folder where every finding keeps a source you can trace to a page.
-- A job-search command center.
-- A watcher that catches subscriptions before they renew.
+The [editorial policy](https://deepdives.zocomputer101.wiki/about) explains authorship, AI assistance, sourcing, and corrections.
 
-## What every guide includes
-
-- Exact steps, written so a beginner can follow them.
-- The safety limits, including what the system must never touch.
-- A verification test, so you can prove the result instead of hoping.
-- Sources, and a note on anything that stayed unverified.
-- Diagrams and posters you can save.
-
-An [editorial policy](https://deepdives.zocomputer101.wiki/about) covers authorship, AI use, sourcing, and corrections. A guide that asks for your trust should say who wrote it and how.
-
-## For machines
-
-The library publishes `llms.txt` and `llms-full.txt`, so an agent can read the whole catalog and hand a reader the right guide.
+[Read Zo Deep Dives](https://deepdives.zocomputer101.wiki/).

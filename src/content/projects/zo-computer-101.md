@@ -1,6 +1,6 @@
 ---
 title: Zo Computer 101
-description: A searchable field guide to Zo Computer with 66 beginner guides and 137 copy-paste automation recipes.
+description: A beginner field guide to Zo Computer, with practical explanations of memory, hosting, automations, and reusable recipes.
 tags: [guide, zo, resource]
 stack: [Built on Zo Computer, Markdown, Search]
 liveUrl: https://www.zocomputer101.wiki/
@@ -13,10 +13,12 @@ status: shipped
 order: 2
 shelf: community
 featured: true
-verified: 2026-08-27
+verified: 2026-10-08
 ---
-Zo Computer 101 is a free field guide for people learning their way around Zo Computer. It covers the practical first questions: memory, the browser, hosting, automations, personas, integrations, recipe packs, and how to judge AI output without pretending the tool is magic.
+Zo Computer 101 is a free field guide for people learning their way around Zo Computer. It covers memory, the browser, hosting, automations, personas, integrations, and how to judge AI output.
 
-Search it, browse it by topic, and use it without a login. Read a guide, copy a recipe, then go build inside your own Zo workspace.
+This is part of my Zo ambassador and technical-writing work: turning platform features into explanations and steps a new user can follow. The guide combines topic-based navigation, search, and recipes readers can adapt in their own workspace.
 
-Built and hosted on my Zo Computer.
+Built and hosted on Zo Computer. The work is an example of beginner documentation and practical onboarding, with enough context to understand a task before copying its instructions.
+
+[Read Zo Computer 101](https://www.zocomputer101.wiki/).

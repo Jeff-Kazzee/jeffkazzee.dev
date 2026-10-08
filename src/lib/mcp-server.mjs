@@ -15,6 +15,7 @@ import {
   tools,
 } from '../data/agent-surface.mjs';
 import { runTool } from './agent-answers.mjs';
+import { totalItems } from '../data/libraries.mjs';
 
 const SERVER_INFO = { name: 'jeffkazzee.dev', title: 'Jeff Kazzee', version: SURFACE_VERSION };
 const SUPPORTED = [MCP_PROTOCOL_VERSION, ...MCP_LEGACY_VERSIONS];
@@ -93,7 +94,7 @@ export async function handleMcp(request, origin) {
         capabilities: { tools: { listChanged: false } },
         serverInfo: SERVER_INFO,
         instructions:
-          'Start with list_guide_libraries: 1,450 free guides and recipes for building real systems. Any page of jeffkazzee.dev can be fetched as Markdown with read_page.',
+          `Start with list_guide_libraries: ${totalItems.toLocaleString('en-US')} free guides and recipes for building real systems. Any page of jeffkazzee.dev can be fetched as Markdown with read_page.`,
       });
 
     case 'ping':

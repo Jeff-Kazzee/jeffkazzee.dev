@@ -1,9 +1,9 @@
 ---
 title: Zo Cookbook
-description: "1,162 recipes for building with your Zo Computer: app ideas, space configurations, automation recipes, and high-leverage prompts."
+description: A searchable recipe library for Zo Computer, covering app ideas, workspace configurations, automations, and prompts readers can adapt.
 tags: [community, zo, resource]
 stack: [Built on Zo Computer]
-liveUrl: https://www.zo-cookbook.space
+liveUrl: https://www.zo-cookbook.space/
 screenshots:
   - src: ./_images/zo-cookbook.png
     alt: Zo Cookbook home, with 1,162 recipes browsable by category and search
@@ -13,10 +13,12 @@ status: shipped
 order: 3
 shelf: community
 featured: true
-verified: 2026-08-27
+verified: 2026-10-08
 ---
-A public cookbook for Zo Computer users: over a thousand recipes spanning apps & sites, space configurations, automations, and prompts, browsable by category, tab, search, or discover mode.
+Zo Cookbook is a public recipe library for Zo Computer users. It covers app and website ideas, workspace configurations, automations, and prompts, organized for browsing and search.
 
-The model is **public cookbook, private execution**: pick a recipe, copy the brief, and run it inside your own Zo. The cookbook shows you what's possible; the work happens on your machine.
+This is part of my Zo ambassador and technical-writing work. Each recipe gives a reader a concrete starting point they can copy and adapt inside their own Zo workspace. The public library explains the idea; execution happens in the reader's workspace.
 
-Community-driven, recipe submissions, a changelog, and a what's-new feed keep it growing.
+The library also supports community recipe submissions. It is a body of practical examples and reusable briefs, rather than a claim that every possible deployment has been tested.
+
+[Browse Zo Cookbook](https://www.zo-cookbook.space/).

@@ -1,36 +1,28 @@
 ---
 title: Vivary
-description: "The create-t3-app for agent workspaces: a CLI scaffold with a typed knowledge graph, a self-improving loop, and graph-aware review."
+description: An active agent workspace bringing project files, conversations, tools, and memory into a desktop app. V1 alpha release acceptance is still underway.
 tags: [agents, tooling, open-source]
-stack: [Python, npm, Markdown, YAML]
+stack: [TypeScript, React, Electron, Node.js]
 repoUrl: https://github.com/vivary-dev/vivary
-liveUrl: https://vivary.vercel.app/
-screenshots:
-  - src: ./_images/vivary.png
-    alt: Vivary landing page showing the agent-workspace scaffold and typed graph concept
 date: 2026-06-15
-featured: false
-status: deprecated
-order: 40
-archived: true
-verified: 2026-08-27
+featured: true
+status: wip
+order: 0
+archived: false
+shelf: tools
+verified: 2026-10-08
+screenshots: [{"src":"./_images/vivary-workspace-20260922.png","alt":"Vivary development screenshot from September 22, 2026, showing the project sidebar and a new agent conversation. Historical capture; V1 alpha acceptance is ongoing."}]
 ---
+Vivary is my active agent workspace project. It brings project files, agent conversations, tools, and memory into one desktop app, with a self-hosted web client as part of the product target.
 
-**Deprecated.** Vivary is no longer under development. It stays here for the record.
-Vivary is the installable workspace shell for serious agent work: run the scaffold, pick a preset, and get a small world with state, memory boundaries, gates, and a typed Markdown graph.
+## The work
 
-## Why it exists
+The focus is completing the workflows around agent-assisted development: opening a project, working with its files, returning to conversation history, and previewing what is being built. Development uses AI coding agents, with review and acceptance checks to establish what actually works.
 
-Agents work better when the workspace itself has structure. Vivary gives them a place to stand: files they can find, rules they can follow, and verification steps they can run without turning the project into a giant framework.
+## Current status
 
-## What it does
+V1 alpha release acceptance is still underway. A tested Windows candidate exists, but it is not a public desktop release. Remaining work includes first-run and upgrade checks, provider workflows, and desktop and web acceptance.
 
-- Scaffolds agent-native workspaces with `create-vivary`
-- Adds a typed knowledge graph through Tropo
-- Adds graph-aware review through Ozone
-- Adds coordination surfaces through Exo
-- Keeps the underlying workspace plain Markdown and YAML
+The earlier CLI scaffold is part of Vivary's history. Its published packages do not establish readiness of the current desktop app.
 
-## The proof point
-
-The important command is not just the initializer. It is `doctor`: the self-check that proves the workspace shell, privacy boundaries, and graph health are still intact.
+See the [active repository](https://github.com/vivary-dev/vivary) and its [acceptance register](https://github.com/vivary-dev/vivary/blob/main/docs/product/multi-project/desktop-acceptance-status.md) for the current evidence and open gaps.

@@ -90,7 +90,7 @@ check(
   ),
   JSON.stringify(j).slice(0, 400),
 );
-check('list_guide_libraries states the total', j.result?.content?.[0]?.text?.includes('1,450'));
+check('list_guide_libraries states the total', j.result?.content?.[0]?.text?.includes('1,517'));
 
 r = await post(handleMcp, {
   jsonrpc: '2.0',
@@ -114,6 +114,7 @@ check('read_page(/projects/llm-arcade/) returns the twin', j.result?.content?.[0
 r = await post(handleMcp, { jsonrpc: '2.0', id: 6, method: 'initialize', params: { protocolVersion: '2025-06-18' } });
 j = await r.json();
 check('legacy initialize negotiates', j.result?.protocolVersion === '2025-06-18', JSON.stringify(j));
+check('initialize guide total matches the catalog', j.result?.instructions?.includes('1,517'));
 
 r = await post(handleMcp, { jsonrpc: '2.0', id: 7, method: 'nope/nope' });
 check('unknown method is 404', r.status === 404);
@@ -184,7 +185,7 @@ for (const [path, needle] of [
   ['/.well-known/mcp/server-card.json', 'streamable-http'],
   ['/.well-known/agent-skills/index.json', 'sha256:'],
   ['/.well-known/ard.json', 'representativeQueries'],
-  ['/index.md', 'Free guides'],
+  ['/index.md', 'Zo guides and technical writing'],
   ['/for-agents.md', 'Markdown'],
   ['/projects.md', 'LLM Arcade'],
   ['/blog.md', '2026'],

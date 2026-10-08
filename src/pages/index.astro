@@ -7,7 +7,6 @@ import ProjectCard from '../components/ProjectCard.astro';
 import PostCard from '../components/PostCard.astro';
 import earthrise from '../assets/earthrise.avif';
 import { SITE } from '../data/agent-surface.mjs';
-import { totalItems } from '../data/libraries.mjs';
 
 const projects = await getCollection('projects');
 type Project = (typeof projects)[number];
@@ -40,7 +39,7 @@ const jsonLd = JSON.stringify({
   name: 'Jeff Kazzee',
   url: SITE,
   description:
-    'Writes free guides for building real systems on a computer you own, and builds software with AI agents.',
+    'Self-taught developer building agent tools with AI-assisted workflows, and a Zo ambassador writing practical technical guides.',
   sameAs: [
     'https://github.com/Jeff-Kazzee',
     'https://x.com/jeffkazzee',
@@ -52,7 +51,7 @@ const jsonLd = JSON.stringify({
 
 <BaseLayout
   title="Jeff Kazzee"
-  description="1,450 free guides and recipes for building real systems on a computer you own, plus open tools and side projects from Jeff Kazzee."
+  description="Jeff Kazzee builds agent tools with AI-assisted workflows. Explore Vivary, experimental Context Engine tooling, and Zo technical guides. Open to developer roles."
 >
   <script type="application/ld+json" set:html={jsonLd} is:inline />
 
@@ -64,18 +63,21 @@ const jsonLd = JSON.stringify({
       widths={[820, 1400, 2000]}
       sizes="100vw"
       loading="eager"
+      fetchpriority="high"
+      format="webp"
     />
     <div class="hero-scrim" aria-hidden="true"></div>
     <div class="wrap hero-inner">
       <p class="now rise" style="--i: 0">
         <span class="dot live" aria-hidden="true"></span>
-        Building <a href="https://llmarcade.fun" rel="noopener">LLM Arcade</a>
+        Building <a href="/projects/vivary/">Vivary</a> · V1 alpha acceptance underway
       </p>
-      <h1 class="rise" style="--i: 1">I give away the guides, and build the things I'm learning on.</h1>
+      <h1 class="rise" style="--i: 1">I build tools for working with AI.</h1>
       <p class="lede rise" style="--i: 2">
-        <strong>{totalItems.toLocaleString('en-US')} free guides and recipes</strong> for building
-        real systems on a computer you own, plus open tools and a few side projects. Self-taught,
-        still learning in public.
+        I'm a self-taught developer working with AI coding agents. My current projects are
+        <a href="/projects/vivary/">Vivary</a>, an agent workspace, and
+        <a href="/projects/context-engine/">Context Engine</a>, experimental context tooling.
+        I'm looking for developer roles.
       </p>
       <nav class="links rise" style="--i: 3" aria-label="Profiles">
         {links.map((l) => (
@@ -87,8 +89,24 @@ const jsonLd = JSON.stringify({
 
   <section class="wrap">
     <SectionHeading
-      title="Community resources"
-      note="Free libraries for Zo Computer users. No email gate, no upsell."
+      title="Agent workspaces and tools"
+      note="Current development and open tools. Each project records its status and what remains to verify."
+    />
+    <div class="grid">
+      {tools.map((p, i) => (
+        <ProjectCard project={p} index={i} />
+      ))}
+    </div>
+    <p class="aside">
+      Also in development: <a href="/projects/context-engine/">Context Engine</a>,
+      an opt-in experiment for Claude Code and Codex. Release review and live acceptance remain open.
+    </p>
+  </section>
+
+  <section class="wrap">
+    <SectionHeading
+      title="Zo guides and technical writing"
+      note="My Zo ambassador work: beginner guides, technical field manuals, and reusable recipes. Free to read."
     />
     <div class="grid">
       {community.map((p, i) => (
@@ -101,15 +119,6 @@ const jsonLd = JSON.stringify({
         <a href={`/blog/${paidPost.id}/`}>That story is here</a>.
       </p>
     )}
-  </section>
-
-  <section class="wrap">
-    <SectionHeading title="Open tools" note="Built because I needed them, then given away." />
-    <div class="grid">
-      {tools.map((p, i) => (
-        <ProjectCard project={p} index={i} />
-      ))}
-    </div>
   </section>
 
   <section class="wrap">
@@ -163,12 +172,13 @@ const jsonLd = JSON.stringify({
 
   <section class="wrap cta-band">
     <div class="cta-inner">
-      <h2>Want to learn this, not just read about it?</h2>
+      <h2>Let's build something useful.</h2>
       <p>
-        I teach people to build with AI, live and screen-shared. Learn to code, use AI on your
-        real job, or ship the thing you keep putting off. One-on-one or in a small group.
+        I'm open to developer roles and conversations about agent tooling, practical workflows,
+        and technical documentation. I also teach people to build with AI.
       </p>
-      <a href="/work-with-me/" class="btn primary">Work with me</a>
+      <a href="mailto:jeffkazzee@gmail.com" class="btn primary">Get in touch</a>
+      <a href="/work-with-me/">AI coaching and workshops</a>
     </div>
   </section>
 </BaseLayout>
