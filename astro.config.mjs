@@ -7,6 +7,9 @@ const NOINDEX_PAGES = ['/contact-thanks/'];
 
 export default defineConfig({
   site: 'https://jeffkazzee.dev',
+  // Astro 7 defaults to 'jsx', which drops the space between inline elements
+  // ("are Vivary," renders as "areVivary,"). Keep the HTML-aware behavior.
+  compressHTML: true,
   integrations: [
     sitemap({
       // Pages a search engine has no reason to hold. Keep this in step with

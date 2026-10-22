@@ -17,10 +17,10 @@
     "audit:properties": "node scripts/audit-properties.mjs"
   },
   "dependencies": {
-    "@astrojs/rss": "4.0.18",
+    "@astrojs/rss": "4.0.19",
     "@astrojs/sitemap": "3.7.3",
     "@vercel/functions": "3.9.5",
-    "astro": "6.4.6"
+    "astro": "7.3.3"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.9",
@@ -30,6 +30,7 @@
     "yaml-language-server": {
       "yaml": "2.9.0"
     },
-    "esbuild": "0.28.1"
+    "esbuild": "0.28.1",
+    "fast-uri": "^3.1.8"
   }
 }
