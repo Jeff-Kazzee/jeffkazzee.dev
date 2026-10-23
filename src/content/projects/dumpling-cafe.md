@@ -12,6 +12,6 @@ status: demo
 order: 11
 shelf: side
 featured: false
-verified: 2026-08-27
+verified: 2026-10-23
 ---
 A small cafe website demo. One of the quick builds, made fast, shipped to a URL, lessons folded into the next thing.
