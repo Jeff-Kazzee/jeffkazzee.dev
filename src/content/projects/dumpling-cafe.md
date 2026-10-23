@@ -3,7 +3,7 @@ title: Dumpling Cafe
 description: A small cafe site demo, quick build, served hot.
 tags: [web, demo]
 stack: [TypeScript]
-liveUrl: https://dumpling-cafe-kilo.vercel.app
+liveUrl: https://dumpling-cafe.vercel.app
 screenshots:
   - src: ./_images/dumpling-cafe.png
     alt: Dumpling Cafe demo site
