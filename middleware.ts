@@ -1,7 +1,7 @@
 import { next } from '@vercel/functions';
 
 import { A2A_ENDPOINT, MCP_ENDPOINT } from './src/data/agent-surface.mjs';
-import { twinPath } from './src/lib/agent-answers.mjs';
+import { twinUrl } from './src/lib/agent-answers.mjs';
 import { handleA2a } from './src/lib/a2a-server.mjs';
 import { handleMcp } from './src/lib/mcp-server.mjs';
 
@@ -45,8 +45,13 @@ export default async function middleware(request: Request): Promise<Response> {
   if (url.pathname === MCP_ENDPOINT) return handleMcp(request, url.origin);
   if (url.pathname === A2A_ENDPOINT) return handleA2a(request, url.origin);
 
-  if (request.method === 'GET' && wantsMarkdown(request.headers.get('accept'))) {
-    const twin = await fetch(new URL(twinPath(url.pathname), url.origin));
+  const twinTarget =
+    request.method === 'GET' && wantsMarkdown(request.headers.get('accept'))
+      ? twinUrl(url.pathname, url.origin)
+      : null;
+
+  if (twinTarget) {
+    const twin = await fetch(twinTarget);
 
     if (twin.ok) {
       const body = await twin.text();
