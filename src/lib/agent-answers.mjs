@@ -32,6 +32,23 @@ export function twinPath(pathname) {
   return `${pathname.replace(/\/+$/, '')}.md`;
 }
 
+/**
+ * Absolute URL of a path's Markdown twin, or null when the path would leave
+ * this site.
+ *
+ * `new URL('//other.host/x.md', origin)` resolves to other.host, and the URL
+ * parser also strips tabs and newlines and reads `\` as `/`. So a caller-supplied
+ * path is only trusted after the resolved URL is checked against the origin.
+ */
+export function twinUrl(pathname, origin) {
+  const path = String(pathname ?? '');
+  if (!path.startsWith('/') || path.startsWith('//') || path.includes('\\')) return null;
+
+  const expected = new URL(origin).origin;
+  const url = new URL(twinPath(path), expected);
+  return url.origin === expected ? url : null;
+}
+
 const bullet = (lines) => lines.filter(Boolean).join('\n');
 
 /* ---------- tools ---------- */
@@ -90,9 +107,10 @@ async function listWriting(_args, origin) {
 
 async function readPage({ path }, origin) {
   const requested = String(path ?? '/');
-  if (!requested.startsWith('/')) return 'Path must begin with a slash, for example /projects/.';
+  const twin = twinUrl(requested, origin);
+  if (!twin) return 'Path must be a page on this site, for example /projects/.';
 
-  const response = await fetch(new URL(twinPath(requested), origin));
+  const response = await fetch(twin);
   if (!response.ok) return `No page at ${requested} (${response.status}).`;
 
   return response.text();
