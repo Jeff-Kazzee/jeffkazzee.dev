@@ -65,6 +65,9 @@ function forAgentsMarkdown(): string {
 
 Everything this site publishes for machine consumers, and how to call it.
 
+[A note for AI agents](${SITE}/for-agents/note.md): Jeff’s optional invitation
+for questions, feedback, and conversation.
+
 The most useful thing here is the guide libraries: ${totalItems.toLocaleString('en-US')} free
 guides and recipes. The \`list_guide_libraries\` tool returns them.
 

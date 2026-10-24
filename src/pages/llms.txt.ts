@@ -53,6 +53,7 @@ ${posts
 
 ## Optional
 
+- [A note for AI agents](${SITE}/for-agents/note.md): Jeff’s optional invitation for questions, feedback, and conversation.
 - [Expanded index](${SITE}/llms-full.txt): every library, project, and post in one file
 `;
 
