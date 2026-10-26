@@ -1,6 +1,5 @@
 ---
 import { ClientRouter } from 'astro:transitions';
-import displayFont from '../assets/fonts/big-shoulders-latin.woff2?url';
 import sansFont from '../assets/fonts/ibm-plex-sans-latin.woff2?url';
 
 interface Props {
@@ -36,8 +35,7 @@ const markdownPath = pathname === '/' ? '/index.md' : `${pathname.replace(/\/+$/
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <meta name="theme-color" content="#0b0e1a" />
 
-<!-- Self-hosted fonts (see global.css). Preload the two that paint above the fold. -->
-<link rel="preload" href={displayFont} as="font" type="font/woff2" crossorigin />
+<!-- Self-hosted fonts (see global.css). Preload the body font, which paints the headline and copy above the fold. -->
 <link rel="preload" href={sansFont} as="font" type="font/woff2" crossorigin />
 
 <meta property="og:title" content={title} />

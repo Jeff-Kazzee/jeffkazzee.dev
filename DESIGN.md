@@ -1,6 +1,6 @@
 # Design
 
-Mountains in deep space. The home page opens on the Cosmic Cliffs of the Carina Nebula, photographed by the James Webb Space Telescope: a ridge of gold and rust gas under a field of stars. The rest of the site is the dark sky around it. Bold, cold, and earned. Replaces the Earthrise night-gallery system on 2026-10-25 at Jeff's direction.
+Mountains in deep space, read calmly. The home page opens on the Cosmic Cliffs of the Carina Nebula, photographed by the James Webb Space Telescope: a ridge of gold and rust gas under a field of stars. The rest of the site is the dark sky around it. The image carries the drama, the type stays quiet. Replaces the Earthrise night-gallery system on 2026-10-25 at Jeff's direction.
 
 ## Visual Theme
 
@@ -29,42 +29,42 @@ Status words are always printed. Color is never the only signal.
 
 ## Typography
 
-- Display: **Big Shoulders** 800 to 900. Headlines only. Uppercase on the home page. Never below 24px.
-- Body and UI: **IBM Plex Sans** 400, 600, and 400 italic. `--font-serif` now points here so long-form pages keep working.
-- Labels, metadata, nav, buttons: **JetBrains Mono** 400 and 500, uppercase with letter spacing. Mono is for labels and code, never for body copy.
-- Google Fonts CDN with preconnect, `display=swap`. Self-hosting subset WOFF2 files is the next speed step.
-- Home hero h1: `clamp(3.75rem, 10.5vw, 10.5rem)`, line height 0.86, max 12ch.
-- Body: 1.125rem, line height 1.65, measure 68ch.
+Calm and readable on a laptop first. Revised 2026-10-26 after the first version read as too large and too loud.
+
+- Headings and body: **IBM Plex Sans**. Headings 600, sentence case. Body 400 at 1.0625rem, line height 1.65, measure 66ch.
+- Site name only: **Big Shoulders** 800, uppercase, 1.4rem.
+- Metadata only (status, stack, hostnames, code): **JetBrains Mono** at 0.8rem. Never for buttons, nav, or section labels.
+- Self-hosted, Latin subset, fallback faces scaled to the same width so nothing jumps when fonts load. Only the body font is preloaded.
+- Sizes: page h1 `clamp(2rem, 3.6vw, 2.75rem)`, home h1 `clamp(2.1rem, 4vw, 3.1rem)`, h2 `clamp(1.5rem, 2.4vw, 1.875rem)`, card and post titles 1.1 to 1.2rem.
+- No uppercase headings. No status lines above the headline.
 
 ## Hero (home)
 
-- Full-bleed `<Image>` of `src/assets/cosmic-cliffs.jpg` (3200px source). Astro writes WebP at 960, 1600, 2400 and 3200 wide, 68 to 418 KB. Loaded eagerly with `fetchpriority="high"`.
-- The header sits over the image (`overlayHeader` on `BaseLayout`).
-- A vertical scrim darkens the top for the header and fades to `--bg` at the bottom so the headline sits on dark rust, never the bright ridge.
-- Content bottom-left: now line with the live dot, headline, lede, two buttons, image credit bottom-right.
+- One `<Picture>` of `src/assets/cosmic-cliffs.jpg`, AVIF with WebP fallback. A phone downloads 33 KB.
+- Height `clamp(30rem, 72vh, 42rem)`. Header sits over the image.
+- Copy is left-aligned in a 34rem column on a dark left-side scrim, so it never runs across the bright ridge. On phones the scrim darkens the lower half instead.
+- Headline, lede, two buttons. Image credit small, bottom right.
 
 ## Home page sections
 
-1. Now: Vivary as the feature. Screenshot in a framed panel, status, description, stack, links.
-2. Work, "Things that load": four cards with screenshots that link to the live sites. Picked by slug in `src/pages/index.astro`. A card must have a screenshot and a `verified` stamp or the build fails.
-3. Also: rows that link to project pages on this site.
-4. Writing: the three newest posts.
-5. For agents: the live site's agent note, kept word for word.
-6. Hire band: developer roles, email, work with me.
+1. Vivary: screenshot and text side by side.
+2. Projects: four cards in a 2 by 2 grid, each linking to its live site, picked by slug in `src/pages/index.astro`. A card needs a screenshot and a `verified` stamp or the build fails. Then three rows linking to project pages.
+3. Writing: the three newest posts as rows.
+4. For agents: the agent note, kept word for word.
+5. Get in touch.
 
-The Zo-hosted libraries are off the home page while Zo Computer has them asleep (HTTP 503 on 2026-10-25). They stay on `/projects/`.
+The Zo-hosted libraries stay off the home page while their sites return 503. They are listed on `/projects/`.
 
 ## Components
 
-- Cards: no box. A 16:10 screenshot frame with a hairline border, a mono metadata row, a Big Shoulders title, a description. Hover brightens the screenshot and turns the title gold.
-- Buttons: 48px tall, 2px radius, mono uppercase label. Primary is amber with space-black text. Secondary is a hairline outline.
-- Rows: hairline-separated, display title, mono status, faint description.
-- Radius: 4px at most. Square screenshot frames. No shadows.
+- Cards: no box. A 16:10 screenshot frame, a 600-weight title, a short description, then a mono status and hostname. Hover brightens the screenshot and turns the title gold.
+- Buttons: 44px tall, 4px radius, sentence-case label in Plex 600. Primary is amber with space-black text. Secondary is a hairline outline.
+- Rows: hairline-separated, title, faint description, mono status.
+- Radius: 4px. No shadows.
 
 ## Motion
 
-- Slow and heavy: `cubic-bezier(0.22, 1, 0.36, 1)`, 400 to 800ms. Things drift, they don't bounce.
-- `.rise` on hero lines, `.reveal` on cards and the agent note. Both gated so no-JS readers see everything.
+- Little of it. `cubic-bezier(0.22, 1, 0.36, 1)`. Hover color changes, and `.reveal` fade-up on the project cards and agent note, gated so no-JS readers see everything. Nothing moves in the hero.
 - Full `prefers-reduced-motion` support.
 
 ## Social card

@@ -58,10 +58,10 @@ const isActive = (href: string) => path.startsWith(href);
 
   .mark {
     font-family: var(--font-display);
-    font-weight: 900;
-    font-size: 1.75rem;
+    font-weight: 800;
+    font-size: 1.4rem;
     line-height: 1;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.03em;
     text-transform: uppercase;
     color: var(--ink);
     text-decoration: none;
@@ -80,11 +80,8 @@ const isActive = (href: string) => path.startsWith(href);
   }
 
   .nav-link {
-    font-family: var(--font-mono);
-    font-size: 0.8125rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--ink);
+    font-size: 0.95rem;
+    color: var(--ink-soft);
     text-decoration: none;
     /* 44px touch target */
     padding-block: 0.8rem;
@@ -101,12 +98,11 @@ const isActive = (href: string) => path.startsWith(href);
 
   @media (max-width: 480px) {
     nav {
-      gap: 0 0.9rem;
+      gap: 0 1rem;
     }
 
     .nav-link {
-      font-size: 0.75rem;
-      letter-spacing: 0.02em;
+      font-size: 0.9rem;
     }
   }
 
