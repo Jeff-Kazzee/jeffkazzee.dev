@@ -6,7 +6,7 @@ canonicalUrl: https://jeffkazzee.substack.com/p/five-zo-cookbook-recipes-worth-r
 tags: []
 ---
 
-![](https://substackcdn.com/image/fetch/$s_!QVCL!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F29a176c9-71dd-4b95-8330-81fbcfac108d_1536x1024.png)
+![](./_images/five-zo-cookbook-recipes-worth-running-1.jpg)
 
 Zo Computer can do a lot. The hard part is figuring out what it can do for you on a given Tuesday night.
 
@@ -34,7 +34,7 @@ You feed it the carrier, the current rate, when you signed up, and what you want
 
 The payoff is often $10 to $40 a month off a bill that crept up while you weren’t watching. The setup takes about ten minutes. The call takes fifteen. If it saves you $20 a month, it beats most household chores.
 
-![](https://substackcdn.com/image/fetch/$s_!5cON!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F937ae425-e512-4b78-8996-fdef321e08f2_1254x1254.png)
+![](./_images/five-zo-cookbook-recipes-worth-running-2.jpg)
 
 ### 3. The “Is This A Scam?” Email Checker
 

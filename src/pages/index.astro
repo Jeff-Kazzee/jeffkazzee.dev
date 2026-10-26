@@ -73,7 +73,7 @@ const jsonLd = JSON.stringify({
       class="hero-bg"
       src={cosmicCliffs}
       alt="The Cosmic Cliffs of the Carina Nebula: a ridge of gold and rust gas under a field of stars, photographed by the James Webb Space Telescope"
-      widths={[828, 1280, 1920, 2560]}
+      widths={[640, 828, 1080, 1280, 1440, 1680, 1920, 2560]}
       sizes="100vw"
       formats={['avif', 'webp']}
       fallbackFormat="webp"
@@ -105,8 +105,8 @@ const jsonLd = JSON.stringify({
           class="shot"
           src={feature.data.screenshots[0].src}
           alt=""
-          widths={[560, 840, 1120]}
-          sizes="(min-width: 960px) 560px, 100vw"
+          widths={[400, 560, 720, 960, 1120]}
+          sizes="(min-width: 1120px) 580px, (min-width: 860px) 55vw, calc(100vw - 2rem)"
         />
       </span>
     </a>
@@ -138,8 +138,8 @@ const jsonLd = JSON.stringify({
               class="shot"
               src={p.data.screenshots[0].src}
               alt={p.data.screenshots[0].alt}
-              widths={[400, 600, 800]}
-              sizes="(min-width: 1100px) 520px, (min-width: 680px) 50vw, 100vw"
+              widths={[360, 480, 640, 800, 1040]}
+              sizes="(min-width: 1120px) 504px, (min-width: 680px) calc(50vw - 3rem), calc(100vw - 2rem)"
             />
           </span>
           <span class="card-title">{p.data.title}</span>

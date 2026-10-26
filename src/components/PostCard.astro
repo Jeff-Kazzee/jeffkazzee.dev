@@ -12,7 +12,7 @@ const { post, index = 0 } = Astro.props;
 
 <article class="post reveal" style={`--i: ${index}`}>
   <p class="date"><FormattedDate date={post.data.pubDate} /></p>
-  <h3><a href={`/blog/${post.id}/`}>{post.data.title}</a></h3>
+  <h2><a href={`/blog/${post.id}/`}>{post.data.title}</a></h2>
   <p class="desc">{post.data.description}</p>
 </article>
 
@@ -30,17 +30,17 @@ const { post, index = 0 } = Astro.props;
     color: var(--ink-faint);
   }
 
-  h3 {
+  h2 {
     font-size: 1.35rem;
     font-weight: 540;
   }
 
-  h3 a {
+  h2 a {
     color: var(--ink);
     text-decoration: none;
   }
 
-  h3 a:hover {
+  h2 a:hover {
     color: var(--accent);
   }
 

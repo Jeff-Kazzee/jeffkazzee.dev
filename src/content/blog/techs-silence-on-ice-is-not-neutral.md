@@ -6,7 +6,7 @@ canonicalUrl: https://jeffkazzee.substack.com/p/techs-silence-on-ice-is-not-neut
 tags: []
 ---
 
-![](https://substackcdn.com/image/fetch/$s_!cBKv!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Ff80ed5e3-f66d-4382-8402-0b25f3972f18_1672x941.png)
+![](./_images/techs-silence-on-ice-is-not-neutral-1.jpg)
 
 The accounts I follow can take eight paragraphs to argue about a system prompt. About what ICE bought from Palantir this month, they have written nothing.
 

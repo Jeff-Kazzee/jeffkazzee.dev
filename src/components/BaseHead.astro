@@ -1,5 +1,4 @@
 ---
-import { ClientRouter } from 'astro:transitions';
 import sansFont from '../assets/fonts/ibm-plex-sans-latin.woff2?url';
 
 interface Props {
@@ -23,6 +22,35 @@ const ogImageAbs = new URL(ogImage, Astro.site).href;
  */
 const { pathname } = Astro.url;
 const markdownPath = pathname === '/' ? '/index.md' : `${pathname.replace(/\/+$/, '')}.md`;
+
+/** Same-origin pages only. Never the agent endpoints, raw files, or the form result page. */
+const notThese = {
+  not: {
+    href_matches: [
+      '/api/*',
+      '/.well-known/*',
+      '/*.md',
+      '/*.txt',
+      '/*.json',
+      '/*.xml',
+      '/contact-thanks/',
+    ],
+  },
+};
+const speculationRules = {
+  prerender: [
+    {
+      where: { and: [{ href_matches: '/*' }, notThese, { not: { selector_matches: '[data-no-prerender]' } }] },
+      eagerness: 'moderate',
+    },
+  ],
+  prefetch: [
+    {
+      where: { and: [{ href_matches: '/*' }, notThese] },
+      eagerness: 'moderate',
+    },
+  ],
+};
 ---
 
 <meta charset="utf-8" />
@@ -62,4 +90,12 @@ const markdownPath = pathname === '/' ? '/index.md' : `${pathname.replace(/\/+$/
 
 <script src="../scripts/webmcp.ts"></script>
 
-<ClientRouter />
+<!--
+  Instant navigation. Browsers that support the Speculation Rules API (Chrome,
+  Edge) fully render the next page in the background as soon as a reader
+  hovers a link for about 200 ms, or presses on it on a phone. The click then
+  swaps in a page that is already painted. Links into the machine surface are
+  left out: an agent endpoint should only ever answer a real request.
+  Other browsers fall back to Astro's hover prefetch (astro.config.mjs).
+-->
+<script type="speculationrules" is:inline set:html={JSON.stringify(speculationRules)} />

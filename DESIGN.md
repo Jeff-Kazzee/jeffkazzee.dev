@@ -67,6 +67,10 @@ The Zo-hosted libraries stay off the home page while their sites return 503. The
 - Little of it. `cubic-bezier(0.22, 1, 0.36, 1)`. Hover color changes, and `.reveal` fade-up on the project cards and agent note, gated so no-JS readers see everything. Nothing moves in the hero.
 - Full `prefers-reduced-motion` support.
 
+## Speed
+
+Part of the design, not an afterthought. Details are in the README under Speed. In short: prerender on hover, inlined CSS, self-hosted subset fonts with width-matched fallbacks, AVIF hero, first image eager and the rest lazy, native view transitions, a network-first service worker with offline support, and a 240 KB first-visit budget enforced at build. Lighthouse on the 2026-10-26 build: 100 performance, 100 accessibility, 100 best practices on mobile and desktop. SEO reads 92 only because Lighthouse does not know the `Content-Signal` and `Agentmap` lines in robots.txt, which the agent-readiness checks need.
+
 ## Social card
 
 `scripts/generate-og.mjs` builds `public/og-default.png` from the hero image.

@@ -11,9 +11,9 @@ const { screenshots } = Astro.props;
 
 {screenshots.length > 0 && (
   <div class="gallery">
-    {screenshots.map((shot) => (
+    {screenshots.map((shot, i) => (
       <figure>
-        <Image src={shot.src} alt={shot.alt} widths={[640, 1280]} sizes="auto, (max-width: 768px) 100vw, 640px" format="webp" loading="lazy" decoding="async" />
+        <Image src={shot.src} alt={shot.alt} widths={[640, 1280]} sizes="auto, (max-width: 768px) 100vw, 640px" format="webp" loading={i === 0 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : 'auto'} decoding="async" />
         <figcaption>{shot.alt}</figcaption>
       </figure>
     ))}

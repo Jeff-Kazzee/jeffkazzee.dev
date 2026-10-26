@@ -140,6 +140,3 @@ function register(): void {
 }
 
 register();
-
-// The site uses Astro's client router, so re-register after a soft navigation.
-document.addEventListener('astro:page-load', register);

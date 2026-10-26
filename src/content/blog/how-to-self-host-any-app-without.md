@@ -6,7 +6,7 @@ canonicalUrl: https://jeffkazzee.substack.com/p/how-to-self-host-any-app-without
 tags: []
 ---
 
-![](https://substackcdn.com/image/fetch/$s_!K_Bz!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Feb73ab3c-7107-47f9-808c-2d89fa60d2ef_1376x768.jpeg)
+![](./_images/how-to-self-host-any-app-without-1.jpg)
 
 Last week I installed a design app on my own server. It runs at a private web address only I can reach. It restarts itself when it crashes. I never opened a terminal. I do not write code. I asked for it in a chat window and ten minutes later it was running.
 
@@ -24,7 +24,7 @@ That has shifted. The server I use is called Zo Computer. It is a Linux server w
 
 The app is [Open Design](https://github.com/nexu-io/open-design), made by a small team called nexu-io. It is a design tool that uses AI coding assistants to generate prototypes, slides, and other artifacts. The relevant detail is that I already had several coding assistants installed on Zo (Claude Code, Codex, Pi), and Open Design knows how to use whichever ones it finds.
 
-![](https://substackcdn.com/image/fetch/$s_!_KQJ!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Ff2709ec4-4c0a-4d0d-bf9a-344a1de7cf3a_1090x2258.png)
+![](./_images/how-to-self-host-any-app-without-2.png)
 
 If Open Design is not your thing, this post is still useful. Substitute any of the apps in this list: Linkding (bookmarks), Memos (notes), Miniflux (RSS), Vaultwarden (passwords), Forgejo (a private GitHub), n8n (Zapier in self-hosted form), Penpot (Figma), NocoDB (Airtable). They all install the same way. Same five sentences in chat.
 
@@ -54,7 +54,7 @@ https://open-design-yourname.zo.computer
 
  and a note that everything was running.
 
-![](https://substackcdn.com/image/fetch/$s_!hWqU!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F2b083d15-7662-4388-817c-7b4a70f3c9d1_1280x577.png)
+![](./_images/how-to-self-host-any-app-without-3.png)
 
 This is the part of every self-hosting blog post where the author says “and now you have your own app running, congratulations!” That is rarely where it actually ends. Three things broke after Zo declared success, and each one taught me something I now apply to every install.
 
@@ -62,7 +62,7 @@ This is the part of every self-hosting blog post where the author says “and no
 
 I opened the URL. The page loaded. Claude Code appeared in the dropdown of available coding assistants. I typed a request. Nothing happened.
 
-![](https://substackcdn.com/image/fetch/$s_!eBDI!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Ff3cdde5a-3bd5-44f1-8477-85cbb6836e39_1280x577.png)
+![](./_images/how-to-self-host-any-app-without-4.png)
 
 I asked Zo to check the error log. It came back with one line:
 
@@ -164,7 +164,7 @@ The real benefit of having a chat-driven server is that it removes the apprentic
 
 ### **Try it yourself**
 
-![](https://substackcdn.com/image/fetch/$s_!pDop!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fdfbfaed0-706d-4389-9050-1c98642fae5d_1280x577.png)
+![](./_images/how-to-self-host-any-app-without-5.png)
 
 If you have an app you have meant to run yourself, open your Zo chat and try the prompt at the top of this post with the app’s GitHub URL substituted. Read the report when it finishes. If something breaks, paste the symptom into chat and follow the conversation.
 

@@ -127,6 +127,21 @@
   --t-base: 400ms;
 }
 
+/* ---------- page transitions ----------
+   Native cross-document view transitions: a short cross-fade between pages
+   with no JavaScript router. Chrome, Edge and Safari animate it; other
+   browsers navigate normally. The header holds still across the fade. */
+
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 160ms;
+  animation-timing-function: var(--ease-out);
+}
+
 /* ---------- base ---------- */
 
 *,
@@ -399,6 +414,10 @@ html.js .reveal.in {
 /* ---------- reduced motion: everything settles ---------- */
 
 @media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
+
   *,
   *::before,
   *::after {

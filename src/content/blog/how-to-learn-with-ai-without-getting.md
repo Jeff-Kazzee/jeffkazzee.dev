@@ -6,7 +6,7 @@ canonicalUrl: https://jeffkazzee.substack.com/p/how-to-learn-with-ai-without-get
 tags: []
 ---
 
-![](https://substackcdn.com/image/fetch/$s_!sLNe!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F13faba53-966b-457d-b1fd-17835b9950b7_1448x1086.png)
+![](./_images/how-to-learn-with-ai-without-getting-1.jpg)
 
 AI has made a lot of knowledge workers faster and a little worse at thinking alone. A first draft, a spreadsheet formula, or a meeting summary that used to take an hour now takes ten minutes. The tradeoff is practice: people are doing fewer hard reps. You can’t quite remember the last time you sat with a hard question for an hour. The blank page feels more unfamiliar than it used to. You send the plan after the model has cleaned it up, and when someone in the meeting asks about the second recommendation, you cannot quite explain why it’s there.
 
@@ -53,7 +53,7 @@ Push back when the model gets too polite. After three or four questions, paste: 
 
 When you’re done, keep every question that made you hesitate. That list is your study plan. It is a better first plan than a generic course outline, because it starts from the gaps you actually have instead of the ones a textbook author predicted you would have.
 
-![](https://substackcdn.com/image/fetch/$s_!qPQV!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F37e7d416-98a9-4fb8-abf4-23d3fca5d978_1254x1254.png)
+![](./_images/how-to-learn-with-ai-without-getting-2.jpg)
 
 ### Step 3. Try first
 
@@ -65,7 +65,7 @@ Trying first feels slow, but the useful questions usually appear during the slow
 
 A confused first attempt gives the model something concrete to diagnose. If yours came out clean, you picked a question you already knew. Pick a harder one next round.
 
-![](https://substackcdn.com/image/fetch/$s_!Q2ei!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fb32c28e1-4641-40d6-9cb9-cecf1c5e07cd_1254x1254.png)
+![](./_images/how-to-learn-with-ai-without-getting-3.jpg)
 
 ### Step 4. Grade second
 

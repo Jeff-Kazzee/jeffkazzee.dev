@@ -18,10 +18,12 @@ Built with [Astro](https://astro.build) and hand-rolled CSS. Deployed on
 | :--- | :--- |
 | `npm install` | Install dependencies |
 | `npm run dev` | Dev server at `localhost:4321` |
-| `npm run build` | Type-check and build to `dist/` |
+| `npm run build` | Type-check, build to `dist/`, then check the page weight budget |
 | `npm run preview` | Serve the build locally |
 | `npm run verify` | Check the agent surface against the build |
 | `npm run agent-surface` | Regenerate the well-known documents only |
+| `npm run budget` | Check the home page weight budget against the last build |
+| `node scripts/localize-remote-images.mjs` | Copy Substack images in posts into the repo |
 
 `agent-surface` runs automatically before `dev` and `build`.
 
@@ -55,6 +57,17 @@ middleware fails to deploy.
 
 Vercel does not support `vercel.json` rewrites on Astro projects, which is why
 negotiation runs in middleware rather than as a rewrite rule.
+
+## Speed
+
+The site is static HTML with no framework on the client. What makes it fast:
+
+- **Instant navigation.** A `<script type="speculationrules">` in `BaseHead.astro` tells Chrome and Edge to render a page in the background once its link is hovered for about 200 ms (or pressed on a phone). The click shows a page that is already painted. Agent endpoints and raw files are excluded. Other browsers get Astro's hover prefetch.
+- **No render-blocking requests.** CSS is inlined into each page. Fonts are self-hosted, Latin-subset, and only the body font is preloaded. Fallback fonts are scaled to the same width, so nothing moves when the real fonts arrive.
+- **Images.** The hero is AVIF with a WebP fallback, 21 KB on a phone. Every image has width and height set. The first image on a page loads at once; the rest load lazily. Blog images are served from this site, not Substack.
+- **Native page transitions.** `@view-transition` in `global.css` cross-fades between pages with no JavaScript router.
+- **Service worker** (`public/sw.js`). Pages are network-first with a 3 second timeout, then the saved copy, then `/offline/`. Hashed `/_astro/` files are cache-first. The main pages are saved on install. It never handles `/api/`, `/.well-known/`, or `.md`/`.txt`/`.json`/`.xml`, so Markdown negotiation and the MCP and A2A endpoints always reach the network. To retire it, see the comment at the top of the file.
+- **Budget.** `scripts/check-budget.mjs` fails the build if a first phone visit to the home page passes 240 KB. It is about 58 KB.
 
 ## Adding or changing a project
 

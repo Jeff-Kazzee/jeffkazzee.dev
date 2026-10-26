@@ -6,7 +6,7 @@ canonicalUrl: https://jeffkazzee.substack.com/p/cheap-ai-was-a-sale-the-bill-is-
 tags: []
 ---
 
-![](https://substackcdn.com/image/fetch/$s_!Cb9w!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F340e8f79-a034-48bf-b3e5-f298e0377fbd_1536x1024.png)
+![](./_images/cheap-ai-was-a-sale-the-bill-is-coming-1.jpg)
 
 I live on a low income, under the federal poverty line. Every recurring cost is one I have to justify to myself, and AI is on that list. It earned its place because right now it is cheap. It is not free, but it is cheap enough that someone on my budget can run a capable model and get the work done, and that low price is the only reason it fits at all.
 
@@ -40,7 +40,7 @@ The people whose job is to watch this agree on the shape, and not just in Americ
 
 ### The worst of it is forecast to be temporary
 
-![](https://substackcdn.com/image/fetch/$s_!4gGt!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fd835d5fc-a682-4221-a322-66b0e4580794_1254x1254.png)
+![](./_images/cheap-ai-was-a-sale-the-bill-is-coming-2.jpg)
 
 Almost everyone forecasting this expects the worst of it to be temporary. The IMF, the OECD, and the European Central Bank all assume the energy spike fades through 2026 and inflation eases back toward normal in 2027. Nobody can promise the timing, and they all say so plainly, but the baseline is a bad year, not a permanent one.
 
