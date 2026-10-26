@@ -18,7 +18,7 @@
  * Bump VERSION whenever the caching logic changes.
  */
 
-const VERSION = 'v1';
+const VERSION = 'v2';
 const PAGES = `pages-${VERSION}`;
 const ASSETS = `assets-${VERSION}`;
 
@@ -76,9 +76,12 @@ async function page(request, event) {
     }
     return response;
   } catch {
+    // ignoreVary: the server sends "Vary: Accept" for Markdown negotiation,
+    // and a saved page was fetched with a different Accept header than a
+    // browser navigation sends. Only HTML pages are in this cache.
     return (
-      (await cache.match(request, { ignoreSearch: true })) ||
-      (await cache.match('/offline/')) ||
+      (await cache.match(request, { ignoreSearch: true, ignoreVary: true })) ||
+      (await cache.match('/offline/', { ignoreVary: true })) ||
       new Response('Offline', { status: 503, headers: { 'content-type': 'text/plain' } })
     );
   }
