@@ -54,7 +54,9 @@ const d = post.data;
     padding-block: clamp(2.5rem, 7vh, 4rem) calc(var(--space) * 5);
     display: grid;
     gap: calc(var(--space) * 5);
-    max-width: calc(var(--measure) + 8rem);
+    /* About 68 characters a line: the column a laptop reader can hold. The
+       header and images share the same left and right edges. */
+    max-width: calc(38rem + 2 * clamp(1rem, 5vw, 3rem));
   }
 
   header {
@@ -84,7 +86,7 @@ const d = post.data;
   .prose {
     font-family: var(--font-serif);
     font-size: 1.125rem;
-    line-height: 1.8;
+    line-height: 1.7;
   }
 
   .prose :global(h2),

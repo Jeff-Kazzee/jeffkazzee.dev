@@ -4,6 +4,7 @@ import { Image, Picture } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import cosmicCliffs from '../assets/cosmic-cliffs.jpg';
+import Status from '../components/Status.astro';
 import { SITE } from '../data/agent-surface.mjs';
 
 type Project = CollectionEntry<'projects'>;
@@ -35,9 +36,6 @@ function pick(slug: string, needsLive: boolean): Project {
 const feature = pick(FEATURE, true);
 const cards = CARDS.map((slug) => pick(slug, true));
 const rows = ROWS.map((slug) => pick(slug, false));
-
-const tone = (status: Project['data']['status']) =>
-  status === 'shipped' ? 'shipped' : status === 'demo' || status === 'deprecated' ? 'quiet' : 'active';
 
 const host = (url?: string) => (url ? new URL(url).host.replace(/^www\./, '') : undefined);
 
@@ -95,11 +93,13 @@ const jsonLd = JSON.stringify({
         <a class="btn" href="mailto:jeffkazzee@gmail.com">Email me</a>
       </div>
     </div>
-    <p class="credit">Cosmic Cliffs, Carina Nebula. JWST, NASA, ESA, CSA, STScI</p>
+    <div class="wrap credit-wrap">
+      <p class="credit">Cosmic Cliffs, Carina Nebula. JWST, NASA, ESA, CSA, STScI</p>
+    </div>
   </section>
 
   <section class="wrap section feature" aria-labelledby="feature-title">
-    <a class="feature-shot" href={`/projects/${feature.id}/`} tabindex="-1" aria-hidden="true">
+    <a class="feature-shot" href="https://vivaryagent.xyz" tabindex="-1" aria-hidden="true">
       <span class="frame">
         <Image
           class="shot"
@@ -112,12 +112,13 @@ const jsonLd = JSON.stringify({
     </a>
     <div class="feature-text">
       <p class="meta">
-        <span class="status" data-tone={tone(feature.data.status)}>{feature.data.status}</span>
+        <Status status={feature.data.status} />
         <span>{feature.data.stack.slice(0, 3).join(' · ')}</span>
       </p>
       <h2 id="feature-title"><a href={`/projects/${feature.id}/`}>{feature.data.title}</a></h2>
       <p class="desc">{feature.data.description}</p>
       <p class="links">
+        <a href="https://vivaryagent.xyz">vivaryagent.xyz</a>
         <a href={`/projects/${feature.id}/`}>Project notes</a>
         {feature.data.repoUrl && <a href={feature.data.repoUrl}>GitHub</a>}
       </p>
@@ -145,7 +146,7 @@ const jsonLd = JSON.stringify({
           <span class="card-title">{p.data.title}</span>
           <span class="card-desc">{p.data.description}</span>
           <span class="meta">
-            <span class="status" data-tone={tone(p.data.status)}>{p.data.status}</span>
+            <Status status={p.data.status} />
             {host(p.data.liveUrl) && <span>{host(p.data.liveUrl)}</span>}
           </span>
         </a>
@@ -158,7 +159,7 @@ const jsonLd = JSON.stringify({
           <a class="row" href={`/projects/${p.id}/`}>
             <span class="row-title">{p.data.title}</span>
             <span class="row-desc">{p.data.description}</span>
-            <span class="status" data-tone={tone(p.data.status)}>{p.data.status}</span>
+            <Status status={p.data.status} />
           </a>
         </li>
       ))}
@@ -209,11 +210,13 @@ const jsonLd = JSON.stringify({
   </section>
 
   <section class="wrap section contact" aria-labelledby="contact-title">
-    <h2 id="contact-title">Get in touch</h2>
-    <p>
-      I'm open to developer roles and conversations about agent tooling, practical workflows,
-      and technical documentation. I also teach people to build with AI.
-    </p>
+    <div class="contact-text">
+      <h2 id="contact-title">Get in touch</h2>
+      <p>
+        I'm open to developer roles and conversations about agent tooling, practical workflows,
+        and technical documentation. I also teach people to build with AI.
+      </p>
+    </div>
     <div class="actions">
       <a href="mailto:jeffkazzee@gmail.com" class="btn primary">Email me</a>
       <a href="/work-with-me/" class="btn">Work with me</a>
@@ -297,6 +300,7 @@ const jsonLd = JSON.stringify({
     font-size: 1.125rem;
     line-height: 1.6;
     color: var(--ink-soft);
+    text-wrap: pretty;
   }
 
   .lede a {
@@ -310,24 +314,28 @@ const jsonLd = JSON.stringify({
     padding-top: calc(var(--space) * 1);
   }
 
-  .credit {
+  /* Same right edge as every section below it. */
+  .credit-wrap {
     position: absolute;
-    right: clamp(1rem, 5vw, 3rem);
+    left: 0;
+    right: 0;
     bottom: 0.75rem;
+  }
+
+  .credit {
     font-size: 0.75rem;
     color: var(--ink-faint);
     text-align: right;
+    max-width: none;
   }
 
   @media (max-width: 720px) {
-    .credit {
-      position: static;
-      padding: 0 1rem 0.75rem;
+    .hero-inner {
+      padding-block: 6.5rem 3rem;
     }
 
-    .hero {
-      flex-direction: column;
-      justify-content: flex-end;
+    .credit-wrap {
+      bottom: 0.5rem;
     }
   }
 
@@ -357,24 +365,11 @@ const jsonLd = JSON.stringify({
   .meta {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 0.25rem 0.75rem;
     font-family: var(--font-mono);
     font-size: 0.8rem;
     color: var(--ink-faint);
-  }
-
-  .status {
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    color: var(--neutral);
-  }
-
-  .status[data-tone='shipped'] {
-    color: var(--glacier);
-  }
-
-  .status[data-tone='active'] {
-    color: var(--accent);
   }
 
   .frame {
@@ -390,7 +385,7 @@ const jsonLd = JSON.stringify({
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: top;
+    object-position: left top;
     transition: filter 0.3s var(--ease-out);
   }
 
@@ -413,6 +408,13 @@ const jsonLd = JSON.stringify({
     display: block;
   }
 
+  /* Narrow screens: name and description before the picture. */
+  @media (max-width: 859px) {
+    .feature-text {
+      order: -1;
+    }
+  }
+
   .feature-shot:hover :global(.shot) {
     filter: brightness(1.08);
   }
@@ -433,7 +435,7 @@ const jsonLd = JSON.stringify({
   }
 
   .feature-text .desc {
-    color: var(--ink-soft);
+    color: var(--ink-muted);
   }
 
   .links {
@@ -492,7 +494,7 @@ const jsonLd = JSON.stringify({
 
   .card-desc {
     font-size: 0.975rem;
-    color: var(--ink-soft);
+    color: var(--ink-muted);
   }
 
   /* ---------- project rows ---------- */
@@ -527,7 +529,7 @@ const jsonLd = JSON.stringify({
 
   .row-desc {
     font-size: 0.95rem;
-    color: var(--ink-faint);
+    color: var(--ink-muted);
   }
 
   @media (max-width: 720px) {
@@ -551,7 +553,7 @@ const jsonLd = JSON.stringify({
 
   .post {
     display: grid;
-    grid-template-columns: 10rem minmax(0, 1fr);
+    grid-template-columns: 12rem minmax(0, 1fr);
     gap: 0.25rem 1.5rem;
     align-items: baseline;
     padding-block: 1.25rem;
@@ -584,7 +586,7 @@ const jsonLd = JSON.stringify({
 
   .post-desc {
     font-size: 0.95rem;
-    color: var(--ink-faint);
+    color: var(--ink-muted);
     max-width: 62ch;
   }
 
@@ -634,6 +636,7 @@ const jsonLd = JSON.stringify({
     display: grid;
     gap: calc(var(--space) * 2);
     justify-items: start;
+    align-self: center;
   }
 
   .agent-links ul {
@@ -667,14 +670,23 @@ const jsonLd = JSON.stringify({
 
   /* ---------- contact ---------- */
 
+  /* Text left, buttons on the right edge of the column. */
   .contact {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: calc(var(--space) * 3) calc(var(--space) * 6);
+  }
+
+  .contact-text {
     display: grid;
-    gap: calc(var(--space) * 2);
-    justify-items: start;
+    gap: calc(var(--space) * 1.5);
+    flex: 1 1 28rem;
   }
 
   .contact p {
-    color: var(--ink-soft);
+    color: var(--ink-muted);
     max-width: 52ch;
   }
 </style>

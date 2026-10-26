@@ -16,8 +16,10 @@ const rank = (a: Project, b: Project) => {
   return b.data.date.valueOf() - a.data.date.valueOf();
 };
 
-const active = allProjects.filter((p) => !p.data.archived).sort(rank);
-const archived = allProjects.filter((p) => p.data.archived).sort(rank);
+/** Deprecated work is shown with the archive on this page, but stays in the data agents read. */
+const retired = (p: Project) => p.data.archived || p.data.status === 'deprecated';
+const active = allProjects.filter((p) => !retired(p)).sort(rank);
+const archived = allProjects.filter(retired).sort(rank);
 ---
 
 <BaseLayout

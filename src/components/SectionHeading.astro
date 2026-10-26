@@ -17,13 +17,11 @@ const Tag = level;
 </div>
 
 <style>
+  /* Heading with its note stacked underneath, on the same left edge. */
   .heading {
     margin-block: clamp(3.5rem, 9vh, 5.5rem) calc(var(--space) * 4);
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 1rem 2rem;
-    flex-wrap: wrap;
+    display: grid;
+    gap: calc(var(--space) * 1);
   }
 
   .heading:has(h1) {
@@ -31,9 +29,8 @@ const Tag = level;
   }
 
   .note {
-    font-size: 0.92rem;
-    color: var(--ink-faint);
-    max-width: 38ch;
-    text-wrap: balance;
+    font-size: 1rem;
+    color: var(--ink-muted);
+    max-width: 60ch;
   }
 </style>

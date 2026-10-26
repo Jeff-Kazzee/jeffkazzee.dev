@@ -23,23 +23,25 @@ const links = [
       Built with Astro and AI agents. Hand-rolled CSS, no trackers. Every page is also
       <a href="/for-agents/">readable as Markdown</a>.
     </p>
-    <p class="colophon">
-      Home page image: the Cosmic Cliffs of the Carina Nebula, James Webb Space Telescope. NASA, ESA,
-      CSA, STScI.
-    </p>
   </div>
 </footer>
 
 <style>
   footer {
-    border-top: 1px solid var(--line);
     margin-top: clamp(4rem, 12vh, 7rem);
   }
 
   .inner {
-    padding-block: calc(var(--space) * 6);
+    padding-block: 0 calc(var(--space) * 6);
     display: grid;
     gap: calc(var(--space) * 2);
+  }
+
+  /* The rule sits inside the content column, like every other divider. */
+  .inner::before {
+    content: '';
+    border-top: 1px solid var(--line);
+    margin-bottom: calc(var(--space) * 4);
   }
 
   .line {

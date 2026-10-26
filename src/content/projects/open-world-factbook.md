@@ -6,8 +6,8 @@ stack: [TypeScript]
 repoUrl: https://github.com/Jeff-Kazzee/open-world-factbook
 liveUrl: https://worldfactbook.xyz
 screenshots:
-  - src: ./_images/open-world-factbook.png
-    alt: Open World Factbook, a country database covering 262 countries and territories
+  - src: ./_images/open-world-factbook.webp
+    alt: "Open World Factbook home page with a country search box, totals, and featured countries"
 date: 2026-03-15
 featured: true
 status: shipped

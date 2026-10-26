@@ -10,7 +10,7 @@ const items = [
   { href: '/projects/', label: 'Projects' },
   { href: '/blog/', label: 'Writing' },
   { href: '/for-agents/', label: 'For agents' },
-  { href: '/work-with-me/', label: 'Work with me', cta: true },
+  { href: '/work-with-me/', label: 'Work with me' },
 ];
 const isActive = (href: string) => path.startsWith(href);
 ---
@@ -22,7 +22,7 @@ const isActive = (href: string) => path.startsWith(href);
       {items.map((item) => (
         <a
           href={item.href}
-          class:list={['nav-link', { active: isActive(item.href), cta: item.cta }]}
+          class:list={['nav-link', { active: isActive(item.href) }]}
           aria-current={isActive(item.href) ? 'page' : undefined}
         >
           {item.label}
@@ -85,10 +85,6 @@ const isActive = (href: string) => path.startsWith(href);
     text-decoration: none;
     /* 44px touch target */
     padding-block: 0.8rem;
-  }
-
-  .nav-link.cta {
-    color: var(--accent);
   }
 
   .nav-link:hover {

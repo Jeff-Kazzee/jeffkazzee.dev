@@ -1,10 +1,10 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Status from '../../components/Status.astro';
 import StackBadges from '../../components/StackBadges.astro';
 import LinkButton from '../../components/LinkButton.astro';
 import ScreenshotGallery from '../../components/ScreenshotGallery.astro';
-import FormattedDate from '../../components/FormattedDate.astro';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
@@ -17,8 +17,7 @@ export async function getStaticPaths() {
 const { project } = Astro.props;
 const { Content } = await render(project);
 const d = project.data;
-const retired = d.status === 'deprecated';
-const wip = d.status !== 'shipped' && !retired;
+const dated = d.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
 ---
 
 <BaseLayout title={`${d.title} · jeffkazzee.dev`} description={d.description}>
@@ -26,9 +25,8 @@ const wip = d.status !== 'shipped' && !retired;
     <header>
       <p class="crumb"><a href="/projects/">← All projects</a></p>
       <h1>{d.title}</h1>
-      <p class="status">
-        <span class="dot" data-tone={retired ? 'retired' : wip ? 'wip' : undefined} aria-hidden="true"></span>
-        {d.status}{d.builtOn === 'zo' && ' · built on a Zo computer'} · <FormattedDate date={d.date} />
+      <p class="status-line">
+        <Status status={d.status} suffix={d.builtOn === 'zo' ? `built on a Zo computer · ${dated}` : dated} />
       </p>
     </header>
 
@@ -83,16 +81,8 @@ const wip = d.status !== 'shipped' && !retired;
     color: var(--accent);
   }
 
-  .status {
-    font-size: 0.8rem;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--ink-faint);
-    display: flex;
-    align-items: center;
-    gap: 0.45rem;
-    flex-wrap: wrap;
+  .status-line {
+    margin-top: calc(var(--space) * 1);
   }
 
   .meta {

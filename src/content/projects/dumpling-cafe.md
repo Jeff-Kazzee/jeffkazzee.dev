@@ -5,8 +5,8 @@ tags: [web, demo]
 stack: [TypeScript]
 liveUrl: https://dumpling-cafe.vercel.app
 screenshots:
-  - src: ./_images/dumpling-cafe.png
-    alt: Dumpling Cafe demo site
+  - src: ./_images/dumpling-cafe.webp
+    alt: "Dumpling Cafe demo: a chat interface with a sidebar and a dumpling mascot"
 date: 2026-02-01
 status: demo
 order: 11

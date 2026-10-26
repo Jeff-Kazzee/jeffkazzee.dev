@@ -93,6 +93,7 @@
   --surface: #161b2e; /* ridge-night */
   --ink: #f4f1ea; /* star-white */
   --ink-soft: #c9c7c0;
+  --ink-muted: #a9adbb; /* descriptions under titles, 8.6:1 on --bg */
   --ink-faint: #8a8fa3; /* fog-gray, 5.9:1 on --bg */
   --line: rgb(123 156 194 / 0.22);
   --line-strong: rgb(123 156 194 / 0.4);
@@ -102,6 +103,7 @@
   --accent-tint: rgb(232 160 76 / 0.22);
   --amber: #e8a04c;
   --glacier: #7b9cc2; /* shipped status, 6.7:1 on --bg */
+  --progress: #d6b25e; /* wip, alpha, prototype: gold, kept apart from link amber */
   --neutral: #b8bccb; /* demo and retired status */
   --rust: #b5532a; /* large text and borders only */
 

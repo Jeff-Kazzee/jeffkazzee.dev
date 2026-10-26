@@ -5,8 +5,8 @@ tags: [game, web, experiment]
 stack: [JavaScript, Canvas, zero dependencies]
 liveUrl: https://puckwork.vercel.app
 screenshots:
-  - src: ./_images/puckwork.png
-    alt: PUCKWORK gameplay, with the simulated air cushion rendered on canvas
+  - src: ./_images/puckwork.webp
+    alt: "Puckwork start menu in glowing cyan over the simulated air hockey table"
 date: 2026-04-20
 status: demo
 order: 9

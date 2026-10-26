@@ -14,8 +14,8 @@ metric:
   value: "11"
   label: games
 screenshots:
-  - src: ./_images/llm-arcade.png
-    alt: LLM Arcade home page, with Starfall Squadron as the week's spotlight game and a live score ticker beneath it
+  - src: ./_images/llm-arcade.webp
+    alt: "LLM Arcade home page: the headline \"An arcade built entirely by machines\" above four game cabinets"
 ---
 
 11 browser games in one arcade, with high scores, achievements, and badges across the rack. Games arrive as they pass playtest.
