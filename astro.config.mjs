@@ -10,6 +10,8 @@ export default defineConfig({
   // Astro 7 defaults to 'jsx', which drops the space between inline elements
   // ("are Vivary," renders as "areVivary,"). Keep the HTML-aware behavior.
   compressHTML: true,
+  // Fetch a page when a link is hovered or tapped, so the click feels instant.
+  prefetch: { prefetchAll: true, defaultStrategy: 'hover' },
   integrations: [
     sitemap({
       // Pages a search engine has no reason to hold. Keep this in step with

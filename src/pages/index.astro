@@ -1,12 +1,15 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
-import { Image } from 'astro:assets';
+import { Image, Picture } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import cosmicCliffs from '../assets/cosmic-cliffs.jpg';
 import { SITE } from '../data/agent-surface.mjs';
 
 type Project = CollectionEntry<'projects'>;
+
+/** Both hero layers must use the same widths so they share one download. */
+const heroWidths = [828, 1280, 1920, 2560, 3200];
 
 const projects = await getCollection('projects');
 const bySlug = new Map(projects.map((p) => [p.id, p]));
@@ -68,25 +71,53 @@ const jsonLd = JSON.stringify({
 >
   <script type="application/ld+json" set:html={jsonLd} is:inline />
 
+  <!--
+    Depth hero. Back to front:
+      sky     the whole image (the page's largest paint)
+      title   the headline, set in the sky
+      ridge   the same image again, masked to the cliffs, so the cliffs sit in
+              front of the headline. Same URLs as the sky, so the browser
+              downloads the image once.
+    On scroll the sky and the headline sink while the ridge stays put, so
+    the headline slides down behind the cliffs. CSS only, and off for
+    reduced motion.
+  -->
   <section class="hero" aria-labelledby="hero-title">
-    <Image
-      class="hero-bg"
-      src={cosmicCliffs}
-      alt="The Cosmic Cliffs of the Carina Nebula: a ridge of gold and rust gas under a field of stars, photographed by the James Webb Space Telescope"
-      widths={[960, 1600, 2400, 3200]}
-      sizes="100vw"
-      loading="eager"
-      fetchpriority="high"
-      format="webp"
-      quality={68}
-    />
-    <div class="hero-scrim" aria-hidden="true"></div>
+    <div class="layer sky">
+      <Picture
+        src={cosmicCliffs}
+        alt="The Cosmic Cliffs of the Carina Nebula: a ridge of gold and rust gas under a field of stars, photographed by the James Webb Space Telescope"
+        widths={heroWidths}
+        sizes="100vw"
+        formats={['avif', 'webp']}
+        fallbackFormat="webp"
+        quality={44}
+        loading="eager"
+        fetchpriority="high"
+      />
+    </div>
+    <div class="scrim-top" aria-hidden="true"></div>
+    <div class="wrap title-wrap">
+      <h1 id="hero-title" class="rise" style="--i: 0">I build tools for working with AI.</h1>
+    </div>
+    <div class="layer ridge" aria-hidden="true">
+      <Picture
+        src={cosmicCliffs}
+        alt=""
+        widths={heroWidths}
+        sizes="100vw"
+        formats={['avif', 'webp']}
+        fallbackFormat="webp"
+        quality={44}
+        loading="eager"
+      />
+    </div>
+    <div class="scrim-bottom" aria-hidden="true"></div>
     <div class="wrap hero-inner">
-      <p class="now label rise" style="--i: 0">
+      <p class="now label rise" style="--i: 1">
         <span class="dot live" aria-hidden="true"></span>
         Building <a href="/projects/vivary/">Vivary</a> · V1 alpha acceptance underway
       </p>
-      <h1 id="hero-title" class="rise" style="--i: 1">I build tools for working with AI.</h1>
       <p class="lede rise" style="--i: 2">
         I'm a self-taught developer working with AI coding agents. My current projects are
         <a href="/projects/vivary/">Vivary</a>, an agent workspace, and
@@ -238,69 +269,131 @@ const jsonLd = JSON.stringify({
   /* ---------- hero ---------- */
 
   .hero {
+    --hero-y: 40%; /* vertical crop of the image; the ridge mask follows it */
     position: relative;
+    isolation: isolate;
     overflow: hidden;
     min-height: clamp(40rem, 100svh, 60rem);
     display: flex;
-    align-items: flex-end;
+    flex-direction: column;
     background: var(--bg);
   }
 
-  .hero :global(.hero-bg) {
+  /*
+   * Both image layers get the same box, so object-fit puts the cliffs in the
+   * same place in each. The box starts 12% above the hero so the sky has
+   * picture to sink into when it moves down on scroll, and runs past the
+   * bottom so the image scales up enough to put the ridge line just under
+   * the headline at rest.
+   */
+  .layer {
     position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: 50% 42%;
+    left: 0;
+    right: 0;
+    top: -12%;
+    height: 130%;
+    pointer-events: none;
   }
 
-  /*
-   * Top band seals the header against the starfield. The bottom half carries
-   * the page colour back in, so the headline sits on dark rust and never on
-   * the bright ridge.
-   */
-  .hero-scrim {
+  .layer :global(picture),
+  .layer :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .layer :global(img) {
+    object-fit: cover;
+    object-position: 50% var(--hero-y);
+  }
+
+  .sky {
+    z-index: 0;
+  }
+
+  .ridge {
+    z-index: 3;
+  }
+
+  /* Mask is 960px wide with a soft edge, 9 KB. Same fit and position as the image. */
+  .ridge :global(img) {
+    -webkit-mask-image: url('../assets/ridge-mask.png');
+    mask-image: url('../assets/ridge-mask.png');
+    -webkit-mask-size: cover;
+    mask-size: cover;
+    -webkit-mask-position: 50% var(--hero-y);
+    mask-position: 50% var(--hero-y);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+  }
+
+  /* Seals the header against the starfield. Sits under the headline. */
+  .scrim-top {
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 22%;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgb(11 14 26 / 0.65), rgb(11 14 26 / 0));
+  }
+
+  /* Carries the page colour back in over the cliffs, under the lede and buttons. */
+  .scrim-bottom {
     position: absolute;
     inset: 0;
+    z-index: 4;
+    pointer-events: none;
     background: linear-gradient(
       180deg,
-      rgb(11 14 26 / 0.7) 0%,
-      rgb(11 14 26 / 0) 20%,
-      rgb(11 14 26 / 0) 38%,
-      rgb(11 14 26 / 0.62) 62%,
-      rgb(11 14 26 / 0.94) 86%,
+      rgb(11 14 26 / 0) 46%,
+      rgb(11 14 26 / 0.5) 62%,
+      rgb(11 14 26 / 0.9) 84%,
       var(--bg) 100%
     );
   }
 
+  .title-wrap {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    padding-top: clamp(6.5rem, 14vh, 8.5rem);
+  }
+
+  h1 {
+    font-weight: 900;
+    font-size: clamp(3.5rem, min(7.6vw, 13vh), 7.5rem);
+    line-height: 0.86;
+    text-transform: uppercase;
+    text-align: center;
+    text-wrap: balance;
+    max-width: 18ch;
+    margin-inline: auto;
+    color: var(--ink);
+  }
+
   .hero-inner {
     position: relative;
+    z-index: 5;
     width: 100%;
+    margin-top: auto;
     display: grid;
-    gap: calc(var(--space) * 3.5);
-    padding-block: 8rem 2.5rem;
+    justify-items: center;
+    text-align: center;
+    gap: calc(var(--space) * 3);
+    padding-block: 3rem 2.5rem;
   }
 
   .now {
     color: var(--accent-bright);
     display: flex;
     align-items: center;
+    justify-content: center;
     flex-wrap: wrap;
     gap: 0.5rem;
   }
 
   .now a {
     color: inherit;
-  }
-
-  h1 {
-    font-weight: 900;
-    font-size: clamp(3.75rem, 10.5vw, 10.5rem);
-    line-height: 0.86;
-    text-transform: uppercase;
-    max-width: 12ch;
-    color: var(--ink);
   }
 
   .lede {
@@ -310,6 +403,40 @@ const jsonLd = JSON.stringify({
     color: var(--ink);
   }
 
+  /* Scroll depth: sky and headline sink, the cliffs hold still. */
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .sky,
+      .title-wrap {
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: scroll(root block);
+        animation-range: 0 75vh;
+        will-change: transform;
+      }
+
+      .sky {
+        animation-name: sky-sink;
+      }
+
+      .title-wrap {
+        animation-name: title-sink;
+      }
+    }
+  }
+
+  @keyframes sky-sink {
+    to {
+      transform: translateY(9%);
+    }
+  }
+
+  @keyframes title-sink {
+    to {
+      transform: translateY(26vh);
+    }
+  }
+
   .lede a {
     color: var(--accent-bright);
   }
@@ -317,17 +444,17 @@ const jsonLd = JSON.stringify({
   .actions {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 0.75rem;
   }
 
   .credit {
-    justify-self: end;
     margin-top: calc(var(--space) * 3);
     font-family: var(--font-mono);
     font-size: 0.75rem;
     letter-spacing: 0.04em;
     color: var(--ink-faint);
-    text-align: right;
+    text-align: center;
     max-width: none;
     text-wrap: balance;
   }
