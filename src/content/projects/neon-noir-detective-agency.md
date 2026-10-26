@@ -6,8 +6,8 @@ stack: [HTML, CSS]
 repoUrl: https://github.com/Jeff-Kazzee/Neon-Noir-Detective-Agency
 liveUrl: https://neon-noir-detective-agency.vercel.app
 screenshots:
-  - src: ./_images/neon-noir.png
-    alt: Neon Noir Detective Agency, pure HTML and CSS noir atmosphere
+  - src: ./_images/neon-noir.webp
+    alt: Neon Noir Detective Agency home page, with a dripping pink neon title over a dark navigation bar
 date: 2025-11-01
 status: demo
 order: 10

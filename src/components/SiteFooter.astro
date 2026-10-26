@@ -23,6 +23,10 @@ const links = [
       Built with Astro and AI agents. Hand-rolled CSS, no trackers. Every page is also
       <a href="/for-agents/">readable as Markdown</a>.
     </p>
+    <p class="colophon">
+      Home page image: the Cosmic Cliffs of the Carina Nebula, James Webb Space Telescope. NASA, ESA,
+      CSA, STScI.
+    </p>
   </div>
 </footer>
 
@@ -30,40 +34,46 @@ const links = [
   footer {
     border-top: 1px solid var(--line);
     margin-top: clamp(4rem, 12vh, 7rem);
-    background: var(--bg-raised);
   }
 
   .inner {
     padding-block: calc(var(--space) * 6);
     display: grid;
-    gap: calc(var(--space) * 2.5);
+    gap: calc(var(--space) * 2);
   }
 
   .line {
-    font-family: var(--font-serif);
-    font-style: italic;
-    font-size: 1.05rem;
-    color: var(--ink-soft);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    line-height: 1.05;
+    text-transform: uppercase;
+    color: var(--ink);
   }
 
   nav {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem 1.5rem;
+    gap: 0 1.5rem;
   }
 
   nav a {
-    font-size: 0.9rem;
-    color: var(--ink-soft);
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    letter-spacing: 0.04em;
+    color: var(--ink);
     text-decoration: none;
+    padding-block: 0.75rem;
   }
 
   nav a:hover {
-    color: var(--accent);
+    color: var(--accent-bright);
   }
 
   .colophon {
-    font-size: 0.82rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.6;
     color: var(--ink-faint);
   }
 </style>

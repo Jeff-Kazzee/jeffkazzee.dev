@@ -1,41 +1,48 @@
 /* ============================================================
-   jeffkazzee.dev — night gallery design system
-   Hand-rolled. No framework. Night sky, moonlight ink, one jade accent.
+   jeffkazzee.dev — cosmic cliffs design system
+   Hand-rolled. No framework. Deep space, star-white ink, one amber accent.
+   Colors come from the JWST Cosmic Cliffs image in the home page hero.
    ============================================================ */
 
 :root {
   /* color */
-  --bg: oklch(15% 0.012 255);
-  --bg-raised: oklch(18% 0.014 255);
-  --surface: oklch(19.5% 0.015 257);
-  --ink: oklch(93% 0.008 95);
-  --ink-soft: oklch(76% 0.012 95);
-  --ink-faint: oklch(62% 0.014 95);
-  --line: oklch(30% 0.015 255);
-  --accent: oklch(78% 0.11 155);
-  --accent-bright: oklch(86% 0.1 152);
-  --accent-vivid: oklch(72% 0.17 150);
-  --accent-tint: oklch(30% 0.05 155);
-  --amber: oklch(76% 0.12 80);
+  --bg: #0b0e1a; /* space-black */
+  --bg-raised: #11152a;
+  --surface: #161b2e; /* ridge-night */
+  --ink: #f4f1ea; /* star-white */
+  --ink-soft: #c9c7c0;
+  --ink-faint: #8a8fa3; /* fog-gray, 5.9:1 on --bg */
+  --line: rgb(123 156 194 / 0.22);
+  --line-strong: rgb(123 156 194 / 0.4);
+  --accent: #e8a04c; /* nebula-amber */
+  --accent-bright: #f2c879; /* dust-gold */
+  --accent-vivid: #e8a04c;
+  --accent-tint: rgb(232 160 76 / 0.22);
+  --amber: #e8a04c;
+  --glacier: #7b9cc2; /* shipped status, 6.7:1 on --bg */
+  --neutral: #b8bccb; /* demo and retired status */
+  --rust: #b5532a; /* large text and borders only */
 
   /* type */
-  --font-serif: "Literata", Georgia, "Times New Roman", serif;
-  --font-sans: "Hanken Grotesk", system-ui, "Segoe UI", sans-serif;
-  --font-mono: ui-monospace, Consolas, Menlo, monospace;
+  --font-display: "Big Shoulders", "Arial Narrow", Impact, sans-serif;
+  --font-sans: "IBM Plex Sans", system-ui, "Segoe UI", sans-serif;
+  /* Long-form reading text. Was a serif in the old system; the name stays so
+     page styles keep working. */
+  --font-serif: var(--font-sans);
+  --font-mono: "JetBrains Mono", ui-monospace, Consolas, Menlo, monospace;
 
   /* structure */
   --space: 0.5rem; /* 8px scale */
-  --measure: 66ch;
-  --site-max: 70rem;
-  --radius: 10px;
-  --shadow-soft: 0 1px 2px oklch(5% 0.01 255 / 0.5),
-    0 12px 32px oklch(5% 0.01 255 / 0.45);
-  --shadow-rest: 0 1px 2px oklch(5% 0.01 255 / 0.35);
+  --measure: 68ch;
+  --site-max: 77.5rem;
+  --radius: 4px;
+  --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.5), 0 12px 32px rgb(0 0 0 / 0.45);
+  --shadow-rest: none;
 
-  /* motion */
+  /* motion: slow and heavy */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --t-fast: 180ms;
-  --t-base: 320ms;
+  --t-base: 400ms;
 }
 
 /* ---------- base ---------- */
@@ -54,17 +61,17 @@ html {
 
 body {
   font-family: var(--font-sans);
-  font-size: 1.0625rem;
-  /* light type on dark reads lighter; extra leading compensates */
-  line-height: 1.75;
+  font-size: 1.125rem;
+  line-height: 1.65;
   color: var(--ink);
   background: var(--bg);
   min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
 }
 
 ::selection {
   background: var(--accent-tint);
-  color: var(--accent-bright);
+  color: var(--ink);
 }
 
 :focus-visible {
@@ -74,27 +81,32 @@ body {
 }
 
 h1,
-h2,
+h2 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: 0;
+  text-wrap: balance;
+}
+
 h3,
 h4 {
-  font-family: var(--font-serif);
-  font-weight: 560;
-  font-optical-sizing: auto;
-  line-height: 1.12;
-  letter-spacing: -0.015em;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  line-height: 1.25;
   text-wrap: balance;
 }
 
 h1 {
-  font-size: clamp(2.4rem, 5.5vw, 3.75rem);
+  font-size: clamp(3rem, 7vw, 4.75rem);
 }
 
 h2 {
-  font-size: clamp(1.6rem, 3.2vw, 2.2rem);
+  font-size: clamp(2.1rem, 4.5vw, 3rem);
 }
 
 h3 {
-  font-size: 1.25rem;
+  font-size: 1.35rem;
 }
 
 p {
@@ -110,9 +122,9 @@ img {
 code {
   font-family: var(--font-mono);
   background: var(--bg-raised);
-  border-radius: 4px;
+  border-radius: 2px;
   padding: 0.1em 0.35em;
-  font-size: 0.88em;
+  font-size: 0.86em;
 }
 
 pre {
@@ -140,11 +152,21 @@ hr {
 }
 
 blockquote {
-  font-family: var(--font-serif);
   font-style: italic;
   color: var(--ink-soft);
+  border-inline-start: 2px solid var(--accent);
   padding-inline-start: calc(var(--space) * 3);
   margin-block: calc(var(--space) * 3);
+}
+
+/* Small uppercase mono label above a section. */
+.label {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
 }
 
 /* ---------- links ---------- */
@@ -154,14 +176,16 @@ a {
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
-  text-decoration-color: oklch(78% 0.11 155 / 0.4);
+  text-decoration-color: rgb(232 160 76 / 0.45);
   transition: color var(--t-fast) var(--ease-out),
-    text-decoration-color var(--t-fast) var(--ease-out);
+    text-decoration-color var(--t-fast) var(--ease-out),
+    text-decoration-thickness var(--t-fast) var(--ease-out);
 }
 
 a:hover {
   color: var(--accent-bright);
   text-decoration-color: var(--accent-bright);
+  text-decoration-thickness: 2px;
 }
 
 /* ---------- layout helpers ---------- */
@@ -169,7 +193,7 @@ a:hover {
 .wrap {
   max-width: var(--site-max);
   margin-inline: auto;
-  padding-inline: clamp(1.25rem, 5vw, 3rem);
+  padding-inline: clamp(1rem, 5vw, 3rem);
 }
 
 .flow > * + * {
@@ -179,27 +203,29 @@ a:hover {
 /* ---------- buttons ---------- */
 
 .btn {
-  display: inline-block;
-  font-family: var(--font-sans);
-  font-weight: 600;
-  font-size: 0.9rem;
-  letter-spacing: 0.01em;
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 0.875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   text-decoration: none;
-  padding: 0.6rem 1.35rem;
-  border-radius: 999px;
-  border: 1px solid var(--line);
+  padding: 0 1.5rem;
+  border-radius: 2px;
+  border: 1px solid rgb(244 241 234 / 0.45);
   color: var(--ink);
-  background: var(--surface);
+  background: transparent;
   transition: border-color var(--t-fast) var(--ease-out),
     color var(--t-fast) var(--ease-out),
-    background-color var(--t-fast) var(--ease-out),
-    box-shadow var(--t-fast) var(--ease-out);
+    background-color var(--t-fast) var(--ease-out);
 }
 
 .btn:hover {
-  border-color: var(--accent);
-  color: var(--accent-bright);
-  box-shadow: var(--shadow-rest);
+  border-color: var(--ink);
+  color: var(--ink);
+  text-decoration: none;
 }
 
 .btn.primary {
@@ -220,16 +246,11 @@ a:hover {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  box-shadow: var(--shadow-rest);
-  transition: border-color var(--t-base) var(--ease-out),
-    box-shadow var(--t-base) var(--ease-out),
-    transform var(--t-base) var(--ease-out);
+  transition: border-color var(--t-base) var(--ease-out);
 }
 
 .surface:hover {
-  border-color: oklch(78% 0.11 155 / 0.45);
-  box-shadow: var(--shadow-soft);
-  transform: translateY(-2px);
+  border-color: var(--line-strong);
 }
 
 /* ---------- status dot ---------- */
@@ -239,32 +260,32 @@ a:hover {
   width: 0.5em;
   height: 0.5em;
   border-radius: 50%;
-  background: var(--accent);
+  background: var(--glacier);
   vertical-align: 0.05em;
 }
 
 .dot[data-tone='wip'] {
-  background: var(--amber);
+  background: var(--accent);
 }
 
 /* Retired work reads as quiet, not as work in progress. */
 .dot[data-tone='retired'] {
   background: transparent;
-  box-shadow: inset 0 0 0 1px var(--ink-faint);
+  box-shadow: inset 0 0 0 1px var(--neutral);
 }
 
 .dot.live {
-  background: var(--accent-vivid);
+  background: var(--accent);
   animation: breathe 2.6s var(--ease-out) infinite;
 }
 
 @keyframes breathe {
   0%,
   100% {
-    box-shadow: 0 0 0 0 oklch(72% 0.17 150 / 0.5);
+    box-shadow: 0 0 0 0 rgb(232 160 76 / 0.5);
   }
   55% {
-    box-shadow: 0 0 0 6px oklch(72% 0.17 150 / 0);
+    box-shadow: 0 0 0 6px rgb(232 160 76 / 0);
   }
 }
 
@@ -272,26 +293,26 @@ a:hover {
 
 html.js .reveal {
   opacity: 0;
-  transform: translateY(12px);
+  transform: translateY(16px);
 }
 
 html.js .reveal.in {
   opacity: 1;
   transform: none;
-  transition: opacity 0.55s var(--ease-out), transform 0.55s var(--ease-out);
+  transition: opacity 0.5s var(--ease-out), transform 0.7s var(--ease-out);
   transition-delay: calc(var(--i, 0) * 70ms);
 }
 
 /* staggered entrance for hero lines: set --i per element */
 .rise {
-  animation: rise 0.6s var(--ease-out) both;
+  animation: rise 0.8s var(--ease-out) both;
   animation-delay: calc(var(--i, 0) * 110ms);
 }
 
 @keyframes rise {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(14px);
   }
   to {
     opacity: 1;

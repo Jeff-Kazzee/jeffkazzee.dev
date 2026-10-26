@@ -11,18 +11,22 @@ interface Props {
   ogType?: string;
   canonicalUrl?: string;
   noindex?: boolean;
+  /** Lay the header over a full-bleed hero (home page only). */
+  overlayHeader?: boolean;
 }
+
+const { overlayHeader = false, ...head } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <script is:inline>document.documentElement.classList.add('js');</script>
-    <BaseHead {...Astro.props} />
+    <BaseHead {...head} />
   </head>
   <body>
     <a class="skip" href="#main">skip to content</a>
-    <SiteHeader />
+    <SiteHeader overlay={overlayHeader} />
     <main id="main">
       <slot />
     </main>
@@ -39,7 +43,9 @@ interface Props {
     background: var(--accent);
     color: var(--bg);
     padding: 0.5rem 1rem;
-    border-radius: 0 0 var(--radius) 0;
+    border-radius: 0 0 2px 0;
+    font-family: var(--font-mono);
+    text-decoration: none;
     z-index: 10;
   }
 

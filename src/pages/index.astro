@@ -1,37 +1,49 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import SectionHeading from '../components/SectionHeading.astro';
-import ProjectCard from '../components/ProjectCard.astro';
-import PostCard from '../components/PostCard.astro';
-import earthrise from '../assets/earthrise.avif';
+import FormattedDate from '../components/FormattedDate.astro';
+import cosmicCliffs from '../assets/cosmic-cliffs.jpg';
 import { SITE } from '../data/agent-surface.mjs';
 
+type Project = CollectionEntry<'projects'>;
+
 const projects = await getCollection('projects');
-type Project = (typeof projects)[number];
+const bySlug = new Map(projects.map((p) => [p.id, p]));
 
-const byOrder = (a: Project, b: Project) => a.data.order - b.data.order;
-const shelf = (name: string) =>
-  projects.filter((p) => p.data.shelf === name && !p.data.archived).sort(byOrder);
+/**
+ * The home page picks its projects by slug. A feature or card links straight to
+ * a live site, so it must have a screenshot and a `verified` stamp from
+ * `npm run verify:projects`. Rows link to the project page on this site.
+ */
+const FEATURE = 'vivary';
+const CARDS = ['open-world-factbook', 'llm-arcade', 'puckwork', 'neon-noir-detective-agency'];
+const ROWS = ['context-engine', 'sdlc-skills', 'dumpling-cafe'];
 
-const community = shelf('community');
-const tools = shelf('tools');
-const side = shelf('side');
+function pick(slug: string, needsLive: boolean): Project {
+  const project = bySlug.get(slug);
+  if (!project) throw new Error(`Home page lists "${slug}", but there is no such project.`);
+  if (needsLive) {
+    if (!project.data.verified)
+      throw new Error(`"${slug}" is on the home page but was never verified. Run npm run verify:projects.`);
+    if (!project.data.screenshots.length)
+      throw new Error(`"${slug}" is a home page card but has no screenshot.`);
+  }
+  return project;
+}
+
+const feature = pick(FEATURE, true);
+const cards = CARDS.map((slug) => pick(slug, true));
+const rows = ROWS.map((slug) => pick(slug, false));
+
+const tone = (status: Project['data']['status']) =>
+  status === 'shipped' ? 'shipped' : status === 'demo' || status === 'deprecated' ? 'quiet' : 'active';
+
+const host = (url?: string) => (url ? new URL(url).host.replace(/^www\./, '') : undefined);
 
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 3);
-
-/** This post makes the case for the guides better than any copy could. */
-const paidPost = posts.find((p) => p.id === 'a-company-paid-me-for-guides-i-gave-away');
-
-const links = [
-  { href: 'https://github.com/Jeff-Kazzee', label: 'GitHub' },
-  { href: 'https://x.com/jeffkazzee', label: 'X' },
-  { href: 'https://jeffkazzee.substack.com', label: 'Substack' },
-  { href: 'mailto:jeffkazzee@gmail.com', label: 'Email' },
-];
 
 const jsonLd = JSON.stringify({
   '@context': 'https://schema.org',
@@ -52,96 +64,143 @@ const jsonLd = JSON.stringify({
 <BaseLayout
   title="Jeff Kazzee"
   description="Jeff Kazzee builds agent tools with AI-assisted workflows. Explore Vivary, experimental Context Engine tooling, and Zo technical guides. Open to developer roles."
+  overlayHeader
 >
   <script type="application/ld+json" set:html={jsonLd} is:inline />
 
-  <section class="hero">
+  <section class="hero" aria-labelledby="hero-title">
     <Image
       class="hero-bg"
-      src={earthrise}
-      alt="A crescent Earth rising over the gray surface of the Moon"
-      widths={[820, 1400, 2000]}
+      src={cosmicCliffs}
+      alt="The Cosmic Cliffs of the Carina Nebula: a ridge of gold and rust gas under a field of stars, photographed by the James Webb Space Telescope"
+      widths={[960, 1600, 2400, 3200]}
       sizes="100vw"
       loading="eager"
       fetchpriority="high"
       format="webp"
+      quality={68}
     />
     <div class="hero-scrim" aria-hidden="true"></div>
     <div class="wrap hero-inner">
-      <p class="now rise" style="--i: 0">
+      <p class="now label rise" style="--i: 0">
         <span class="dot live" aria-hidden="true"></span>
         Building <a href="/projects/vivary/">Vivary</a> · V1 alpha acceptance underway
       </p>
-      <h1 class="rise" style="--i: 1">I build tools for working with AI.</h1>
+      <h1 id="hero-title" class="rise" style="--i: 1">I build tools for working with AI.</h1>
       <p class="lede rise" style="--i: 2">
         I'm a self-taught developer working with AI coding agents. My current projects are
         <a href="/projects/vivary/">Vivary</a>, an agent workspace, and
         <a href="/projects/context-engine/">Context Engine</a>, experimental context tooling.
         I'm looking for developer roles.
       </p>
-      <nav class="links rise" style="--i: 3" aria-label="Profiles">
-        {links.map((l) => (
-          <a href={l.href} rel={l.href.startsWith('http') ? 'me noopener' : undefined}>{l.label}</a>
-        ))}
-      </nav>
+      <div class="actions rise" style="--i: 3">
+        <a class="btn primary" href="#work">See the work</a>
+        <a class="btn" href="mailto:jeffkazzee@gmail.com">Email me</a>
+      </div>
+      <p class="credit">Cosmic Cliffs, Carina Nebula · JWST NIRCam · NASA, ESA, CSA, STScI</p>
     </div>
   </section>
 
-  <section class="wrap">
-    <SectionHeading
-      title="Agent workspaces and tools"
-      note="Current development and open tools. Each project records its status and what remains to verify."
-    />
-    <div class="grid">
-      {tools.map((p, i) => (
-        <ProjectCard project={p} index={i} />
+  <section class="wrap now-section" aria-labelledby="now-title">
+    <p class="label">Now</p>
+    <div class="feature">
+      <a class="feature-shot card" href={`/projects/${feature.id}/`}>
+        <span class="shot-bar">
+          <span>{feature.data.repoUrl?.replace('https://', '') ?? `jeffkazzee.dev/projects/${feature.id}`}</span>
+          <span class="shot-note">Development build</span>
+        </span>
+        <span class="frame">
+          <Image
+            class="shot"
+            src={feature.data.screenshots[0].src}
+            alt={feature.data.screenshots[0].alt}
+            widths={[640, 960, 1280]}
+            sizes="(min-width: 1100px) 760px, 100vw"
+          />
+        </span>
+      </a>
+      <div class="feature-text">
+        <p class="status label" data-tone={tone(feature.data.status)}>{feature.data.status}</p>
+        <h2 id="now-title" class="display">{feature.data.title}</h2>
+        <p>{feature.data.description}</p>
+        <p class="stack">{feature.data.stack.join(' · ')}</p>
+        <p class="feature-links">
+          <a href={`/projects/${feature.id}/`}>Project notes</a>
+          {feature.data.repoUrl && <a href={feature.data.repoUrl}>GitHub ↗</a>}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="work" class="wrap work" aria-labelledby="work-title">
+    <div class="section-head">
+      <div>
+        <p class="label">Work</p>
+        <h2 id="work-title" class="display">Things that load</h2>
+      </div>
+      <p class="note">Live sites you can open. Each status is the one on its project page.</p>
+    </div>
+
+    <div class="cards">
+      {cards.map((p, i) => (
+        <a class="card reveal" style={`--i: ${i}`} href={p.data.liveUrl ?? `/projects/${p.id}/`}>
+          <span class="frame">
+            <Image
+              class="shot"
+              src={p.data.screenshots[0].src}
+              alt={p.data.screenshots[0].alt}
+              widths={[480, 720, 1080]}
+              sizes="(min-width: 1100px) 580px, 100vw"
+            />
+          </span>
+          <span class="meta">
+            <span class="status" data-tone={tone(p.data.status)}>{p.data.status}</span>
+            {[...p.data.stack.slice(0, 2), host(p.data.liveUrl)].filter(Boolean).map((m) => <span>· {m}</span>)}
+          </span>
+          <span class="card-title">{p.data.title}</span>
+          <span class="card-desc">{p.data.description}</span>
+        </a>
       ))}
     </div>
-    <p class="aside">
-      Also in development: <a href="/projects/context-engine/">Context Engine</a>,
-      an opt-in experiment for Claude Code and Codex. Release review and live acceptance remain open.
-    </p>
+
+    <div class="rows">
+      <p class="label rows-label">Also</p>
+      {rows.map((p) => (
+        <a class="row" href={`/projects/${p.id}/`}>
+          <span class="row-title">{p.data.title}</span>
+          <span class="status" data-tone={tone(p.data.status)}>{p.data.status}</span>
+          <span class="row-desc">{p.data.description}</span>
+        </a>
+      ))}
+      <p class="more"><a href="/projects/">Everything else, including the archive →</a></p>
+    </div>
   </section>
 
-  <section class="wrap">
-    <SectionHeading
-      title="Zo guides and technical writing"
-      note="My Zo ambassador work: beginner guides, technical field manuals, and reusable recipes. Free to read."
-    />
-    <div class="grid">
-      {community.map((p, i) => (
-        <ProjectCard project={p} index={i} />
+  <section class="wrap writing" aria-labelledby="writing-title">
+    <p class="label">Writing</p>
+    <h2 id="writing-title" class="display">Essays and field notes</h2>
+    <div class="posts">
+      {posts.map((post) => (
+        <a class="post" href={`/blog/${post.id}/`}>
+          <span class="post-date"><FormattedDate date={post.data.pubDate} /></span>
+          <span class="post-body">
+            <span class="post-title">{post.data.title}</span>
+            <span class="post-desc">{post.data.description}</span>
+          </span>
+        </a>
       ))}
     </div>
-    {paidPost && (
-      <p class="aside">
-        Someone once paid me for guides I had already given away.
-        <a href={`/blog/${paidPost.id}/`}>That story is here</a>.
-      </p>
-    )}
+    <p class="more"><a href="/blog/">All posts →</a></p>
   </section>
 
-  <section class="wrap">
-    <SectionHeading
-      title="Side projects"
-      note="Built for the fun of it. AI agents wrote every line of LLM Arcade."
-    />
-    <div class="grid">
-      {side.map((p, i) => (
-        <ProjectCard project={p} index={i} />
-      ))}
-    </div>
-    <p class="more"><a href="/projects/">Everything else, including the archive →</a></p>
-  </section>
-
-  <section class="wrap">
+  <section class="wrap agents" aria-labelledby="agents-title">
     <div class="agent-note reveal">
       <div class="agent-text">
-        <p class="eyebrow">
+        <p class="label eyebrow">
           <span class="dot live" aria-hidden="true"></span>
           For agents
         </p>
-        <h2>This site answers to machines, not just browsers.</h2>
+        <h2 id="agents-title" class="display">This site answers to machines, not just browsers.</h2>
         <p class="say">
           Ask any page for <code>Accept: text/markdown</code> and it returns Markdown. There is an
           MCP server, an A2A agent card, WebMCP tools registered in the page, a published set of
@@ -160,36 +219,31 @@ const jsonLd = JSON.stringify({
     </div>
   </section>
 
-  <section class="wrap">
-    <SectionHeading title="Writing" note="Essays and field notes on AI-assisted building." />
-    <div class="posts">
-      {posts.map((post, i) => (
-        <PostCard post={post} index={i} />
-      ))}
-    </div>
-    <p class="more"><a href="/blog/">All posts →</a></p>
-  </section>
-
-  <section class="wrap cta-band">
-    <div class="cta-inner">
-      <h2>Let's build something useful.</h2>
+  <section class="wrap cta" aria-labelledby="cta-title">
+    <h2 id="cta-title" class="display">Looking for developer roles</h2>
+    <div class="cta-side">
       <p>
         I'm open to developer roles and conversations about agent tooling, practical workflows,
         and technical documentation. I also teach people to build with AI.
       </p>
-      <a href="mailto:jeffkazzee@gmail.com" class="btn primary">Get in touch</a>
-      <a href="/work-with-me/">AI coaching and workshops</a>
+      <div class="actions">
+        <a href="mailto:jeffkazzee@gmail.com" class="btn primary">Email me</a>
+        <a href="/work-with-me/" class="btn">Work with me</a>
+      </div>
     </div>
   </section>
 </BaseLayout>
 
 <style>
+  /* ---------- hero ---------- */
+
   .hero {
     position: relative;
     overflow: hidden;
-    min-height: clamp(36rem, 92vh, 54rem);
+    min-height: clamp(40rem, 100svh, 60rem);
     display: flex;
     align-items: flex-end;
+    background: var(--bg);
   }
 
   .hero :global(.hero-bg) {
@@ -198,133 +252,405 @@ const jsonLd = JSON.stringify({
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center 70%;
+    object-position: 50% 42%;
   }
 
   /*
-   * Two passes. The vertical one seals the header seam at the top and carries
-   * the page colour back in at the bottom. The horizontal one keeps the text
-   * column dark wherever the Earth happens to sit, because the headline runs
-   * straight across its bright limb without it.
+   * Top band seals the header against the starfield. The bottom half carries
+   * the page colour back in, so the headline sits on dark rust and never on
+   * the bright ridge.
    */
   .hero-scrim {
     position: absolute;
     inset: 0;
-    background:
-      linear-gradient(
-        to right,
-        oklch(8% 0.01 255 / 0.9) 0%,
-        oklch(8% 0.01 255 / 0.82) 32%,
-        oklch(8% 0.01 255 / 0.5) 52%,
-        oklch(8% 0.01 255 / 0.16) 70%,
-        oklch(0% 0 0 / 0) 84%
-      ),
-      linear-gradient(
-        to bottom,
-        var(--bg) 0%,
-        oklch(0% 0 0 / 0) 18%,
-        oklch(0% 0 0 / 0) 55%,
-        oklch(8% 0.01 255 / 0.5) 80%,
-        oklch(8% 0.01 255 / 0.88) 100%
-      );
+    background: linear-gradient(
+      180deg,
+      rgb(11 14 26 / 0.7) 0%,
+      rgb(11 14 26 / 0) 20%,
+      rgb(11 14 26 / 0) 38%,
+      rgb(11 14 26 / 0.62) 62%,
+      rgb(11 14 26 / 0.94) 86%,
+      var(--bg) 100%
+    );
   }
 
   .hero-inner {
     position: relative;
     width: 100%;
     display: grid;
-    gap: calc(var(--space) * 3);
-    padding-block: clamp(6rem, 16vh, 9rem) clamp(3rem, 9vh, 5rem);
+    gap: calc(var(--space) * 3.5);
+    padding-block: 8rem 2.5rem;
   }
 
   .now {
-    font-size: 0.92rem;
-    color: var(--ink-soft);
-    text-shadow: 0 1px 10px oklch(5% 0.01 255 / 0.7);
+    color: var(--accent-bright);
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
   }
 
-  .now .dot {
-    margin-right: 0.35em;
+  .now a {
+    color: inherit;
   }
 
   h1 {
-    font-size: clamp(2.6rem, 5.6vw, 4.25rem);
-    max-width: 14ch;
+    font-weight: 900;
+    font-size: clamp(3.75rem, 10.5vw, 10.5rem);
+    line-height: 0.86;
+    text-transform: uppercase;
+    max-width: 12ch;
     color: var(--ink);
-    /* A tight shadow plus a wide one: the first holds the letterforms against
-       cloud, the second sinks the whole line into the sky. */
-    text-shadow:
-      0 1px 3px oklch(5% 0.01 255 / 0.75),
-      0 2px 32px oklch(5% 0.01 255 / 0.7);
   }
 
   .lede {
-    font-size: 1.2rem;
-    line-height: 1.7;
-    color: oklch(88% 0.008 95);
-    max-width: 44ch;
-    text-shadow: 0 1px 12px oklch(5% 0.01 255 / 0.6);
-  }
-
-  .lede strong {
+    font-size: 1.25rem;
+    line-height: 1.55;
+    max-width: 46ch;
     color: var(--ink);
   }
 
-  .links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1.75rem;
-    padding-top: calc(var(--space) * 1);
+  .lede a {
+    color: var(--accent-bright);
   }
 
-  .links a {
-    font-size: 0.95rem;
-    font-weight: 500;
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .credit {
+    justify-self: end;
+    margin-top: calc(var(--space) * 3);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    color: var(--ink-faint);
+    text-align: right;
+    max-width: none;
+    text-wrap: balance;
+  }
+
+  /* ---------- shared ---------- */
+
+  .display {
+    font-weight: 900;
+    font-size: clamp(3rem, 6vw, 5rem);
+    line-height: 0.9;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  .status {
+    font-family: var(--font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--neutral);
+  }
+
+  .status[data-tone='shipped'] {
+    color: var(--glacier);
+  }
+
+  .status[data-tone='active'] {
+    color: var(--accent);
+  }
+
+  .card {
+    color: inherit;
     text-decoration: none;
   }
 
-  .rows {
-    border-bottom: 1px solid var(--line);
+  .frame {
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+    border: 1px solid var(--line);
+    background: var(--surface);
   }
 
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
-    gap: calc(var(--space) * 4);
+  .frame :global(.shot) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    transition: filter 0.4s var(--ease-out), transform 0.6s var(--ease-out);
   }
 
-  .aside {
-    margin-top: calc(var(--space) * 4);
-    font-size: 0.95rem;
-    color: var(--ink-faint);
-  }
-
-  .aside a {
-    margin-left: 0.35em;
-  }
-
-  .posts {
-    border-bottom: 1px solid var(--line);
+  .card:hover .frame :global(.shot) {
+    filter: brightness(1.1);
+    transform: scale(1.015);
   }
 
   .more {
-    padding-top: calc(var(--space) * 4);
-    font-weight: 500;
+    padding-top: calc(var(--space) * 3);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
 
   .more a {
     text-decoration: none;
+    display: inline-block;
+    padding-block: 0.75rem;
   }
 
-  /* ---------- for agents ---------- */
+  /* ---------- now ---------- */
+
+  .now-section {
+    padding-top: clamp(4rem, 12vw, 7rem);
+  }
+
+  .now-section > .label {
+    margin-bottom: calc(var(--space) * 2.5);
+  }
+
+  .feature {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3rem;
+    align-items: flex-end;
+  }
+
+  .feature-shot {
+    flex: 999 1 560px;
+    min-width: 0;
+    display: block;
+  }
+
+  .shot-bar {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.6rem 1rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-bottom: none;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--ink-faint);
+  }
+
+  @media (max-width: 560px) {
+    .shot-note {
+      display: none;
+    }
+  }
+
+  .feature-text {
+    flex: 1 1 320px;
+    min-width: 0;
+    display: grid;
+    gap: calc(var(--space) * 2.5);
+  }
+
+  .feature-text .status {
+    font-size: 0.8125rem;
+  }
+
+  .feature-text .display {
+    font-size: clamp(3.5rem, 7vw, 6rem);
+    line-height: 0.88;
+  }
+
+  .stack {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--ink-faint);
+  }
+
+  .feature-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+  }
+
+  .feature-links a {
+    padding-block: 0.75rem;
+  }
+
+  /* ---------- work ---------- */
+
+  .work,
+  .writing,
+  .agents {
+    padding-top: clamp(5rem, 14vw, 9rem);
+  }
+
+  .section-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem 3rem;
+    margin-bottom: 3.5rem;
+  }
+
+  .section-head .label {
+    margin-bottom: calc(var(--space) * 2.5);
+  }
+
+  .note {
+    max-width: 38ch;
+    color: var(--ink-faint);
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 30rem), 1fr));
+    gap: 4.5rem 2.5rem;
+  }
+
+  .cards .card {
+    display: grid;
+    gap: calc(var(--space) * 2.25);
+    align-content: start;
+    min-width: 0;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--ink-faint);
+  }
+
+  .card-title {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 2.5rem;
+    line-height: 0.95;
+    text-transform: uppercase;
+    color: var(--ink);
+    transition: color var(--t-fast) var(--ease-out);
+  }
+
+  .card:hover .card-title {
+    color: var(--accent-bright);
+  }
+
+  .card-desc {
+    max-width: 46ch;
+    color: var(--ink);
+  }
+
+  .rows {
+    margin-top: 7rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .rows-label {
+    padding-top: 1.5rem;
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem 2rem;
+    padding-block: 1.4rem;
+    border-bottom: 1px solid var(--line);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .row-title {
+    flex: 0 0 15rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.75rem;
+    line-height: 1.1;
+    text-transform: uppercase;
+    color: var(--ink);
+    transition: color var(--t-fast) var(--ease-out);
+  }
+
+  .row .status {
+    flex: 0 0 7rem;
+    font-size: 0.8125rem;
+  }
+
+  .row-desc {
+    flex: 1 1 20rem;
+    color: var(--ink-faint);
+  }
+
+  .row:hover .row-title {
+    color: var(--accent-bright);
+  }
+
+  /* ---------- writing ---------- */
+
+  .writing .label {
+    margin-bottom: calc(var(--space) * 2.5);
+  }
+
+  .writing .display {
+    margin-bottom: 3rem;
+  }
+
+  .posts {
+    border-top: 1px solid var(--line);
+  }
+
+  .post {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 2.5rem;
+    padding-block: 2rem;
+    border-bottom: 1px solid var(--line);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .post-date {
+    flex: 0 0 9rem;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--ink-faint);
+  }
+
+  .post-body {
+    flex: 1 1 30rem;
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .post-title {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--ink);
+    transition: color var(--t-fast) var(--ease-out);
+  }
+
+  .post:hover .post-title {
+    color: var(--accent-bright);
+  }
+
+  .post-desc {
+    max-width: 62ch;
+    color: var(--ink-faint);
+  }
+
+  /* ---------- for agents (copy is the live site's, kept word for word) ---------- */
 
   .agent-note {
-    border-block: 1px solid var(--line);
-    padding-block: clamp(2.25rem, 6vh, 3.25rem);
-    margin-top: clamp(3rem, 8vh, 4.5rem);
     display: grid;
-    gap: calc(var(--space) * 3.5);
-    align-items: start;
+    gap: 2.5rem;
+    align-items: end;
+    padding: clamp(2rem, 5vw, 3.5rem);
+    background: var(--surface);
+    border: 1px solid var(--line);
   }
 
   @media (min-width: 860px) {
@@ -335,89 +661,84 @@ const jsonLd = JSON.stringify({
   }
 
   .eyebrow {
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--ink-faint);
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    margin-bottom: calc(var(--space) * 2);
+    margin-bottom: calc(var(--space) * 2.5);
   }
 
-  .agent-note h2 {
-    font-size: clamp(1.4rem, 2.8vw, 1.9rem);
-    max-width: 22ch;
+  .agent-note .display {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    max-width: 16ch;
   }
 
   .say {
-    margin-top: calc(var(--space) * 2);
-    color: var(--ink-soft);
+    margin-top: calc(var(--space) * 3);
     max-width: 58ch;
-    font-size: 0.98rem;
+    color: var(--ink-soft);
   }
 
   .agent-links {
     display: grid;
-    gap: calc(var(--space) * 2.5);
+    gap: calc(var(--space) * 2);
     justify-items: start;
   }
 
   .agent-links ul {
     list-style: none;
     padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
+    display: grid;
+    width: 100%;
+    border-top: 1px solid var(--line);
   }
 
   .agent-links li a {
+    display: block;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--line);
     font-family: var(--font-mono);
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     text-decoration: none;
-    color: var(--ink-soft);
-    background: var(--bg-raised);
-    border: 1px solid transparent;
-    border-radius: 999px;
-    padding: 0.28rem 0.75rem;
-    transition: border-color var(--t-fast) var(--ease-out), color var(--t-fast) var(--ease-out);
+    color: var(--accent-bright);
   }
 
   .agent-links li a:hover {
-    color: var(--accent-bright);
-    border-color: oklch(78% 0.11 155 / 0.4);
+    color: var(--ink);
   }
 
   .agent-more {
-    font-size: 0.95rem;
-    font-weight: 500;
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     text-decoration: none;
+    padding-block: 0.75rem;
   }
 
-  .cta-band {
-    padding-block: clamp(3.5rem, 9vh, 5.5rem);
-  }
+  /* ---------- hire ---------- */
 
-  .cta-inner {
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-soft);
-    padding: clamp(2rem, 5vw, 3.5rem);
-    text-align: center;
+  .cta {
+    padding-top: clamp(6rem, 16vw, 10rem);
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: calc(var(--space) * 2.5);
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem 3rem;
   }
 
-  .cta-inner h2 {
-    max-width: 18ch;
+  .cta .display {
+    font-size: clamp(3.5rem, 8vw, 7.5rem);
+    line-height: 0.86;
+    max-width: 11ch;
   }
 
-  .cta-inner p {
-    max-width: 44ch;
+  .cta-side {
+    flex: 0 1 26rem;
+    display: grid;
+    gap: calc(var(--space) * 3);
+  }
+
+  .cta-side p {
     color: var(--ink-soft);
   }
 </style>
