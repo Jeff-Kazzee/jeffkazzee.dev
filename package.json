@@ -33,6 +33,12 @@
       "yaml": "2.9.0"
     },
     "esbuild": "0.28.1",
-    "fast-uri": "^3.1.8"
+    "fast-uri": "^3.1.9",
+    "@vercel/cli-config": {
+      "zod": "4.6.7"
+    }
+  },
+  "engines": {
+    "node": "22.x"
   }
 }
