@@ -21,6 +21,7 @@
     "@astrojs/markdown-satteri": "^0.4.5",
     "@astrojs/rss": "4.0.19",
     "@astrojs/sitemap": "3.7.3",
+    "@sentry/browser": "^11.10.0",
     "@vercel/functions": "3.9.5",
     "astro": "7.3.3"
   },
