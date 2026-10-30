@@ -1,0 +1,399 @@
+@font-face {
+  font-family: "LAC Psychedelic Swirl";
+  src: url("fonts/LACPsychedelicSwirl-Regular.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "LAC Gothic Storybook";
+  src: url("fonts/LACGothicStorybook-Regular.woff2") format("woff2");
+  font-display: swap;
+}
+
+html[data-halloween="true"][data-lac-host="jeffkazzee"] {
+  --bg: #0d0814;
+  --bg-raised: #160f24;
+  --surface: #1c132d;
+  --ink: #f7f2eb;
+  --ink-soft: #dfd5e8;
+  --ink-muted: #b8abc7;
+  --ink-faint: #998aa8;
+  --accent: #ff7518;
+  --accent-vivid: #ff7518;
+  --amber: #ff7518;
+  --accent-bright: #ffa347;
+  --accent-tint: rgb(255 117 24 / 0.24);
+  --glacier: #6ee7b7;
+  --line: rgb(255 117 24 / 0.22);
+  --line-strong: rgb(110 231 183 / 0.45);
+  --lac-ink: #f7f2eb;
+  --lac-panel: #1c132d;
+  --lac-edge: rgb(255 117 24 / 0.45);
+  --lac-accent: #ff7518;
+  --lac-accent-ink: #0d0814;
+  --lac-title: #ffa347;
+  --lac-web: #f7f2eb;
+  --lac-backdrop: rgb(13 8 20 / 0.72);
+}
+
+html[data-halloween="true"][data-lac-host="jeffkazzee"] .hero-scrim {
+  background:
+    linear-gradient(90deg, rgb(13 8 20 / 0.92) 0%, rgb(13 8 20 / 0.8) 34%, rgb(13 8 20 / 0.35) 62%, rgb(13 8 20 / 0) 82%),
+    linear-gradient(180deg, rgb(13 8 20 / 0.6) 0%, rgb(13 8 20 / 0) 22%, rgb(13 8 20 / 0) 70%, var(--bg) 100%);
+}
+
+@media (max-width: 720px) {
+  html[data-halloween="true"][data-lac-host="jeffkazzee"] .hero-scrim {
+    background: linear-gradient(180deg, rgb(13 8 20 / 0.6) 0%, rgb(13 8 20 / 0.15) 22%, rgb(13 8 20 / 0.7) 48%, rgb(13 8 20 / 0.94) 72%, var(--bg) 100%);
+  }
+}
+
+html[data-halloween="true"][data-lac-host="llmarcade"] {
+  --terra: 24 100% 36%;
+  --primary: 24 100% 36%;
+  --ring: 24 100% 36%;
+  --olive: 135 45% 26%;
+  --mustard: 38 95% 52%;
+  --lac-ink: #2b241d;
+  --lac-panel: #fffaf1;
+  --lac-edge: #ddd3c2;
+  --lac-accent: #b84900;
+  --lac-accent-ink: #fffaf1;
+  --lac-title: #b84900;
+  --lac-web: #2b241d;
+  --lac-backdrop: rgb(43 36 29 / 0.55);
+}
+
+html[data-halloween="true"] #hero-title,
+html[data-halloween="true"] h1 .text-terra {
+  font-family: "LAC Psychedelic Swirl", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+html[data-halloween="true"] #hero-title {
+  color: var(--accent);
+}
+
+html[data-halloween="true"] main h2[id$="-title"],
+html[data-halloween="true"] main h2.text-2xl {
+  font-family: "LAC Gothic Storybook", serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+html[data-halloween="true"] .lac-web {
+  position: fixed;
+  top: 0;
+  z-index: 30;
+  width: clamp(72px, 11vw, 150px);
+  color: var(--lac-web);
+  pointer-events: none;
+}
+
+html[data-halloween="true"] .lac-web svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  opacity: 0.2;
+}
+
+html[data-halloween="true"] .lac-web img {
+  position: absolute;
+  top: 70%;
+  left: 62%;
+  width: 32px;
+  height: 32px;
+  animation: lac-dangle 6s ease-in-out infinite;
+}
+
+html[data-halloween="true"] .lac-web--l {
+  left: 0;
+}
+
+html[data-halloween="true"] .lac-web--r {
+  right: 0;
+  transform: scaleX(-1);
+}
+
+html[data-halloween="true"] .lac-banner {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: 34vh;
+  margin: 0 auto;
+}
+
+html[data-halloween="true"] .lac-critter {
+  position: fixed;
+  right: max(12px, env(safe-area-inset-right));
+  bottom: 0;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  pointer-events: none;
+}
+
+html[data-halloween="true"] .lac-critter-btn {
+  min-width: 44px;
+  min-height: 44px;
+  width: 96px;
+  height: 96px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  pointer-events: auto;
+  transform: translateY(18%);
+  transition: transform 280ms ease-out;
+}
+
+html[data-halloween="true"] .lac-critter-btn:hover,
+html[data-halloween="true"] .lac-critter-btn:focus-visible {
+  transform: translateY(2%);
+}
+
+html[data-halloween="true"] .lac-critter-btn:focus-visible {
+  outline: 2px solid var(--lac-accent);
+  outline-offset: 2px;
+}
+
+html[data-halloween="true"] .lac-critter-btn img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  animation: lac-bob 5s ease-in-out infinite;
+}
+
+html[data-halloween="true"] .lac-bubble {
+  max-width: 250px;
+  margin: 0 6px 6px 0;
+  padding: 12px 14px;
+  border: 1px solid var(--lac-edge);
+  border-radius: 16px;
+  background: var(--lac-panel);
+  color: var(--lac-ink);
+  font-size: 14px;
+  line-height: 1.4;
+  pointer-events: auto;
+}
+
+html[data-halloween="true"] .lac-bubble-title {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--lac-title);
+  font-family: "LAC Psychedelic Swirl", sans-serif;
+  font-size: 32px;
+  line-height: 1;
+}
+
+html[data-halloween="true"] .lac-bubble-cta {
+  min-width: 44px;
+  min-height: 44px;
+  margin-top: 10px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--lac-accent);
+  color: var(--lac-accent-ink);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+html[data-halloween="true"] .lac-bubble-cta:focus-visible {
+  outline: 2px solid var(--lac-ink);
+  outline-offset: 2px;
+}
+
+html[data-halloween="true"] .lac-toast {
+  position: fixed;
+  top: 28%;
+  left: 50%;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--lac-title);
+  font-family: "LAC Psychedelic Swirl", sans-serif;
+  font-size: 40px;
+  pointer-events: none;
+  transform: translateX(-50%);
+  animation: lac-float 4s ease-in-out 1 forwards;
+}
+
+html[data-halloween="true"] .lac-toast img {
+  width: 72px;
+  height: 72px;
+}
+
+html[data-halloween="true"] .lac-dialog {
+  box-sizing: border-box;
+  width: min(560px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  padding: 20px;
+  border: 1px solid var(--lac-edge);
+  border-radius: 16px;
+  background: var(--lac-panel);
+  color: var(--lac-ink);
+}
+
+html[data-halloween="true"] .lac-dialog::backdrop {
+  background: var(--lac-backdrop);
+}
+
+html[data-halloween="true"] .lac-dialog-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+html[data-halloween="true"] .lac-dialog-icons {
+  display: flex;
+  gap: 6px;
+  margin-right: auto;
+}
+
+html[data-halloween="true"] .lac-dialog-icons img {
+  width: 28px;
+  height: 28px;
+}
+
+html[data-halloween="true"] .lac-dialog-title {
+  margin: 0;
+  color: var(--lac-title);
+  font-family: "LAC Gothic Storybook", serif;
+  font-size: 32px;
+  font-weight: 400;
+}
+
+html[data-halloween="true"] .lac-dialog-close {
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid var(--lac-edge);
+  border-radius: 999px;
+  background: none;
+  color: inherit;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+html[data-halloween="true"] .lac-dialog label {
+  display: block;
+  margin: 12px 0 4px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+html[data-halloween="true"] .lac-dialog input {
+  box-sizing: border-box;
+  width: 100%;
+  font: inherit;
+}
+
+html[data-halloween="true"] .lac-dialog input[type="text"] {
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--lac-ink);
+  border-radius: 10px;
+  background: transparent;
+  color: inherit;
+}
+
+html[data-halloween="true"] .lac-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+html[data-halloween="true"] .lac-pill {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--lac-edge);
+  border-radius: 999px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+html[data-halloween="true"] .lac-pill[aria-pressed="true"] {
+  background: var(--lac-accent);
+  border-color: var(--lac-accent);
+  color: var(--lac-accent-ink);
+}
+
+html[data-halloween="true"] .lac-specimens {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+html[data-halloween="true"] .lac-specimen {
+  margin: 0 0 10px;
+  overflow-wrap: anywhere;
+  line-height: 1.15;
+}
+
+html[data-halloween="true"] .lac-specimen small {
+  display: block;
+  font-family: system-ui, sans-serif;
+  font-size: 12px;
+  opacity: 0.75;
+}
+
+html[data-halloween="true"] .lac-dialog-link {
+  display: inline-block;
+  margin-top: 8px;
+  color: var(--lac-title);
+  font-weight: 600;
+}
+
+@keyframes lac-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes lac-dangle {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 8px;
+  }
+}
+
+@keyframes lac-float {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 12px);
+  }
+  20%,
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -36px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-halloween="true"] [class*="lac-"],
+  html[data-halloween="true"] [class*="lac-"] * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
