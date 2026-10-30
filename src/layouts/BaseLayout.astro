@@ -26,6 +26,42 @@ const { overlayHeader = false, ...head } = Astro.props;
     <!-- Halloween 2026 theme. Writes nothing on or after 2026-11-01T00:00:00-06:00.
          Remove this block and public/halloween/ on 2026-11-02. -->
     <!-- halloween:start -->
+    <script is:inline>(function () {
+const HALLOWEEN_CUTOFF_ISO = '2026-11-01T00:00:00-06:00';
+const HALLOWEEN_CUTOFF_MS = 1793512800000;
+const SESSION_KEY = 'lac_halloween_override';
+
+function storageCall(storage, method, value) {
+  try {
+    return storage ? storage[method](SESSION_KEY, value) : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+function shouldActivateHalloween({ search = '', nowMs, storage } = {}) {
+  const query = new URLSearchParams(search).get('halloween');
+  if (query === '1' || query === '0') {
+    storageCall(storage, 'setItem', query);
+    return query === '1';
+  }
+  if (query === 'auto') storageCall(storage, 'removeItem');
+  const stored = storageCall(storage, 'getItem');
+  if (stored === '1' || stored === '0') return stored === '1';
+  return nowMs < HALLOWEEN_CUTOFF_MS;
+}
+
+function isQuietRoute(pathname = '') {
+  return /^\/(game|dev)(\/|$)/.test(pathname);
+}
+var s = null;
+try { s = window.sessionStorage; } catch (e) {}
+if (!shouldActivateHalloween({ search: location.search, nowMs: Date.now(), storage: s })) return;
+var d = document.documentElement;
+d.setAttribute('data-lac-host', 'jeffkazzee');
+if (!isQuietRoute(location.pathname)) d.setAttribute('data-halloween', 'true');
+document.write('<link rel="stylesheet" href="/halloween/halloween.css"><script src="/halloween/halloween-init.js"><\/script>');
+})();</script>
     <!-- halloween:end -->
   </head>
   <body>
