@@ -23,6 +23,10 @@ const { overlayHeader = false, ...head } = Astro.props;
   <head>
     <script is:inline>document.documentElement.classList.add('js');</script>
     <BaseHead {...head} />
+    <!-- Halloween 2026 theme. Writes nothing on or after 2026-11-01T00:00:00-06:00.
+         Remove this block and public/halloween/ on 2026-11-02. -->
+    <!-- halloween:start -->
+    <!-- halloween:end -->
   </head>
   <body>
     <a class="skip" href="#main">skip to content</a>
