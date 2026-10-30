@@ -26,12 +26,13 @@ function shouldActivateHalloween({ search = '', nowMs, storage } = {}) {
 }
 
 function isQuietRoute(pathname = '') {
-  return /^\/(game|dev)(\/|$)/.test(pathname);
+  return /^\/(game|dev)(\/|$)/i.test(pathname);
 }
 
 const TRIGGER = /(boo|spoopy)$/;
 const KEY_WINDOW_MS = 2500;
 const IGNORED_TAGS = ['INPUT', 'TEXTAREA', 'SELECT', 'CANVAS'];
+const IGNORED_ROLES = ['listbox', 'option', 'menu', 'menuitem', 'combobox', 'textbox', 'grid', 'slider', 'spinbutton'];
 
 function msUntilCutoff(nowMs) {
   return Math.max(0, HALLOWEEN_CUTOFF_MS - nowMs);
@@ -39,6 +40,7 @@ function msUntilCutoff(nowMs) {
 
 function isIgnoredKeyTarget({
   tagName = '',
+  role = '',
   isContentEditable,
   pathname = '',
   ctrlKey,
@@ -49,6 +51,7 @@ function isIgnoredKeyTarget({
 } = {}) {
   if (ctrlKey || metaKey || altKey || repeat || isComposing || isContentEditable) return true;
   if (IGNORED_TAGS.includes(tagName.toUpperCase())) return true;
+  if (IGNORED_ROLES.includes(role)) return true;
   return isQuietRoute(pathname);
 }
 
@@ -119,6 +122,7 @@ const timers = new Set();
 const nodes = [];
 let interval = null;
 let modal = null;
+let hideBubble = null;
 let keys = { buffer: '', lastMs: 0 };
 let cast = Math.floor(Math.random() * CAST.length);
 
@@ -159,6 +163,7 @@ function img(path, size) {
 function web(side) {
   const holder = el('div', { className: 'lac-web lac-web--' + side });
   holder.innerHTML = WEB;
+  if (side === 'l') holder.append(img('icons/spider.webp', 32));
   return holder;
 }
 
@@ -180,6 +185,9 @@ function mountCritter() {
     title.textContent = CAST[cast][1];
     line.textContent = ' ' + CAST[cast][2];
     bubble.hidden = false;
+    clearTimeout(hideBubble);
+    hideBubble = setTimeout(() => (bubble.hidden = true), 10000);
+    timers.add(hideBubble);
   });
   on(cta, 'click', () => openModal(cta));
   return el('div', { className: 'lac-critter' }, [bubble, button]);
@@ -200,7 +208,6 @@ function mountBanner() {
     sizes: '(max-width: 800px) 100vw, 1200px',
   });
   section.after(banner);
-  nodes.push(banner);
 }
 
 function toast() {
@@ -208,7 +215,6 @@ function toast() {
   node.prepend(img('critters/ghost.webp', 72));
   node.setAttribute('aria-hidden', 'true');
   document.body.append(node);
-  nodes.push(node);
   later(() => node.remove(), 4100);
 }
 
@@ -239,8 +245,10 @@ function tick() {
 
 function onKey(event) {
   const target = event.target || {};
+  const widget = target.closest ? target.closest('[role]') : null;
   const ignored = isIgnoredKeyTarget({
     tagName: target.tagName,
+    role: widget ? widget.getAttribute('role') : '',
     isContentEditable: target.isContentEditable,
     pathname: location.pathname,
     ctrlKey: event.ctrlKey,
@@ -252,8 +260,9 @@ function onKey(event) {
   if (ignored) return;
   keys = appendKey(keys, event.key, Date.now());
   if (keys.matched) {
+    const from = document.activeElement;
     toast();
-    later(() => openModal(null), 1200);
+    later(() => openModal(from && from !== document.body ? from : null), 1200);
   }
 }
 

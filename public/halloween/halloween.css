@@ -36,6 +36,18 @@ html[data-halloween="true"][data-lac-host="jeffkazzee"] {
   --lac-backdrop: rgb(13 8 20 / 0.72);
 }
 
+html[data-halloween="true"][data-lac-host="jeffkazzee"] .hero-scrim {
+  background:
+    linear-gradient(90deg, rgb(13 8 20 / 0.92) 0%, rgb(13 8 20 / 0.8) 34%, rgb(13 8 20 / 0.35) 62%, rgb(13 8 20 / 0) 82%),
+    linear-gradient(180deg, rgb(13 8 20 / 0.6) 0%, rgb(13 8 20 / 0) 22%, rgb(13 8 20 / 0) 70%, var(--bg) 100%);
+}
+
+@media (max-width: 720px) {
+  html[data-halloween="true"][data-lac-host="jeffkazzee"] .hero-scrim {
+    background: linear-gradient(180deg, rgb(13 8 20 / 0.6) 0%, rgb(13 8 20 / 0.15) 22%, rgb(13 8 20 / 0.7) 48%, rgb(13 8 20 / 0.94) 72%, var(--bg) 100%);
+  }
+}
+
 html[data-halloween="true"][data-lac-host="llmarcade"] {
   --terra: 24 100% 36%;
   --primary: 24 100% 36%;
@@ -63,7 +75,8 @@ html[data-halloween="true"] #hero-title {
   color: var(--accent);
 }
 
-html[data-halloween="true"] main h2 {
+html[data-halloween="true"] main h2[id$="-title"],
+html[data-halloween="true"] main h2.text-2xl {
   font-family: "LAC Gothic Storybook", serif;
   font-weight: 400;
   letter-spacing: 0.02em;
@@ -75,7 +88,6 @@ html[data-halloween="true"] .lac-web {
   z-index: 30;
   width: clamp(72px, 11vw, 150px);
   color: var(--lac-web);
-  opacity: 0.2;
   pointer-events: none;
 }
 
@@ -83,6 +95,16 @@ html[data-halloween="true"] .lac-web svg {
   display: block;
   width: 100%;
   height: auto;
+  opacity: 0.2;
+}
+
+html[data-halloween="true"] .lac-web img {
+  position: absolute;
+  top: 70%;
+  left: 62%;
+  width: 32px;
+  height: 32px;
+  animation: lac-dangle 6s ease-in-out infinite;
 }
 
 html[data-halloween="true"] .lac-web--l {
@@ -229,6 +251,17 @@ html[data-halloween="true"] .lac-dialog-head {
   gap: 12px;
 }
 
+html[data-halloween="true"] .lac-dialog-icons {
+  display: flex;
+  gap: 6px;
+  margin-right: auto;
+}
+
+html[data-halloween="true"] .lac-dialog-icons img {
+  width: 28px;
+  height: 28px;
+}
+
 html[data-halloween="true"] .lac-dialog-title {
   margin: 0;
   color: var(--lac-title);
@@ -264,7 +297,7 @@ html[data-halloween="true"] .lac-dialog input {
 html[data-halloween="true"] .lac-dialog input[type="text"] {
   min-height: 44px;
   padding: 8px 12px;
-  border: 1px solid var(--lac-edge);
+  border: 1px solid var(--lac-ink);
   border-radius: 10px;
   background: transparent;
   color: inherit;
@@ -329,6 +362,16 @@ html[data-halloween="true"] .lac-dialog-link {
   }
   50% {
     transform: translateY(-4px);
+  }
+}
+
+@keyframes lac-dangle {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 8px;
   }
 }
 

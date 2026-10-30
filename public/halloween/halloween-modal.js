@@ -41,7 +41,16 @@ function loadFonts(assetBase, isLive) {
   }
 }
 
-function build() {
+function icons(assetBase) {
+  const row = el('span', { className: 'lac-dialog-icons' });
+  row.setAttribute('aria-hidden', 'true');
+  for (const name of ['pumpkin', 'candy', 'bat', 'tombstone']) {
+    row.append(el('img', { src: `${assetBase}icons/${name}.webp`, alt: '', width: 28, height: 28 }));
+  }
+  return row;
+}
+
+function build(assetBase) {
   const close = el('button', { type: 'button', className: 'lac-dialog-close', textContent: '×' });
   close.setAttribute('aria-label', 'Close the font tester');
   const title = el('h2', { className: 'lac-dialog-title', id: 'lac-dialog-title', textContent: 'Trick or Type' });
@@ -78,7 +87,7 @@ function build() {
   const link = el('a', { className: 'lac-dialog-link', href: SITE, target: '_blank', rel: 'noopener', textContent: 'Get all 5 fonts (SIL OFL 1.1)' });
 
   const node = el('dialog', { className: 'lac-dialog' }, [
-    el('div', { className: 'lac-dialog-head' }, [title, close]),
+    el('div', { className: 'lac-dialog-head' }, [title, icons(assetBase), close]),
     el('p', { textContent: 'Type something and try all 5 Halloween fonts.' }),
     el('label', { htmlFor: 'lac-text', textContent: 'Your text' }),
     text,
@@ -99,7 +108,7 @@ function build() {
 export function openHalloweenModal({ trigger: from, assetBase, isLive }) {
   if (!isLive() || api.isOpen()) return api;
   if (!dialog || !dialog.isConnected) {
-    dialog = build();
+    dialog = build(assetBase);
     document.body.append(dialog);
   }
   trigger = from;

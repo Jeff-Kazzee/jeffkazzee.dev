@@ -52,7 +52,7 @@ function shouldActivateHalloween({ search = '', nowMs, storage } = {}) {
 }
 
 function isQuietRoute(pathname = '') {
-  return /^\/(game|dev)(\/|$)/.test(pathname);
+  return /^\/(game|dev)(\/|$)/i.test(pathname);
 }
 var s = null;
 try { s = window.sessionStorage; } catch (e) {}
