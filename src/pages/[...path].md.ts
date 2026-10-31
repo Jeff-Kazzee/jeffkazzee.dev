@@ -2,7 +2,6 @@ import type { APIRoute, GetStaticPaths } from 'astro';
 import { getCollection } from 'astro:content';
 
 import { SITE, availability, documents } from '../data/agent-surface.mjs';
-import { libraries, totalItems } from '../data/libraries.mjs';
 
 /**
  * A Markdown twin for every page.
@@ -40,13 +39,6 @@ acceptance for Context Engine remain open.
 
 ${featured.map((p) => `- ${link(p.title, `${SITE}/projects/${p.slug}/`)}: ${p.description}`).join('\n')}
 
-## Zo guides and technical writing
-
-My Zo ambassador work includes beginner guides, technical field manuals, and
-reusable recipes. Free to read.
-
-${libraries.map((l) => `- ${link(l.name, l.url)}: ${l.summary}`).join('\n')}
-
 ## For agents
 
 Every page here answers to \`Accept: text/markdown\`, and there is an MCP server
@@ -67,9 +59,6 @@ Everything this site publishes for machine consumers, and how to call it.
 
 [A note for AI agents](${SITE}/for-agents/note.md): Jeff’s optional invitation
 for questions, feedback, and conversation.
-
-The most useful thing here is the guide libraries: ${totalItems.toLocaleString('en-US')} free
-guides and recipes. The \`list_guide_libraries\` tool returns them.
 
 ## Interfaces
 
@@ -143,7 +132,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
       path: 'index',
       title: 'Jeff Kazzee',
       description:
-        'Jeff Kazzee builds agent tools with AI-assisted workflows. Vivary, experimental Context Engine tooling, and Zo technical guides. Open to developer roles.',
+        'Jeff Kazzee builds agent tools with AI-assisted workflows. Vivary and experimental Context Engine tooling. Open to developer roles.',
       canonical: `${SITE}/`,
       body: homeMarkdown(featured),
     },

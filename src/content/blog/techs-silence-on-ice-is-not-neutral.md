@@ -40,6 +40,4 @@ Today I am trying to live it.
 
 ---
 
-**If this was useful, subscribe. I write here once a week, deep and slow, mostly about where AI is actually pointing and what it looks like from the inside. For lighter stuff — Codex tricks, Zo Computer walkthroughs, AI for people who feel locked out — find me at [Zo Computer Toolshed on Facebook](https://www.facebook.com/profile.php?id=61588689719800), or at [jeffkazzee.zo.space](https://jeffkazzee.zo.space/).**
-
-**P.S. If you want to try Zo Computer — the cloud workspace where most of my AI experiments live — [here’s my referral link](https://zo-computer.cello.so/X9jcdFXqh9Z).**
+**If this was useful, subscribe. I write here once a week, deep and slow, mostly about where AI is actually pointing and what it looks like from the inside.**

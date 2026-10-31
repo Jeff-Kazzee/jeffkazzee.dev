@@ -26,7 +26,7 @@ const dated = d.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long
       <p class="crumb"><a href="/projects/">← All projects</a></p>
       <h1>{d.title}</h1>
       <p class="status-line">
-        <Status status={d.status} suffix={d.builtOn === 'zo' ? `built on a Zo computer · ${dated}` : dated} />
+        <Status status={d.status} suffix={dated} />
       </p>
     </header>
 

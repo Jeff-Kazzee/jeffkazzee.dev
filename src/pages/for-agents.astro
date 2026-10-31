@@ -23,7 +23,7 @@ const inGroup = (id: string) => documents.filter((doc) => doc.group === id);
 const mcpExample = `curl -sX POST ${SITE}/api/mcp \\
   -H 'Content-Type: application/json' \\
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/call",
-       "params":{"name":"list_guide_libraries"}}'`;
+       "params":{"name":"list_projects"}}'`;
 
 const markdownExample = `curl -s -H 'Accept: text/markdown' ${SITE}/projects/llm-arcade/`;
 ---
@@ -39,8 +39,7 @@ const markdownExample = `curl -s -H 'Accept: text/markdown' ${SITE}/projects/llm
       <p class="lede">
         Most sites are built for a browser and leave agents to scrape the HTML. This one publishes
         the same content in the formats agents already read, and exposes two endpoints that answer
-        questions directly. The most useful thing here is the guide libraries, so the tools lead
-        with those.
+        questions directly.
       </p>
       <p class="sub">
         It is also the working example behind the

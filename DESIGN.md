@@ -53,8 +53,6 @@ Calm and readable on a laptop first. Revised 2026-10-26 after the first version 
 4. For agents: the agent note, kept word for word.
 5. Get in touch.
 
-The Zo-hosted libraries stay off the home page while their sites return 503. They are listed on `/projects/`.
-
 ## Components
 
 - Cards: no box. A 16:10 screenshot frame, a 600-weight title, a short description, then a mono status and hostname. Hover brightens the screenshot and turns the title gold.

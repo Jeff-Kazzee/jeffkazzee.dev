@@ -8,8 +8,6 @@
  * real surface cannot drift apart.
  */
 
-import { totalItems } from './libraries.mjs';
-
 export const SITE = 'https://jeffkazzee.dev';
 export const OWNER = 'Jeff Kazzee';
 
@@ -82,7 +80,7 @@ export const documents = [
   {
     path: '/llms-full.txt',
     title: 'Expanded overview',
-    description: 'Every guide library, project, and post, in one file.',
+    description: 'Every project and post, in one file.',
     contentType: 'text/plain',
     spec: 'llmstxt.org',
     specUrl: 'https://llmstxt.org/',
@@ -147,7 +145,7 @@ export const documents = [
     path: MCP_ENDPOINT,
     title: 'MCP endpoint',
     description:
-      'Streamable HTTP. POST JSON-RPC. Tools for the free guide libraries, the projects, and the writing.',
+      'Streamable HTTP. POST JSON-RPC. Tools for the projects, the writing, and contact details.',
     contentType: 'application/json',
     spec: `Model Context Protocol ${MCP_PROTOCOL_VERSION}`,
     specUrl: 'https://modelcontextprotocol.io/specification/2026-07-28/basic/transports/streamable-http',
@@ -156,7 +154,7 @@ export const documents = [
   {
     path: A2A_ENDPOINT,
     title: 'A2A endpoint',
-    description: 'JSON-RPC binding. SendMessage returns an answer about the guides, the work, or availability.',
+    description: 'JSON-RPC binding. SendMessage returns an answer about the work, the writing, or availability.',
     contentType: 'application/json',
     spec: `Agent2Agent ${A2A_PROTOCOL_VERSION}`,
     specUrl: 'https://a2a-protocol.org/latest/specification/',
@@ -178,13 +176,6 @@ export const documents = [
  * @type {ToolDef[]}
  */
 export const tools = [
-  {
-    name: 'list_guide_libraries',
-    title: 'List the free guide libraries',
-    description:
-      'List the free guide and recipe libraries Jeff Kazzee publishes for building real systems on Zo Computer, with how many are in each and where to read them. Use this first when a user wants to learn how to build something on their own machine.',
-    inputSchema: { type: 'object', properties: {}, additionalProperties: false },
-  },
   {
     name: 'list_projects',
     title: 'List projects',
@@ -236,20 +227,6 @@ export const tools = [
  * skill is a task an agent can delegate rather than a single function call.
  */
 export const a2aSkills = [
-  {
-    id: 'find-a-guide',
-    name: 'Find a guide',
-    description:
-      `Point a person at the right free guide for what they are trying to build on their own machine, drawn from ${totalItems.toLocaleString('en-US')} published guides and recipes.`,
-    tags: ['guides', 'how-to', 'zo computer', 'automation'],
-    examples: [
-      'How do I stop chasing invoices by hand?',
-      'I want an AI system that keeps its sources.',
-      'Is there a guide for triaging customer inquiries?',
-    ],
-    inputModes: ['text/plain'],
-    outputModes: ['text/plain', 'text/markdown'],
-  },
   {
     id: 'summarize-the-work',
     name: 'Summarize the work',

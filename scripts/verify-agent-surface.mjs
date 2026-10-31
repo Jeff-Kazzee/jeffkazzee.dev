@@ -73,24 +73,9 @@ console.log('\n== MCP ==');
 
 let r = await post(handleMcp, { jsonrpc: '2.0', id: 1, method: 'tools/list' });
 let j = await r.json();
-check('tools/list returns tools', j.result?.tools?.length === 5, JSON.stringify(j).slice(0, 300));
+check('tools/list returns tools', j.result?.tools?.length === 4, JSON.stringify(j).slice(0, 300));
 check('tools carry inputSchema', j.result?.tools?.every((t) => t.inputSchema?.type === 'object'));
-
-r = await post(handleMcp, {
-  jsonrpc: '2.0',
-  id: 2,
-  method: 'tools/call',
-  params: { name: 'list_guide_libraries' },
-});
-j = await r.json();
-check(
-  'list_guide_libraries names all three libraries',
-  ['Zo Deep Dives', 'Zo Computer 101', 'Zo Cookbook'].every((n) =>
-    j.result?.content?.[0]?.text?.includes(n),
-  ),
-  JSON.stringify(j).slice(0, 400),
-);
-check('list_guide_libraries states the total', j.result?.content?.[0]?.text?.includes('1,517'));
+check('no guide-library tool remains', !j.result?.tools?.some((t) => t.name === 'list_guide_libraries'));
 
 r = await post(handleMcp, {
   jsonrpc: '2.0',
@@ -114,7 +99,7 @@ check('read_page(/projects/llm-arcade/) returns the twin', j.result?.content?.[0
 r = await post(handleMcp, { jsonrpc: '2.0', id: 6, method: 'initialize', params: { protocolVersion: '2025-06-18' } });
 j = await r.json();
 check('legacy initialize negotiates', j.result?.protocolVersion === '2025-06-18', JSON.stringify(j));
-check('initialize guide total matches the catalog', j.result?.instructions?.includes('1,517'));
+check('initialize points at list_projects', j.result?.instructions?.includes('list_projects'));
 
 r = await post(handleMcp, { jsonrpc: '2.0', id: 7, method: 'nope/nope' });
 check('unknown method is 404', r.status === 404);
@@ -149,7 +134,8 @@ r = await post(handleA2a, {
   params: { message: { role: 'ROLE_USER', parts: [{ text: 'Is there a guide for chasing invoices?' }], messageId: 'm1' } },
 });
 j = await r.json();
-check('SendMessage finds the guides', j.result?.message?.parts?.[0]?.text?.includes('Zo Deep Dives'), JSON.stringify(j).slice(0, 300));
+check('unrouted question falls back to projects', j.result?.message?.parts?.[0]?.text?.includes('LLM Arcade'), JSON.stringify(j).slice(0, 300));
+check('no answer mentions Zo', !/\bZo\b/.test(j.result?.message?.parts?.[0]?.text ?? ''));
 check('SendMessage role is ROLE_AGENT', j.result?.message?.role === 'ROLE_AGENT');
 
 r = await post(handleA2a, {
@@ -179,13 +165,13 @@ for (const [path, needle] of [
   ['/robots.txt', 'Content-Signal: ai-train=yes'],
   ['/robots.txt', 'Agentmap:'],
   ['/llms.txt', 'Machine interfaces'],
-  ['/llms-full.txt', 'Zo Deep Dives'],
+  ['/llms-full.txt', 'LLM Arcade'],
   ['/.well-known/api-catalog', 'linkset'],
   ['/.well-known/agent-card.json', 'supportedInterfaces'],
   ['/.well-known/mcp/server-card.json', 'streamable-http'],
   ['/.well-known/agent-skills/index.json', 'sha256:'],
   ['/.well-known/ard.json', 'representativeQueries'],
-  ['/index.md', 'Zo guides and technical writing'],
+  ['/index.md', 'Selected work'],
   ['/for-agents.md', 'Markdown'],
   ['/projects.md', 'LLM Arcade'],
   ['/blog.md', '2026'],
@@ -194,6 +180,14 @@ for (const [path, needle] of [
   const res = await fetch(origin + path);
   const text = res.ok ? await res.text() : '';
   check(`${path} contains ${JSON.stringify(needle)}`, res.ok && text.includes(needle), `status ${res.status}`);
+}
+
+// Zo hosting ended in October 2026. No document may send a reader there.
+const ZO_HOST = /zo\.space|zo\.computer|zocomputer|zo-cookbook|cello\.so/i;
+for (const path of ['/llms.txt', '/llms-full.txt', '/index.md', '/projects.md', '/blog.md', '/api/content.json', '/.well-known/ard.json']) {
+  const res = await fetch(origin + path);
+  const text = res.ok ? await res.text() : '';
+  check(`${path} links to no Zo host`, res.ok && !ZO_HOST.test(text), text.match(ZO_HOST)?.[0]);
 }
 
 console.log(`\n${failures === 0 ? 'all checks passed' : `${failures} FAILURES`}`);

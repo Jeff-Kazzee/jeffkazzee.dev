@@ -16,7 +16,7 @@ interface Props {
  * status. No panel around it, so the two pages read as one site.
  */
 const { project, index = 0, priority = false } = Astro.props;
-const { title, description, status, builtOn, screenshots, metric } = project.data;
+const { title, description, status, screenshots, metric } = project.data;
 const thumb = screenshots[0];
 ---
 
@@ -44,7 +44,7 @@ const thumb = screenshots[0];
   </span>
   <h2><a href={`/projects/${project.id}/`}>{title}</a></h2>
   <p class="desc">{description}</p>
-  <Status status={status} suffix={builtOn === 'zo' ? 'on Zo' : undefined} />
+  <Status status={status} />
 </article>
 
 <style>

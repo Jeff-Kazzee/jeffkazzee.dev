@@ -49,19 +49,18 @@ const jsonLd = JSON.stringify({
   name: 'Jeff Kazzee',
   url: SITE,
   description:
-    'Self-taught developer building agent tools with AI-assisted workflows, and a Zo ambassador writing practical technical guides.',
+    'Self-taught developer building agent tools with AI-assisted workflows.',
   sameAs: [
     'https://github.com/Jeff-Kazzee',
     'https://x.com/jeffkazzee',
     'https://jeffkazzee.substack.com',
-    'https://jeffkazzee.zo.space',
   ],
 });
 ---
 
 <BaseLayout
   title="Jeff Kazzee"
-  description="Jeff Kazzee builds agent tools with AI-assisted workflows. Explore Vivary, experimental Context Engine tooling, and Zo technical guides. Open to developer roles."
+  description="Jeff Kazzee builds agent tools with AI-assisted workflows. Explore Vivary and experimental Context Engine tooling. Open to developer roles."
   overlayHeader
 >
   <script type="application/ld+json" set:html={jsonLd} is:inline />

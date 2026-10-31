@@ -70,13 +70,22 @@ export async function handleA2a(request, origin) {
         return failure(id, -32602, 'params.message.parts must contain text');
       }
 
+      // Most answers read the content index over the network. A failed fetch
+      // must still come back as a JSON-RPC error, not a bare 500.
+      let answer;
+      try {
+        answer = await answerQuestion(question, origin);
+      } catch (error) {
+        return failure(id, -32603, `Internal error: ${error.message}`);
+      }
+
       return json({
         jsonrpc: '2.0',
         id: id ?? null,
         result: {
           message: {
             role: 'ROLE_AGENT',
-            parts: [{ text: await answerQuestion(question, origin) }],
+            parts: [{ text: answer }],
             messageId: newId('msg'),
             contextId: params?.message?.contextId ?? newId('ctx'),
           },

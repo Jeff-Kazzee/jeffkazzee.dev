@@ -5,13 +5,9 @@
  * through this file, so an agent gets the same answer whichever door it came
  * through. Nothing here touches HTTP directly: the caller passes an `origin`
  * and the functions fetch site documents from it.
- *
- * The useful thing this site can give an agent is the free guide libraries.
- * Lead with those.
  */
 
 import { availability } from '../data/agent-surface.mjs';
-import { libraries, totalItems } from '../data/libraries.mjs';
 
 /** Cache the content index for the life of the isolate. */
 let contentCache = null;
@@ -52,24 +48,6 @@ export function twinUrl(pathname, origin) {
 const bullet = (lines) => lines.filter(Boolean).join('\n');
 
 /* ---------- tools ---------- */
-
-function listGuideLibraries() {
-  return bullet([
-    `${totalItems.toLocaleString('en-US')} free guides and recipes for building real systems on Zo Computer.`,
-    'No email gate. Every library is public and readable in full.',
-    '',
-    ...libraries.map((library) =>
-      bullet([
-        `## ${library.name} (${library.count})`,
-        library.summary,
-        `Read it: ${library.url}`,
-        library.examples.length ? `For example: ${library.examples.join('; ')}` : '',
-        `Count verified ${library.verified}.`,
-        '',
-      ]),
-    ),
-  ]);
-}
 
 async function listProjects({ tag, status } = {}, origin) {
   const { projects } = await loadContent(origin);
@@ -128,7 +106,6 @@ function contactDetails() {
 
 /** @type {Record<string, (args: object, origin: string) => string | Promise<string>>} */
 const handlers = {
-  list_guide_libraries: listGuideLibraries,
   list_projects: listProjects,
   list_writing: listWriting,
   read_page: readPage,
@@ -153,10 +130,6 @@ export async function answerQuestion(question, origin) {
     return contactDetails();
   }
 
-  if (asks('guide', 'tutorial', 'learn', 'how do i', 'how to', 'recipe', 'zo computer', 'deep dive')) {
-    return listGuideLibraries();
-  }
-
   if (asks('write', 'writing', 'blog', 'essay', 'post', 'article')) {
     return listWriting({}, origin);
   }
@@ -166,9 +139,9 @@ export async function answerQuestion(question, origin) {
   }
 
   return bullet([
-    'I answer questions about the free guide libraries, the projects, the writing, and availability.',
+    'I answer questions about the projects, the writing, and availability.',
     '',
-    listGuideLibraries(),
+    await listProjects({}, origin),
     '',
     'Full index: https://jeffkazzee.dev/llms-full.txt',
   ]);
