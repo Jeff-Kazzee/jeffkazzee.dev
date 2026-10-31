@@ -29,9 +29,8 @@ jobs:
       - name: Prepare CI-only dependency layout
         run: |
           cp .github/ci-pnpm-lock.yaml pnpm-lock.yaml
-          printf 'node-linker=hoisted\nignore-scripts=true\n' > .npmrc
+          printf 'nodeLinker: hoisted\nignoreScripts: true\n' > pnpm-workspace.yaml
       - run: pnpm install --frozen-lockfile
       - run: pnpm run build
       - run: pnpm run verify
       - run: node --test scripts/check-live.test.mjs
-
