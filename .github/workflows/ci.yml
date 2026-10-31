@@ -26,12 +26,9 @@ jobs:
           node-version: 22
           cache: pnpm
           cache-dependency-path: .github/ci-pnpm-lock.yaml
-      - name: Prepare CI-only dependency layout
-        run: |
-          cp .github/ci-pnpm-lock.yaml pnpm-lock.yaml
-          printf 'nodeLinker: hoisted\nignoreScripts: true\n' > pnpm-workspace.yaml
+      - run: node scripts/prepare-ci.mjs
       - run: pnpm install --frozen-lockfile
       - run: pnpm run agent-surface
       - run: pnpm run build
       - run: pnpm run verify
-      - run: node --test scripts/check-live.test.mjs
+      - run: node --test scripts/check-live.test.mjs scripts/prepare-ci.test.mjs
