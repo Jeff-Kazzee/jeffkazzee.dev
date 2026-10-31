@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 
 import { SITE } from '../../data/agent-surface.mjs';
-import { getPosts, getProjects, libraryIndex } from '../../lib/content-index';
+import { getPosts, getProjects } from '../../lib/content-index';
 
 /**
  * A static snapshot of everything on this site, in one document.
@@ -14,8 +14,7 @@ export const GET: APIRoute = async () => {
   const body = {
     site: SITE,
     owner: 'Jeff Kazzee',
-    describes: 'Free guide libraries, projects, and writing published at jeffkazzee.dev',
-    guides: libraryIndex(),
+    describes: 'Projects and writing published at jeffkazzee.dev',
     projects: await getProjects(),
     posts: await getPosts(),
   };

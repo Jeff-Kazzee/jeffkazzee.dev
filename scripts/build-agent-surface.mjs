@@ -2,7 +2,7 @@
  * Writes the well-known discovery documents into public/.
  *
  * Runs before `astro build`. Everything it writes is derived from
- * src/data/agent-surface.mjs and src/data/libraries.mjs, so the advertised
+ * src/data/agent-surface.mjs, so the advertised
  * surface and the declared surface stay in step.
  *
  * Content-derived documents (robots.txt, llms.txt, the Markdown twins) are
@@ -27,7 +27,6 @@ import {
   documents,
   tools,
 } from '../src/data/agent-surface.mjs';
-import { libraries, totalItems } from '../src/data/libraries.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const wellKnown = join(root, 'public', '.well-known');
@@ -78,7 +77,7 @@ const mcpServerCard = () =>
   writeJson('mcp/server-card.json', {
     serverInfo: { name: 'jeffkazzee.dev', version: SURFACE_VERSION },
     description:
-      `Find free guides for building real systems on a computer you own (${totalItems.toLocaleString('en-US')} across three libraries), plus Jeff Kazzee's projects and writing. Every page is readable as Markdown through the read_page tool.`,
+      "Jeff Kazzee's projects and writing. Every page is readable as Markdown through the read_page tool.",
     url: abs(MCP_ENDPOINT),
     transport: { type: 'streamable-http' },
     protocolVersion: MCP_PROTOCOL_VERSION,
@@ -93,7 +92,7 @@ const a2aAgentCard = () =>
   writeJson('agent-card.json', {
     name: `${OWNER} portfolio agent`,
     description:
-      "Points people at the right free guide from Jeff Kazzee's published libraries, summarizes the projects and writing at jeffkazzee.dev, and reports what he is open to.",
+      'Summarizes the projects and writing at jeffkazzee.dev and reports what Jeff Kazzee is open to.',
     supportedInterfaces: [
       {
         url: abs(A2A_ENDPOINT),
@@ -163,11 +162,10 @@ function ardEntries() {
       'application/mcp-server-card+json',
       abs('/.well-known/mcp/server-card.json'),
       [
-        'find me a free guide for automating invoice follow-ups',
-        'how do I build a personal chief of staff on my own server',
         'what has Jeff Kazzee built with AI agents',
+        'list the writing on jeffkazzee.dev',
       ],
-      { capabilities: tools.map((tool) => tool.name), tags: ['guides', 'agents', 'portfolio'] },
+      { capabilities: tools.map((tool) => tool.name), tags: ['agents', 'portfolio'] },
     ),
     entry(
       'agent:a2a',
@@ -187,19 +185,6 @@ function ardEntries() {
       abs('/api/content.json'),
       ['list the projects on jeffkazzee.dev', 'what has Jeff Kazzee written about AI agents'],
       { tags: ['portfolio', 'index'] },
-    ),
-    ...libraries.map((library) =>
-      entry(
-        `library:${library.id}`,
-        library.name,
-        'text/html',
-        library.url,
-        [
-          `free guides for building systems on Zo Computer`,
-          `${library.name}: ${library.count}`,
-        ],
-        { tags: ['guides', 'how-to', 'zo computer'], description: library.summary },
-      ),
     ),
   ];
 }

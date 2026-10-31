@@ -15,9 +15,6 @@ const TIMEOUT_MS = 20000;
 
 const SITES = [
   { name: 'jeffkazzee.dev', url: 'https://jeffkazzee.dev', note: 'reference implementation' },
-  { name: 'Zo Deep Dives', url: 'https://deepdives.zocomputer101.wiki', note: '85 guides' },
-  { name: 'Zo Computer 101', url: 'https://www.zocomputer101.wiki', note: '66 guides, 137 recipes' },
-  { name: 'Zo Cookbook', url: 'https://www.zo-cookbook.space', note: '1,162 recipes' },
   { name: 'Open World Factbook', url: 'https://worldfactbook.xyz', note: '262 countries' },
   { name: 'LLM Arcade', url: 'https://www.llmarcade.fun', note: '11 games' },
 ];
@@ -168,7 +165,7 @@ if (invisible.length > 0) {
   for (const r of invisible) {
     console.log(`    ${r.name}: ${kb(r.text)} of text, ${r.note}`);
   }
-  console.log('\n  Fix by rendering the content into the HTML, as Zo Deep Dives already does.');
+  console.log('\n  Fix by rendering the content into the HTML.');
 }
 
 // Every route returning the same <title> reads to a search engine as duplicate

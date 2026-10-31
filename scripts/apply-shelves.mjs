@@ -20,17 +20,12 @@ const DIR = fileURLToPath(new URL('../src/content/projects', import.meta.url));
 const PLAN = {
   'vivary.md': ['tools', 0, true],
   'context-engine.md': [null, 0.5, true],
-  // Community resources: the Zo Computer libraries the community actually uses
-  'zo-deep-dives.md': ['community', 1, true],
-  'zo-computer-101.md': ['community', 2, true],
-  'zo-cookbook.md': ['community', 3, true],
   // Open tools
   'bellamente.md': ['tools', 4, true],
   'sdlc-skills.md': [null, 5, true],
   'open-world-factbook.md': ['tools', 6, true],
   // Side projects, below everything else
   'llm-arcade.md': ['side', 7, true],
-  'ukrainian-trainer.md': ['side', 8, false],
   'puckwork.md': ['side', 9, false],
   'neon-noir-detective-agency.md': ['side', 10, false],
   'dumpling-cafe.md': ['side', 11, false],

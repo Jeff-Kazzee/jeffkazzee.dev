@@ -13,7 +13,7 @@ This is the full story, plus the exact steps to do it with whatever tool you use
 
 ## What exactly did they pay for?
 
-The collection is [Zo Computer 101: the field guide](https://zo-101-jeffkazzee.zocomputer.io), sixty-six plain-English walkthroughs of Zo Computer: how to set up an account, what the AI agent can actually do, where beginners get stuck, and what breaks along the way. I wrote them because I was using the tool constantly and nobody had written the guide I wished existed when I started.
+The collection is Zo Computer 101: the field guide, sixty-six plain-English walkthroughs of Zo Computer: how to set up an account, what the AI agent can actually do, where beginners get stuck, and what breaks along the way. I wrote them because I was using the tool constantly and nobody had written the guide I wished existed when I started.
 
 I published them publicly, under my own name, free to read, no login.
 

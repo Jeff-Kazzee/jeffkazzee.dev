@@ -15,8 +15,7 @@ Personal site and blog at jeffkazzee.dev. It exists to show, with work anyone ca
 The evidence leads, in this order:
 
 1. **Current development and open tools.** Vivary is an active agent workspace with V1 alpha acceptance underway. Context Engine is experimental, opt-in tooling, linked with its release and live-acceptance limits. Project status must distinguish development from a shipped release.
-2. **Community resources.** Zo ambassador and technical-writing work across Zo Deep Dives, Zo Computer 101, and Zo Cookbook. Descriptions should explain the work even if the hosted libraries later become unavailable.
-3. **Side projects.** LLM Arcade, where AI agents wrote every line, plus games and demos.
+2. **Side projects.** LLM Arcade, where AI agents wrote every line, plus games and demos.
 
 The profile is project-led and explicit about AI-assisted development. The project verifier checks links and repository contents; homepage cards require a recorded verification date. A passing link check does not establish release readiness.
 

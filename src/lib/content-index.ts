@@ -1,7 +1,6 @@
 import { getCollection } from 'astro:content';
 
 import { SITE } from '../data/agent-surface.mjs';
-import { libraries, totalItems } from '../data/libraries.mjs';
 
 /** Absolute URL for a site path. */
 export const abs = (path: string) => new URL(path, SITE).href;
@@ -19,7 +18,6 @@ export type ProjectRecord = {
   featured: boolean;
   archived: boolean;
   shelf?: string;
-  builtOn?: string;
   repoUrl?: string;
   liveUrl?: string;
   releaseUrl?: string;
@@ -56,7 +54,6 @@ export async function getProjects(): Promise<ProjectRecord[]> {
       featured: project.data.featured,
       archived: project.data.archived,
       shelf: project.data.shelf,
-      builtOn: project.data.builtOn,
       repoUrl: project.data.repoUrl,
       liveUrl: project.data.liveUrl,
       releaseUrl: project.data.releaseUrl,
@@ -79,17 +76,3 @@ export async function getPosts(): Promise<PostRecord[]> {
       canonicalUrl: post.data.canonicalUrl,
     }));
 }
-
-/** The free guide libraries, flattened for machine consumers. */
-export const libraryIndex = () => ({
-  totalItems,
-  libraries: libraries.map(({ id, name, url, summary, count, items, verified }) => ({
-    id,
-    name,
-    url,
-    summary,
-    count,
-    items,
-    verified,
-  })),
-});

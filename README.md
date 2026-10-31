@@ -1,6 +1,6 @@
 # jeffkazzee.dev
 
-Personal site: the free Zo Computer guide libraries, the projects, and the writing.
+Personal site: the projects and the writing.
 
 It is also a working example of an agent-ready site. Every page is served as
 Markdown on request, and the site exposes an MCP server, an A2A agent card,
@@ -30,7 +30,6 @@ Built with [Astro](https://astro.build) and hand-rolled CSS. Deployed on
 ## Layout
 
 ```
-src/data/libraries.mjs      The free guide libraries. Single source of truth.
 src/data/agent-surface.mjs  Endpoints, tools, skills, Link headers.
 src/lib/agent-answers.mjs   The answers behind MCP, A2A, and WebMCP.
 src/lib/mcp-server.mjs      MCP over Streamable HTTP.
@@ -93,12 +92,6 @@ words "live right now". Both now derive from checked data.
 
 Edit front matter through `scripts/lib/frontmatter.mjs`, not with regex. Ad-hoc
 regex flattened every nested `screenshots:` block twice.
-
-## Updating the guide libraries
-
-Edit `src/data/libraries.mjs`. The home page, the MCP `list_guide_libraries`
-tool, `llms.txt`, and the ARD catalog all read from it. Each entry carries a
-`verified` date, so re-check the counts when a library grows.
 
 ## Adding an agent skill
 

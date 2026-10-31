@@ -1,24 +1,11 @@
 import type { APIRoute } from 'astro';
 
 import { SITE, availability, documents } from '../data/agent-surface.mjs';
-import { libraries, totalItems } from '../data/libraries.mjs';
 import { getPosts, getProjects } from '../lib/content-index';
 
 export const GET: APIRoute = async () => {
   const projects = await getProjects();
   const posts = await getPosts();
-
-  const libraryBlocks = libraries
-    .map(
-      (library) => `### ${library.name}
-
-${library.summary}
-
-- Size: ${library.count} (verified ${library.verified})
-- Read it: ${library.url}
-${library.examples.length ? `- Example guides: ${library.examples.join('; ')}` : ''}`,
-    )
-    .join('\n\n');
 
   const projectBlocks = projects
     .filter((project) => !project.archived)
@@ -51,15 +38,6 @@ same source that renders the site, so this file and the pages cannot disagree.
 
 Every page is also available as Markdown on its own: send \`Accept: text/markdown\`
 or append \`.md\` to the path.
-
----
-
-## Free guide libraries
-
-${totalItems.toLocaleString('en-US')} guides and recipes for building real systems on Zo Computer, a
-personal server you own. All public, no email gate.
-
-${libraryBlocks}
 
 ---
 

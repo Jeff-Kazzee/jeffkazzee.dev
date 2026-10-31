@@ -26,8 +26,7 @@ const projects = defineCollection({
        */
       metric: z.object({ value: z.string(), label: z.string() }).optional(),
       /** Which homepage shelf this belongs on. Omit to keep it off the home page. */
-      shelf: z.enum(['zo', 'community', 'tools', 'side']).optional(),
-      builtOn: z.enum(['zo']).optional(),
+      shelf: z.enum(['tools', 'side']).optional(),
       status: z
         .enum(['shipped', 'alpha', 'prototype', 'demo', 'wip', 'deprecated'])
         .default('wip'),

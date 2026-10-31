@@ -23,10 +23,6 @@ type ToolDescriptor = {
 
 /** Shape of /api/content.json, narrowed to what these tools read. */
 type SiteIndex = {
-  guides: {
-    totalItems: number;
-    libraries: { name: string; url: string; summary: string; count: string }[];
-  };
   projects: {
     title: string;
     description: string;
@@ -52,23 +48,6 @@ const siteIndex = () => {
 };
 
 const tools: ToolDescriptor[] = [
-  {
-    name: 'list_guide_libraries',
-    description:
-      'List the free guide and recipe libraries published by this site, with how many are in each and where to read them.',
-    inputSchema: { type: 'object', properties: {}, additionalProperties: false },
-    async execute() {
-      const { guides } = await siteIndex();
-
-      const lines = guides.libraries.map(
-        (library) => `${library.name} (${library.count})\n  ${library.summary}\n  ${library.url}`,
-      );
-
-      return text(
-        `${guides.totalItems.toLocaleString('en-US')} free guides and recipes.\n\n${lines.join('\n\n')}`,
-      );
-    },
-  },
   {
     name: 'list_projects',
     description:
