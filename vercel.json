@@ -1,5 +1,11 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    { "source": "/projects/:slug(zo-computer-101|zo-cookbook|zo-deep-dives|ukrainian-trainer)", "destination": "/projects/", "permanent": true },
+    { "source": "/projects/:slug(zo-computer-101|zo-cookbook|zo-deep-dives|ukrainian-trainer)/", "destination": "/projects/", "permanent": true },
+    { "source": "/blog/:slug(five-zo-cookbook-recipes-worth-running|how-to-self-host-any-app-without)", "destination": "/blog/", "permanent": true },
+    { "source": "/blog/:slug(five-zo-cookbook-recipes-worth-running|how-to-self-host-any-app-without)/", "destination": "/blog/", "permanent": true }
+  ],
   "headers": [
     {
       "source": "/(.*)",
