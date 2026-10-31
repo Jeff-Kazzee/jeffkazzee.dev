@@ -1,0 +1,36 @@
+name: Live checks
+on:
+  schedule:
+    - cron: '23 * * * *'
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/check-live*'
+      - '.github/workflows/live-checks.yml'
+permissions:
+  contents: read
+concurrency:
+  group: live-checks-${{ github.event_name == 'pull_request' && github.ref || 'production' }}
+  cancel-in-progress: false
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node --test scripts/check-live.test.mjs
+      - name: Check canonical live sites during the bounded pilot
+        if: github.event_name != 'pull_request'
+        shell: bash
+        run: |
+          if [ "$(date -u +%s)" -ge "$(date -u -d '2026-11-14T00:00:00Z' +%s)" ]; then
+            echo 'Pilot expired. No network checks ran. Owner review is required to renew.' >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          node scripts/check-live.mjs
