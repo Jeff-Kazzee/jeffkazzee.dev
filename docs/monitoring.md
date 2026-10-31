@@ -6,9 +6,11 @@ scheduled checker for either domain. The pilot stops network checks at
 2026-11-14 00:00 UTC. Remove its schedule after review or explicitly renew it.
 
 `CI / check` runs the existing type check, build, page-weight budget and agent
-surface verifier on pull requests and pushes to main. The pnpm lockfile was
-imported from package-lock.json. Dependency updates must keep both lockfiles
-consistent while Vercel continues using the existing npm deployment setup.
+surface verifier on pull requests and pushes to main. `.github/ci-pnpm-lock.yaml`
+was imported from package-lock.json and is copied to the root only inside CI.
+This keeps Vercel's npm detection unchanged. Dependency updates must keep both
+lockfiles consistent. CI uses a hoisted dependency layout to match the existing
+Astro image build, and disables dependency lifecycle scripts.
 
 `Live checks / live` runs hourly at minute 23 and on manual dispatch. Pull
 requests run only its fixture tests. Every run leaves an Actions receipt.

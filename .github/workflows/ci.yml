@@ -25,7 +25,9 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
-      - run: pnpm install --frozen-lockfile
+          cache-dependency-path: .github/ci-pnpm-lock.yaml
+      - run: cp .github/ci-pnpm-lock.yaml pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile --ignore-scripts --config.node-linker=hoisted
       - run: pnpm run build
       - run: pnpm run verify
       - run: node --test scripts/check-live.test.mjs
