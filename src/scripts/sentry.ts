@@ -26,29 +26,23 @@ import * as Sentry from '@sentry/browser';
 // Most error loops repeat on one page, so a page sends at most five events.
 let sent = 0;
 
-// A URL's query string and fragment can carry a subscriber id or a token, and
-// the SDK copies URLs into many fields: request.url, navigation breadcrumbs
-// (data.from, data.to), fetch breadcrumbs (data.url), and the frame filename
-// it invents for a stackless error. urlQueryParams covers only some of them,
-// so strip both parts from every URL-shaped string before an event leaves.
-// A token counts as a URL when the part before its first ? or # holds a / or
-// a dot. That covers any scheme in any case (HTTPS://), root-relative paths
-// (/a?b) and relative ones (api/content.json#c), and leaves "token ?" and
-// '#id' alone. Splitting into tokens first keeps this linear on long strings.
-// Tokens split on whitespace only. A browser encodes whitespace in a URL but
-// leaves ( ) and ' as they are, so a fragment like #(alice@example.com) must
-// stay in one token to be cut whole.
-const TOKEN = /\S+/g;
-function stripTail(token: string): string {
-  const cut = token.search(/[?#]/);
-  return cut > 0 && /[./]/.test(token.slice(0, cut)) ? token.slice(0, cut) : token;
-}
-function stripUrlTails(value: unknown): unknown {
-  if (typeof value === 'string') return value.replace(TOKEN, stripTail);
-  if (Array.isArray(value)) return value.map(stripUrlTails);
+// A URL's query string and fragment can carry a subscriber id or a token.
+// Finding every URL shape after the fact failed three review rounds, so URLs
+// are kept out at their sources instead:
+//   - fetch, XHR and history breadcrumbs are never built, and beforeBreadcrumb
+//     drops the url, from and to fields of any breadcrumb that is,
+//   - beforeSend rebuilds request.url from location.origin and
+//     location.pathname and drops the Referer header,
+//   - every other string has each token cut at its first ? or #, with whitespace
+//     as the only separator, because a browser leaves ( ) and ' unencoded in a
+//     URL. This damages some text that is not a URL, such as "#fff", on purpose.
+const URL_FIELDS = ['url', 'from', 'to'];
+function cutTails(value: unknown): unknown {
+  if (typeof value === 'string') return value.replace(/\S+/g, (token) => (token.length > 1 ? token.split(/[?#]/)[0] : token));
+  if (Array.isArray(value)) return value.map(cutTails);
   if (value && typeof value === 'object') {
     const record = value as Record<string, unknown>;
-    for (const key of Object.keys(record)) record[key] = stripUrlTails(record[key]);
+    for (const key of Object.keys(record)) record[key] = cutTails(record[key]);
   }
   return value;
 }
@@ -69,7 +63,19 @@ Sentry.init({
   // has. The free plan's 5,000 errors a month is guarded by the per-page cap
   // below, not by dropping events at random.
   sampleRate: 1,
-  beforeSend: (event) => (++sent > 5 ? null : (stripUrlTails(event) as typeof event)),
+  integrations: [Sentry.breadcrumbsIntegration({ fetch: false, xhr: false, history: false })],
+  beforeBreadcrumb: (breadcrumb) => {
+    if (breadcrumb.data) for (const field of URL_FIELDS) delete breadcrumb.data[field];
+    return breadcrumb;
+  },
+  beforeSend: (event) => {
+    if (++sent > 5) return null;
+    if (event.request) {
+      event.request.url = location.origin + location.pathname;
+      if (event.request.headers) delete event.request.headers.Referer;
+    }
+    return cutTails(event) as typeof event;
+  },
   // Browser noise. Each of these would spend part of the monthly error
   // allowance without naming a defect in this site.
   ignoreErrors: [
