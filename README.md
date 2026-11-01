@@ -66,7 +66,7 @@ The site is static HTML with no framework on the client. What makes it fast:
 - **Images.** The hero is AVIF with a WebP fallback, 21 KB on a phone. Every image has width and height set. The first image on a page loads at once; the rest load lazily. Blog images are served from this site, not Substack.
 - **Native page transitions.** `@view-transition` in `global.css` cross-fades between pages with no JavaScript router.
 - **Service worker** (`public/sw.js`). Pages are network-first with a 3 second timeout, then the saved copy, then `/offline/`. Hashed `/_astro/` files are cache-first. The main pages are saved on install. It never handles `/api/`, `/.well-known/`, or `.md`/`.txt`/`.json`/`.xml`, so Markdown negotiation and the MCP and A2A endpoints always reach the network. To retire it, see the comment at the top of the file.
-- **Budget.** `scripts/check-budget.mjs` fails the build if a first phone visit to the home page passes 240 KB. It is about 58 KB.
+- **Budget.** `scripts/check-budget.mjs` fails the build if a first phone visit to the home page passes 240 KB. It is about 88 KB, of which about 30 KB is the Sentry error reporter. The check follows the chunks a linked script imports.
 
 ## Adding or changing a project
 
