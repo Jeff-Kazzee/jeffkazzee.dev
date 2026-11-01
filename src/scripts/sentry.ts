@@ -35,7 +35,10 @@ let sent = 0;
 // a dot. That covers any scheme in any case (HTTPS://), root-relative paths
 // (/a?b) and relative ones (api/content.json#c), and leaves "token ?" and
 // '#id' alone. Splitting into tokens first keeps this linear on long strings.
-const TOKEN = /[^\s"'<>()]+/g;
+// Tokens split on whitespace only. A browser encodes whitespace in a URL but
+// leaves ( ) and ' as they are, so a fragment like #(alice@example.com) must
+// stay in one token to be cut whole.
+const TOKEN = /\S+/g;
 function stripTail(token: string): string {
   const cut = token.search(/[?#]/);
   return cut > 0 && /[./]/.test(token.slice(0, cut)) ? token.slice(0, cut) : token;
