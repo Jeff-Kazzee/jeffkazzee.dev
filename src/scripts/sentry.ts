@@ -26,6 +26,26 @@ import * as Sentry from '@sentry/browser';
 // Most error loops repeat on one page, so a page sends at most five events.
 let sent = 0;
 
+// A URL's query string and fragment can carry a subscriber id or a token, and
+// the SDK copies URLs into many fields: request.url, navigation breadcrumbs
+// (data.from, data.to), fetch breadcrumbs (data.url), and the frame filename
+// it invents for a stackless error. urlQueryParams covers only some of them,
+// so strip both parts from every URL-shaped string before an event leaves.
+const ABSOLUTE_URL_TAIL = /(https?:\/\/[^\s?#"'<>]*)[?#][^\s"'<>]*/g;
+const RELATIVE_URL = /^\/[^\s]*$/;
+function stripUrlTails(value: unknown): unknown {
+  if (typeof value === 'string') {
+    const cleaned = value.replace(ABSOLUTE_URL_TAIL, '$1');
+    return RELATIVE_URL.test(cleaned) ? cleaned.split(/[?#]/)[0] : cleaned;
+  }
+  if (Array.isArray(value)) return value.map(stripUrlTails);
+  if (value && typeof value === 'object') {
+    const record = value as Record<string, unknown>;
+    for (const key of Object.keys(record)) record[key] = stripUrlTails(record[key]);
+  }
+  return value;
+}
+
 Sentry.init({
   dsn: 'https://9addb530203e7f35d68f08a11ca0233b@o4510204952117248.ingest.us.sentry.io/4512340518961152',
   // SDK 11 dropped sendDefaultPii and collects user info unless told not to.
@@ -42,11 +62,7 @@ Sentry.init({
   // has. The free plan's 5,000 errors a month is guarded by the per-page cap
   // below, not by dropping events at random.
   sampleRate: 1,
-  beforeSend: (event) => {
-    // urlQueryParams does not cover the fragment.
-    if (event.request?.url) event.request.url = event.request.url.split('#')[0];
-    return ++sent > 5 ? null : event;
-  },
+  beforeSend: (event) => (++sent > 5 ? null : (stripUrlTails(event) as typeof event)),
   // Browser noise. Each of these would spend part of the monthly error
   // allowance without naming a defect in this site.
   ignoreErrors: [
