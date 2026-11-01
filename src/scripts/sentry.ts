@@ -31,7 +31,9 @@ Sentry.init({
   // SDK 11 dropped sendDefaultPii and collects user info unless told not to.
   // With userInfo on, every event and session asks Sentry to store the
   // visitor's IP address (infer_ip: "auto"). This site has no reason to.
-  dataCollection: { userInfo: false },
+  // The page URL goes into every event too, so drop its query string, which
+  // can carry whatever a link put there, such as a newsletter subscriber id.
+  dataCollection: { userInfo: false, urlQueryParams: false },
   // Vercel sets VERCEL_ENV at build time, and astro.config.mjs passes it in,
   // so preview deployments report as "preview". A build outside Vercel falls
   // back to the old production or development split.
@@ -40,7 +42,11 @@ Sentry.init({
   // has. The free plan's 5,000 errors a month is guarded by the per-page cap
   // below, not by dropping events at random.
   sampleRate: 1,
-  beforeSend: (event) => (++sent > 5 ? null : event),
+  beforeSend: (event) => {
+    // urlQueryParams does not cover the fragment.
+    if (event.request?.url) event.request.url = event.request.url.split('#')[0];
+    return ++sent > 5 ? null : event;
+  },
   // Browser noise. Each of these would spend part of the monthly error
   // allowance without naming a defect in this site.
   ignoreErrors: [
@@ -49,7 +55,7 @@ Sentry.init({
     /^Non-Error promise rejection captured/,
   ],
   // An error raised by a browser extension is not this site's defect.
-  denyUrls: [/^chrome-extension:\/\//i, /^moz-extension:\/\//i, /^safari-extension:\/\//i],
+  denyUrls: [/^chrome-extension:\/\//i, /^moz-extension:\/\//i, /^safari-extension:\/\//i, /^safari-web-extension:\/\//i],
 });
 
 export {};
