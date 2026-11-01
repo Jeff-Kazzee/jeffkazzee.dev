@@ -31,13 +31,17 @@ let sent = 0;
 // (data.from, data.to), fetch breadcrumbs (data.url), and the frame filename
 // it invents for a stackless error. urlQueryParams covers only some of them,
 // so strip both parts from every URL-shaped string before an event leaves.
-const ABSOLUTE_URL_TAIL = /(https?:\/\/[^\s?#"'<>]*)[?#][^\s"'<>]*/g;
-const RELATIVE_URL = /^\/[^\s]*$/;
+// A token counts as a URL when the part before its first ? or # holds a / or
+// a dot. That covers any scheme in any case (HTTPS://), root-relative paths
+// (/a?b) and relative ones (api/content.json#c), and leaves "token ?" and
+// '#id' alone. Splitting into tokens first keeps this linear on long strings.
+const TOKEN = /[^\s"'<>()]+/g;
+function stripTail(token: string): string {
+  const cut = token.search(/[?#]/);
+  return cut > 0 && /[./]/.test(token.slice(0, cut)) ? token.slice(0, cut) : token;
+}
 function stripUrlTails(value: unknown): unknown {
-  if (typeof value === 'string') {
-    const cleaned = value.replace(ABSOLUTE_URL_TAIL, '$1');
-    return RELATIVE_URL.test(cleaned) ? cleaned.split(/[?#]/)[0] : cleaned;
-  }
+  if (typeof value === 'string') return value.replace(TOKEN, stripTail);
   if (Array.isArray(value)) return value.map(stripUrlTails);
   if (value && typeof value === 'object') {
     const record = value as Record<string, unknown>;
