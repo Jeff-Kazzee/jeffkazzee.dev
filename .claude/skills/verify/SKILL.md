@@ -41,7 +41,10 @@ It runs CI's sequence (`scripts/prepare-ci.mjs`, `pnpm install
 --frozen-lockfile`, `pnpm run agent-surface`, then `astro check` and `astro
 build`) and logs it to `build.log` in the evidence folder. It leaves out the
 budget step of `pnpm run build`, which A9 runs, so a bloated home page fails A9
-and the other journeys still run. Then it serves `dist/` with
+and the other journeys still run. It builds with `VERCEL_ENV=production` and
+`VERCEL_GIT_COMMIT_SHA` set to `origin/main`, the values live was built with,
+because `astro.config.mjs` bakes both into the script bundle and A11 compares
+pages byte for byte. Run `git fetch origin main` first. Then it serves `dist/` with
 `scripts/serve.mjs`, which applies the redirects and headers from `vercel.json`.
 Ready is the line `LAUNCH_RESULT=pass http://127.0.0.1:<port>`.
 

@@ -34,7 +34,10 @@ done
   # pnpm run build without its budget step. A9 runs the budget, so an oversized
   # page still fails but no longer hides every other journey.
   pnpm exec astro check &&
-  pnpm exec astro build
+  # Build with the environment and release live production was built with,
+  # so A11 can compare pages byte for byte. Live is deployed from origin/main.
+  # No report leaves the driven browser, so this label reaches no Sentry data.
+  VERCEL_ENV=production VERCEL_GIT_COMMIT_SHA="$(git rev-parse origin/main)" pnpm exec astro build
 } > "$EVIDENCE/build.log" 2>&1
 build=$?
 if [ $build -ne 0 ]; then
