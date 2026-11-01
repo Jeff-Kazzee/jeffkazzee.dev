@@ -29,22 +29,43 @@ let sent = 0;
 // A URL's query string and fragment can carry a subscriber id or a token.
 // Finding every URL shape after the fact failed three review rounds, so URLs
 // are kept out at their sources instead:
-//   - fetch, XHR and history breadcrumbs are never built, and beforeBreadcrumb
-//     drops the url, from and to fields of any breadcrumb that is,
+//   - only console breadcrumbs are built. Fetch, XHR, navigation and click
+//     breadcrumbs carry URLs, and beforeBreadcrumb drops them if any appear,
 //   - beforeSend rebuilds request.url from location.origin and
-//     location.pathname and drops the Referer header,
-//   - every other string is cut at the first ? or # in a token longer than one
-//     character, and everything after it is dropped. Sentry records the raw
-//     string code passed in, so a fragment can hold spaces, and only cutting to
-//     the end removes all of it. This damages text that is not a URL, such as
-//     "div#main > a", which becomes "div", on purpose.
+//     location.pathname, drops the Referer header and query_string, and
+//     reduces each stack frame filename to its origin and path,
+//   - every other string is cut at the first ? or # that follows a / or sits
+//     in a token longer than one character, and everything after it is
+//     dropped. Sentry records the raw string code passed in, so a fragment can
+//     hold spaces, and only cutting to the end removes all of it. This damages
+//     text that is not a URL, such as "div#main > a", which becomes "div".
+// Error reports lose fetch and navigation context. That is the accepted cost.
+const URL_CATEGORIES = new Set(['fetch', 'xhr', 'navigation', 'ui.click']);
 const URL_FIELDS = ['url', 'from', 'to'];
 function cutText(text: string): string {
-  for (const match of text.matchAll(/\S+/g)) {
-    const cut = match[0].search(/[?#]/);
-    if (match[0].length > 1 && cut >= 0) return text.slice(0, (match.index ?? 0) + cut);
+  let end = text.length;
+  const slash = text.indexOf('/');
+  if (slash >= 0) {
+    const after = text.slice(slash).search(/[?#]/);
+    if (after >= 0) end = slash + after;
   }
-  return text;
+  for (const match of text.matchAll(/\S+/g)) {
+    if ((match.index ?? 0) >= end) break;
+    const cut = match[0].search(/[?#]/);
+    if (match[0].length > 1 && cut >= 0) {
+      end = Math.min(end, (match.index ?? 0) + cut);
+      break;
+    }
+  }
+  return text.slice(0, end);
+}
+function originAndPath(url: string): string {
+  try {
+    const parsed = new URL(url, location.href);
+    return /^https?:$/.test(parsed.protocol) ? parsed.origin + parsed.pathname : '<redacted>';
+  } catch {
+    return '<redacted>';
+  }
 }
 function cutTails(value: unknown): unknown {
   if (typeof value === 'string') return cutText(value);
@@ -72,8 +93,9 @@ Sentry.init({
   // has. The free plan's 5,000 errors a month is guarded by the per-page cap
   // below, not by dropping events at random.
   sampleRate: 1,
-  integrations: [Sentry.breadcrumbsIntegration({ fetch: false, xhr: false, history: false })],
+  integrations: [Sentry.breadcrumbsIntegration({ dom: false, fetch: false, xhr: false, history: false })],
   beforeBreadcrumb: (breadcrumb) => {
+    if (URL_CATEGORIES.has(breadcrumb.category ?? '')) return null;
     if (breadcrumb.data) for (const field of URL_FIELDS) delete breadcrumb.data[field];
     return breadcrumb;
   },
@@ -81,7 +103,13 @@ Sentry.init({
     if (++sent > 5) return null;
     if (event.request) {
       event.request.url = location.origin + location.pathname;
+      delete event.request.query_string;
       if (event.request.headers) delete event.request.headers.Referer;
+    }
+    for (const value of event.exception?.values ?? []) {
+      for (const frame of value.stacktrace?.frames ?? []) {
+        if (frame.filename && frame.filename !== '<anonymous>') frame.filename = originAndPath(frame.filename);
+      }
     }
     return cutTails(event) as typeof event;
   },
