@@ -24,3 +24,9 @@ public/.well-known/api-catalog
 public/.well-known/*.json
 public/.well-known/mcp/
 public/.well-known/agent-skills/index.json
+
+# Publish project skills only. ~/.gitignore_global excludes .claude/ on this
+# machine, and the rest of .claude/ (settings, local state) stays private.
+!.claude/
+.claude/*
+!.claude/skills/
