@@ -23,7 +23,10 @@
 
 import * as Sentry from '@sentry/browser';
 
-// Most error loops repeat on one page, so a page sends at most five events.
+// Sampling stays at the default of every event, because sampling would hide
+// the rare errors a small reading site has. The free plan's 5,000 errors a
+// month is guarded instead by this cap: most error loops repeat on one page,
+// so a page sends at most five events.
 let sent = 0;
 
 // A URL's query string and fragment can carry a subscriber id or a token.
@@ -77,51 +80,50 @@ function cutTails(value: unknown): unknown {
   return value;
 }
 
-Sentry.init({
-  dsn: 'https://9addb530203e7f35d68f08a11ca0233b@o4510204952117248.ingest.us.sentry.io/4512340518961152',
-  // SDK 11 dropped sendDefaultPii and collects user info unless told not to.
-  // With userInfo on, every event and session asks Sentry to store the
-  // visitor's IP address (infer_ip: "auto"). This site has no reason to.
-  // The page URL goes into every event too, so drop its query string, which
-  // can carry whatever a link put there, such as a newsletter subscriber id.
-  dataCollection: { userInfo: false, urlQueryParams: false },
-  // Vercel sets VERCEL_ENV at build time, and astro.config.mjs passes it in,
-  // so preview deployments report as "preview". A build outside Vercel falls
-  // back to the old production or development split.
-  environment: import.meta.env.VERCEL_ENV ?? (import.meta.env.PROD ? 'production' : 'development'),
-  // Keep every error. Sampling would hide the rare errors a small reading site
-  // has. The free plan's 5,000 errors a month is guarded by the per-page cap
-  // below, not by dropping events at random.
-  sampleRate: 1,
-  integrations: [Sentry.breadcrumbsIntegration({ dom: false, fetch: false, xhr: false, history: false })],
-  beforeBreadcrumb: (breadcrumb) => {
-    if (URL_CATEGORIES.has(breadcrumb.category ?? '')) return null;
-    if (breadcrumb.data) for (const field of URL_FIELDS) delete breadcrumb.data[field];
-    return breadcrumb;
-  },
-  beforeSend: (event) => {
-    if (++sent > 5) return null;
-    if (event.request) {
-      event.request.url = location.origin + location.pathname;
-      delete event.request.query_string;
-      if (event.request.headers) delete event.request.headers.Referer;
-    }
-    for (const value of event.exception?.values ?? []) {
-      for (const frame of value.stacktrace?.frames ?? []) {
-        if (frame.filename && frame.filename !== '<anonymous>') frame.filename = originAndPath(frame.filename);
+function start() {
+  Sentry.init({
+    dsn: 'https://9addb530203e7f35d68f08a11ca0233b@o4510204952117248.ingest.us.sentry.io/4512340518961152',
+    // @sentry/browser 11 has no sendDefaultPii option. dataCollection.userInfo
+    // defaults to true, and then the SDK marks events infer_ip "auto" and
+    // sessions ip_address "{{auto}}", so Sentry's ingest fills in the visitor's
+    // IP address. This site has no reason to collect it.
+    dataCollection: { userInfo: false, urlQueryParams: false },
+    // astro.config.mjs passes these in from the Vercel build. A build outside
+    // Vercel, such as the verify skill's, reports environment "local".
+    environment: import.meta.env.VERCEL_ENV,
+    release: import.meta.env.VERCEL_GIT_COMMIT_SHA || undefined,
+    integrations: [Sentry.breadcrumbsIntegration({ dom: false, fetch: false, xhr: false, history: false })],
+    beforeBreadcrumb: (breadcrumb) => {
+      if (URL_CATEGORIES.has(breadcrumb.category ?? '')) return null;
+      if (breadcrumb.data) for (const field of URL_FIELDS) delete breadcrumb.data[field];
+      return breadcrumb;
+    },
+    beforeSend: (event) => {
+      if (++sent > 5) return null;
+      if (event.request) {
+        event.request.url = location.origin + location.pathname;
+        delete event.request.query_string;
+        if (event.request.headers) delete event.request.headers.Referer;
       }
-    }
-    return cutTails(event) as typeof event;
-  },
-  // Browser noise. Each of these would spend part of the monthly error
-  // allowance without naming a defect in this site.
-  ignoreErrors: [
-    'ResizeObserver loop limit exceeded',
-    'ResizeObserver loop completed with undelivered notifications',
-    /^Non-Error promise rejection captured/,
-  ],
-  // An error raised by a browser extension is not this site's defect.
-  denyUrls: [/^chrome-extension:\/\//i, /^moz-extension:\/\//i, /^safari-extension:\/\//i, /^safari-web-extension:\/\//i],
-});
+      for (const value of event.exception?.values ?? []) {
+        for (const frame of value.stacktrace?.frames ?? []) {
+          if (frame.filename && frame.filename !== '<anonymous>') frame.filename = originAndPath(frame.filename);
+        }
+      }
+      return cutTails(event) as typeof event;
+    },
+    // Browser noise that the SDK does not already ignore. Each would spend part
+    // of the monthly error allowance without naming a defect in this site.
+    ignoreErrors: ['ResizeObserver loop limit exceeded', /^Non-Error promise rejection captured/],
+    // An error raised by a browser extension is not this site's defect.
+    denyUrls: [/^chrome-extension:\/\//i, /^moz-extension:\/\//i, /^safari-extension:\/\//i, /^safari-web-extension:\/\//i],
+  });
+}
 
-export {};
+// Speculation rules prerender pages a visitor may never open. Starting here
+// would count a session for each of them, so wait until the page is shown.
+// TypeScript's DOM types do not include document.prerendering yet.
+const prerendering = (document as Document & { prerendering?: boolean }).prerendering;
+if (prerendering) document.addEventListener('prerenderingchange', start, { once: true });
+else start();
+

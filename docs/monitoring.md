@@ -49,11 +49,12 @@ Both were verified from the Production deployment's domain and source fields.
 Other Vercel checks exist on the commits. They are not proof of a canonical
 site outage. Do not delete or change those projects as part of monitoring.
 
-Sentry organization `wandering-river-web` already has `jeffkazzee-dev` and
+Sentry organization `wandering-river-web` has `jeffkazzee-dev` and
 `llm-arcade` projects with error monitors and high-priority email alerts.
-Each has one October 29 test event. That does not establish production SDK
-coverage. Existing SDK work is on separate unpublished branches and remains
-separate. No client script, CSP, SDK, or privacy setting changes here.
+jeffkazzee.dev reports browser errors through `src/scripts/sentry.ts` (#12),
+with no IP address, no URL query string or fragment, and at most five events
+per page. llm-arcade has no Sentry SDK on its production branch. The checks in
+this document change no client script, CSP, SDK, or privacy setting.
 
 The authenticated Sentry subscription shows Developer, 5,000 errors and one
 uptime monitor included, with zero uptime monitors used. Replay and tracing

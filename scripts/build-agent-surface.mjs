@@ -243,3 +243,20 @@ if (linkHeader !== expectedLink) {
 }
 
 console.log('  vercel.json Link header matches the declared surface');
+
+// Without this the browser blocks every Sentry event before it leaves the page,
+// and the site looks instrumented while sending nothing.
+const sentrySource = await readFile(join(root, 'src', 'scripts', 'sentry.ts'), 'utf8');
+const ingestHost = sentrySource.match(/dsn: 'https:\/\/[0-9a-f]+@([^/']+)\//)?.[1];
+const connectSrc = vercelConfig.headers
+  ?.flatMap((rule) => rule.headers ?? [])
+  .find((header) => header.key === 'Content-Security-Policy')
+  ?.value.match(/connect-src ([^;]*)/)?.[1].trim().split(/\s+/) ?? [];
+
+if (!ingestHost || !connectSrc.includes(`https://${ingestHost}`)) {
+  throw new Error(
+    `connect-src in vercel.json must allow the Sentry ingest host in src/scripts/sentry.ts.\n\nIngest host: ${ingestHost ?? 'no DSN found'}\nconnect-src: ${connectSrc.join(' ')}\n`,
+  );
+}
+
+console.log('  vercel.json connect-src allows the Sentry ingest host');

@@ -10,7 +10,7 @@
  */
 
 import { readFileSync, statSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, posix } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gzipSync } from 'node:zlib';
 
@@ -35,7 +35,20 @@ const gz = (path) => gzipSync(readFileSync(path), { level: 9 }).length;
 const unique = (re) => [...new Set([...html.matchAll(re)].map((m) => m[1]))].filter((u) => u.startsWith('/'));
 
 const styles = unique(/<link[^>]+rel="stylesheet"[^>]+href="([^"]+)"/g);
-const scripts = unique(/<script[^>]+src="([^"]+)"/g);
+// A linked script can import split chunks, statically or with import(). A
+// first visit downloads those too, so count every chunk a linked script reaches.
+const IMPORT = /(?:\bimport\s*\(?|\bfrom)\s*["'](\.{1,2}\/[^"']+\.js)["']/g;
+function withImports(urls) {
+  const seen = new Set();
+  const visit = (url) => {
+    if (seen.has(url)) return;
+    seen.add(url);
+    for (const [, spec] of readFileSync(local(url), 'utf8').matchAll(IMPORT)) visit(posix.join(posix.dirname(url), spec));
+  };
+  urls.forEach(visit);
+  return [...seen];
+}
+const scripts = withImports(unique(/<script[^>]+src="([^"]+)"/g));
 const fonts = unique(/<link[^>]+rel="preload"[^>]+href="([^"]+\.woff2)"/g);
 
 const avifSource = [...html.matchAll(/<source[^>]*>/g)].map((m) => m[0]).find((tag) => tag.includes('image/avif'));

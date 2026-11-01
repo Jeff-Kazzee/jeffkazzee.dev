@@ -31,7 +31,9 @@ const { overlayHeader = false, ...head } = Astro.props;
       <slot />
     </main>
     <SiteFooter />
-    <!-- First, so Sentry is listening before the other two run. -->
+    <!-- Before reveal and the service worker, so Sentry is listening when they
+         run. webmcp.ts in BaseHead runs earlier, and a prerendered page starts
+         Sentry only when it is shown, so neither is covered at startup. -->
     <script src="../scripts/sentry.ts"></script>
     <script src="../scripts/reveal.ts"></script>
     <script src="../scripts/sw-register.ts"></script>
