@@ -31,6 +31,8 @@ const { overlayHeader = false, ...head } = Astro.props;
       <slot />
     </main>
     <SiteFooter />
+    <!-- First, so Sentry is listening before the other two run. -->
+    <script src="../scripts/sentry.ts"></script>
     <script src="../scripts/reveal.ts"></script>
     <script src="../scripts/sw-register.ts"></script>
   </body>

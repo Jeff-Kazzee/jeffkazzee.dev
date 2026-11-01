@@ -8,6 +8,11 @@ import markdownTidy from './src/lib/markdown-tidy.mjs';
 const NOINDEX_PAGES = ['/contact-thanks/', '/offline/'];
 
 export default defineConfig({
+  // src/scripts/sentry.ts reports this as its environment, so Vercel previews
+  // do not count as production. Unset outside Vercel builds.
+  vite: process.env.VERCEL_ENV
+    ? { define: { 'import.meta.env.VERCEL_ENV': JSON.stringify(process.env.VERCEL_ENV) } }
+    : {},
   site: 'https://jeffkazzee.dev',
   // Astro 7 defaults to 'jsx', which drops the space between inline elements
   // ("are Vivary," renders as "areVivary,"). Keep the HTML-aware behavior.
