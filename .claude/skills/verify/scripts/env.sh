@@ -15,11 +15,14 @@ EVIDENCE="$EVIDENCE_ROOT/$VERIFY_RUN"
 export SKILL REPO VERIFY_PORT CHROME_PORT STATE EVIDENCE
 
 # The build under test: HEAD plus a hash of every uncommitted change. Untracked
-# files count by path and content, so a rename changes the hash.
+# files count by path, size and content, so a rename changes the hash. The
+# bytes stream straight into sha256sum, because a shell variable drops NULs.
 build_id() {
-  local changes
-  changes="$(git -C "$REPO" diff HEAD
-    git -C "$REPO" ls-files --others --exclude-standard -- src public scripts astro.config.mjs vercel.json |
-      while read -r f; do printf '%s\n' "$f"; cat "$REPO/$f"; done)"
-  echo "$(git -C "$REPO" rev-parse HEAD) $(printf '%s' "$changes" | sha256sum | cut -c1-16)"
+  local hash
+  hash="$( {
+    git -C "$REPO" diff --binary HEAD
+    git -C "$REPO" ls-files -z --others --exclude-standard -- src public scripts astro.config.mjs vercel.json |
+      while IFS= read -r -d '' f; do printf '%s\0%s\0' "$f" "$(wc -c < "$REPO/$f")"; cat "$REPO/$f"; done
+  } | sha256sum | cut -c1-16)"
+  echo "$(git -C "$REPO" rev-parse HEAD) $hash"
 }
