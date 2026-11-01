@@ -33,12 +33,21 @@ let sent = 0;
 //     drops the url, from and to fields of any breadcrumb that is,
 //   - beforeSend rebuilds request.url from location.origin and
 //     location.pathname and drops the Referer header,
-//   - every other string has each token cut at its first ? or #, with whitespace
-//     as the only separator, because a browser leaves ( ) and ' unencoded in a
-//     URL. This damages some text that is not a URL, such as "#fff", on purpose.
+//   - every other string is cut at the first ? or # in a token longer than one
+//     character, and everything after it is dropped. Sentry records the raw
+//     string code passed in, so a fragment can hold spaces, and only cutting to
+//     the end removes all of it. This damages text that is not a URL, such as
+//     "div#main > a", which becomes "div", on purpose.
 const URL_FIELDS = ['url', 'from', 'to'];
+function cutText(text: string): string {
+  for (const match of text.matchAll(/\S+/g)) {
+    const cut = match[0].search(/[?#]/);
+    if (match[0].length > 1 && cut >= 0) return text.slice(0, (match.index ?? 0) + cut);
+  }
+  return text;
+}
 function cutTails(value: unknown): unknown {
-  if (typeof value === 'string') return value.replace(/\S+/g, (token) => (token.length > 1 ? token.split(/[?#]/)[0] : token));
+  if (typeof value === 'string') return cutText(value);
   if (Array.isArray(value)) return value.map(cutTails);
   if (value && typeof value === 'object') {
     const record = value as Record<string, unknown>;
