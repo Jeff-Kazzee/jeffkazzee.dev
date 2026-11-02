@@ -8,7 +8,6 @@ date: 2026-10-18
 featured: true
 status: alpha
 order: 0.5
-screenshots: [{"src":"./_images/context-engine-concept.png","alt":"AI-generated concept illustration: an agent reads working context, edits it, and passes updated context to the next model request. Tool names are illustrative, not an implemented API.","fit":"contain"}]
 ---
 Context Engine gives a coding agent a plain file, its Working Context, and lets the agent rewrite that file with the Read, Edit and Write tools it already has. In Claude Code, the plugin rebuilds the conversation from the file at each new user turn. In Codex, it rebuilds when the agent calls `new_context`. Material the agent deleted or offloaded is no longer sent with each request. It adapts the mechanism of the [Context Language Models paper](https://arxiv.org/abs/2609.37725) by Rulin Shao and colleagues. None of the paper's code is copied. Context Engine is MIT-licensed.
 

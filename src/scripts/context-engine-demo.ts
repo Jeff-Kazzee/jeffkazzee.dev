@@ -57,15 +57,15 @@ const openings = ['A', 'B', 'C']
           'Salt on the window. A man in a green coat, then not. Mara folds the ticket until it is a small hard square and puts it in her mouth like a child would.',
           'Nine years, and the dock still smells of diesel and oranges. She had forgotten the oranges. Ilya would remember the oranges.',
         ],
-        4,
+        9,
       ),
   )
   .join('\n\n');
 
 const reports = [
-  repeat(['[api] step #: wrote handler, ran tests, all green, pushed commit to feature branch'], 18),
-  repeat(['[ui] step #: form renders, waiting on error format from api, retried build'], 18),
-  repeat(['[tests] step #: fixtures ready, cannot write ui tests until the form settles'], 18),
+  repeat(['[api] step #: wrote handler, ran tests, all green, pushed commit to feature branch'], 20),
+  repeat(['[ui] step #: form renders, waiting on error format from api, retried build'], 20),
+  repeat(['[tests] step #: fixtures ready, cannot write ui tests until the form settles'], 20),
 ].join('\n');
 
 const SCENARIOS: Record<string, Scenario> = {
