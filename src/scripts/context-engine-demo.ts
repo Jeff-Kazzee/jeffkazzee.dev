@@ -207,7 +207,7 @@ async function digest(text: string): Promise<string> {
 const frame = (revision: number, text: string) =>
   `<working_context revision="${revision}">\n${text}</working_context>`;
 
-function init() {
+function startDemo() {
   const root = document.querySelector<HTMLElement>('[data-ce-demo]');
   if (!root) return;
 
@@ -387,4 +387,4 @@ function init() {
   load(root.querySelector<HTMLInputElement>('input[name="ce-scenario"]:checked')?.value ?? 'code');
 }
 
-init();
+startDemo();
