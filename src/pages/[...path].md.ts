@@ -51,8 +51,9 @@ function contextEngineMarkdown(): string {
 
 Context Engine is an experimental plugin for Claude Code and Codex. It keeps the
 agent's working notes in a plain file, the Working Context, and the agent edits
-that file with its ordinary tools. At the next user turn, the plugin rebuilds the
-request from the file. Text the agent deleted or saved elsewhere is not sent again.
+that file with its ordinary tools. Claude Code rebuilds the request from the file at
+the next user turn. Codex rebuilds it when the agent calls \`new_context\`. After a
+rebuild, text the agent deleted or saved elsewhere is not sent again.
 Pre-release 0.1.5, Linux only.
 
 - ${link('Context Engine for Claude Code', 'https://github.com/Jeff-Kazzee/context-engine-claude')}
@@ -63,8 +64,9 @@ Pre-release 0.1.5, Linux only.
 1. The agent edits context.md with Read, Edit and Write.
 2. The core makes each accepted edit a numbered revision. It refuses a bad edit
    and restores the last good revision.
-3. At the next user turn the request holds the pinned prefix, the Working Context
-   and the new message. Earlier turns are not in it.
+3. The request is rebuilt from the file: in Claude Code at the next user turn, in
+   Codex when the agent calls \`new_context\`. The rebuilt request holds the pinned
+   prefix, the Working Context and the new input. Earlier turns are not in it.
 
 Inside a turn, an edit produces a notice with the revision number and a SHA-256
 digest, and no Working Context text.

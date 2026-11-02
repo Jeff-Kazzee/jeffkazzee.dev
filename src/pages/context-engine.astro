@@ -11,7 +11,7 @@ const PAPER = 'https://arxiv.org/abs/2609.37725';
 const flow = [
   { title: 'The agent edits a file', body: 'Its notes live in context.md, the Working Context. It uses the same Read, Edit and Write tools it uses on code.' },
   { title: 'The core checks the edit', body: 'Each accepted edit becomes a numbered revision. The core refuses a bad edit and restores the last good revision.' },
-  { title: 'The next turn starts from the file', body: 'At the next user turn the request holds the pinned prefix, the Working Context and the new message. Earlier turns are not in it.' },
+  { title: 'The request is rebuilt from the file', body: 'In Claude Code this happens at the next user turn. In Codex it happens when the agent calls new_context. The rebuilt request holds the pinned prefix, the Working Context and the new input. Earlier turns are not in it.' },
 ];
 
 const replay = [
@@ -35,8 +35,9 @@ const replay = [
       <p class="status-line"><Status status="alpha" suffix="pre-release 0.1.5, Linux only" /></p>
       <p class="lede">
         Context Engine is an experimental plugin for Claude Code and Codex. It keeps the agent’s working notes in a plain
-        file, the Working Context, and the agent edits that file with its ordinary tools. At the next user turn, the
-        plugin rebuilds the request from the file. Text the agent deleted or saved elsewhere is not sent again.
+        file, the Working Context, and the agent edits that file with its ordinary tools. Claude Code rebuilds the
+        request from the file at the next user turn. Codex rebuilds it when the agent calls <code>new_context</code>.
+        After a rebuild, text the agent deleted or saved elsewhere is not sent again.
       </p>
       <nav class="actions" aria-label="Context Engine links">
         <LinkButton href="#demo" variant="primary">Try the demo</LinkButton>

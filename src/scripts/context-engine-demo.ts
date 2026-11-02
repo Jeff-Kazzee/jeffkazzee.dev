@@ -236,6 +236,8 @@ function startDemo() {
   // wait for the next user turn.
   let framed = 1;
   let framedText = '';
+  // Counts session loads, so a late digest notice from an old session is dropped.
+  let loads = 0;
 
   function renderBlocks(list: HTMLOListElement, blocks: Block[]) {
     list.replaceChildren(
@@ -291,8 +293,9 @@ function startDemo() {
     notices.prepend(item);
   }
 
-  async function commit(text: string, reply: string) {
-    if (text === committed) return;
+  // Returns whether the edit was accepted.
+  function commit(text: string, reply: string): boolean {
+    if (text === committed) return false;
     if (bytes(frame(revision + 1, text)) > PACKET_LIMIT) {
       editor.value = committed;
       renderEditorState();
@@ -300,7 +303,7 @@ function startDemo() {
         `Refused. That packet is over ${size(PACKET_LIMIT)}. Context Engine never truncates, so revision ${revision} stays in effect.`,
         'refused',
       );
-      return;
+      return false;
     }
     committed = text;
     revision += 1;
@@ -309,12 +312,19 @@ function startDemo() {
       { role: 'tool', label: 'Edit context.md', text: `Edit applied. ${size(bytes(text))} written.` },
       { role: 'assistant', label: 'Reply', text: reply },
     );
-    const sum = await digest(text);
-    notice(
-      `Revision ${revision} accepted. sha256 ${sum.slice(0, 12)}. The notice carries no Working Context text. To read it inside this turn: context-engine read --session demo --framed`,
-    );
     renderEditorState();
     renderRequests();
+    // The digest resolves later. Bind the notice to this revision and session
+    // so a quick second edit or a session switch cannot mislabel it.
+    const accepted = revision;
+    const session = loads;
+    void digest(text).then((sum) => {
+      if (session !== loads) return;
+      notice(
+        `Revision ${accepted} accepted. sha256 prefix ${sum.slice(0, 12)}. The notice carries no Working Context text. To read it inside this turn: context-engine read --session demo --framed`,
+      );
+    });
+    return true;
   }
 
   function renderSteps() {
@@ -325,12 +335,15 @@ function startDemo() {
         button.className = 'btn';
         button.textContent = step.label;
         button.addEventListener('click', () => {
+          if (editor.value !== committed) {
+            notice('Save your edit first, or undo it, before an agent action runs.', 'info');
+            return;
+          }
           if (!committed.includes(step.find)) {
             notice(`Nothing to change. The text that "${step.label}" edits is gone from the file.`, 'info');
             return;
           }
-          button.disabled = true;
-          void commit(committed.replace(step.find, step.replace), step.reply);
+          if (commit(committed.replace(step.find, step.replace), step.reply)) button.disabled = true;
         });
         return button;
       }),
@@ -338,6 +351,7 @@ function startDemo() {
   }
 
   function load(id: string) {
+    loads += 1;
     scenario = SCENARIOS[id] ?? SCENARIOS.code;
     committed = scenario.context;
     framedText = committed;
@@ -375,7 +389,7 @@ function startDemo() {
     renderRequests();
   });
 
-  saveButton.addEventListener('click', () => void commit(editor.value, 'Edited the Working Context by hand.'));
+  saveButton.addEventListener('click', () => commit(editor.value, 'Edited the Working Context by hand.'));
   editor.addEventListener('input', renderEditorState);
 
   root.querySelectorAll<HTMLInputElement>('input[name="ce-scenario"]').forEach((input) => {
