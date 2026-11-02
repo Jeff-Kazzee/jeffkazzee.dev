@@ -1,0 +1,533 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import LinkButton from '../components/LinkButton.astro';
+import Status from '../components/Status.astro';
+
+const CLAUDE_REPO = 'https://github.com/Jeff-Kazzee/context-engine-claude';
+const CODEX_REPO = 'https://github.com/Jeff-Kazzee/context-engine-codex';
+const PAPER = 'https://arxiv.org/abs/2609.37725';
+
+const flow = [
+  { title: 'The agent edits a file', body: 'Its notes live in context.md, the Working Context. It uses the same Read, Edit and Write tools it uses on code.' },
+  { title: 'The core checks the edit', body: 'Each accepted edit becomes a numbered revision. The core refuses a bad edit and restores the last good revision.' },
+  { title: 'The request is rebuilt from the file', body: 'In Claude Code this happens at the next user turn. In Codex it happens when the agent calls new_context. The rebuilt request holds the pinned prefix, the Working Context and the new input. Earlier turns are not in it.' },
+];
+
+const replay = [
+  { prompt: 'First prompt', result: 'CE_READY', detail: 'The model replied with the exact string. The runner recorded revision 1.' },
+  { prompt: 'Next turn', result: '<working_context …>', detail: 'The request opened with the Working Context frame as a user message.' },
+  { prompt: 'Second prompt', result: 'CE_EDIT_DONE', detail: 'The model read the whole file, made one Edit, and replied with the exact string. Revision 2 is the model’s own edit.' },
+  { prompt: 'Next turn', result: 'revision 3', detail: 'The replacement frame carried the edited Working Context.' },
+  { prompt: 'Third prompt', result: 'CE_B7R_TEST', detail: 'The prompt asked for the value without naming it. The model answered from the edited context, with no tool call.' },
+  { prompt: 'Request check', result: '2 messages', detail: 'The recall request held the Working Context frame and the prompt. The earlier turns were not in it.' },
+];
+---
+
+<BaseLayout
+  title="Context Engine demo · jeffkazzee.dev"
+  description="Try Context Engine in your browser: edit an agent's Working Context and watch what the next request contains. Plus a recorded run on Claude Code."
+>
+  <article class="wrap">
+    <header class="intro">
+      <p class="crumb"><a href="/projects/context-engine/">← Context Engine project</a></p>
+      <h1>Let the agent decide what stays in its context.</h1>
+      <p class="status-line"><Status status="alpha" suffix="pre-release 0.1.5, Linux only" /></p>
+      <p class="lede">
+        Context Engine is an experimental plugin for Claude Code and Codex. It keeps the agent’s working notes in a plain
+        file, the Working Context, and the agent edits that file with its ordinary tools. Claude Code rebuilds the
+        request from the file at the next user turn. Codex rebuilds it when the agent calls <code>new_context</code>.
+        After a rebuild, text the agent deleted or saved elsewhere is not sent again.
+      </p>
+      <nav class="actions" aria-label="Context Engine links">
+        <LinkButton href="#demo" variant="primary">Try the demo</LinkButton>
+        <LinkButton href={CLAUDE_REPO}>For Claude Code</LinkButton>
+        <LinkButton href={CODEX_REPO}>For Codex</LinkButton>
+      </nav>
+    </header>
+
+    <section aria-labelledby="how">
+      <SectionHeading id="how" title="How a turn works" />
+      <ol class="flow">
+        {flow.map((step) => (
+          <li>
+            <h3>{step.title}</h3>
+            <p>{step.body}</p>
+          </li>
+        ))}
+      </ol>
+      <p class="aside">
+        Inside a turn, an edit produces a short notice with the revision number and a SHA-256 digest. The notice holds
+        no Working Context text. The agent can read the new revision in the same turn with the core CLI.
+      </p>
+    </section>
+
+    <section aria-labelledby="demo" class="demo-section">
+      <SectionHeading
+        id="demo"
+        title="Try it"
+        note="This runs in your browser. No model is called and nothing is sent anywhere. The sessions are made up. The behavior follows the Claude Code default mode in the README."
+      />
+
+      <p data-ce-nojs class="aside">The simulation needs JavaScript. The recorded run further down does not.</p>
+
+      <div class="demo" data-ce-demo hidden>
+        <fieldset class="scenarios">
+          <legend>Pick a session</legend>
+          <label><input type="radio" name="ce-scenario" value="code" checked /> A coding agent fixing a test</label>
+          <label><input type="radio" name="ce-scenario" value="write" /> A writer’s agent drafting a chapter</label>
+          <label><input type="radio" name="ce-scenario" value="direct" /> An agent directing three workers</label>
+        </fieldset>
+
+        <div class="panes">
+          <div class="pane">
+            <h3 class="pane-title">
+              Working Context <span class="mono">context.md · revision <span data-revision>1</span></span>
+            </h3>
+            <label class="sr-only" for="ce-editor">Working Context file</label>
+            <textarea id="ce-editor" data-editor spellcheck="false" rows="18"></textarea>
+            <p class="mono faint" data-editor-size></p>
+
+            <p class="label">Agent actions</p>
+            <div class="step-buttons" data-steps></div>
+            <div class="row">
+              <button type="button" class="btn" data-save disabled>Save my edit</button>
+            </div>
+
+            <ol class="notices" data-notices aria-live="polite"></ol>
+          </div>
+
+          <div class="pane">
+            <h3 class="pane-title">Next request <span class="mono">turn <span data-turn>4</span></span></h3>
+            <div class="row">
+              <button type="button" class="btn primary" data-send>Send the next message</button>
+            </div>
+
+            <div class="request">
+              <p class="label">With Context Engine <span class="mono faint" data-ce-total></span></p>
+              <ol class="blocks" data-ce-request></ol>
+            </div>
+
+            <div class="request">
+              <p class="label">Plain conversation <span class="mono faint" data-plain-total></span></p>
+              <ol class="blocks" data-plain-request></ol>
+            </div>
+          </div>
+        </div>
+
+        <p class="aside">
+          Sizes count the bytes of this demo’s text. They are not measurements of real sessions, and Context Engine
+          makes no token-saving claim. Inside a turn, real history still grows. The rebuild happens at the user turn.
+        </p>
+      </div>
+    </section>
+
+    <section aria-labelledby="who">
+      <SectionHeading id="who" title="Long work, kept in one file" />
+      <div class="prose">
+        <p>
+          An agent on a long job collects things it no longer needs: a long test log, three abandoned openings for
+          a chapter, every status report from every worker. In a plain conversation all of it is sent again with each
+          request. With Context Engine the agent keeps what matters and moves the rest to files it can open later.
+        </p>
+        <p>
+          Claude Code and Codex are coding agents. People also use them to write, edit and coordinate other agents. The
+          Working Context is plain Markdown, so the same edit works on a test log, a chapter draft or a status board.
+          When a writer makes a call, the agent can write it down as a decision and keep it at the top of the file.
+        </p>
+      </div>
+    </section>
+
+    <section aria-labelledby="replay">
+      <SectionHeading
+        id="replay"
+        title="What a real run showed"
+        note="Claude Code 2.1.300 with Claude Haiku, on a Linux server, October 16, 2026. Reconstructed from the run’s receipts. The strings are the real test strings."
+      />
+      <ol class="replay">
+        {replay.map((step) => (
+          <li>
+            <p class="replay-head">
+              <span class="label">{step.prompt}</span>
+              <code>{step.result}</code>
+            </p>
+            <p>{step.detail}</p>
+          </li>
+        ))}
+      </ol>
+      <p class="aside">
+        The Codex version passed its own live check on October 15, 2026. The recorded requests after an edit carry the
+        full edited Working Context, and after a reset the discarded history is gone from them.
+      </p>
+    </section>
+
+    <section aria-labelledby="limits">
+      <SectionHeading id="limits" title="What it does not do" />
+      <ul class="limits">
+        <li>It runs only on Linux with <code>/proc</code> mounted and Node 24 or newer. On Windows and macOS it stops with an error before it changes anything.</li>
+        <li>It starts off in every project. You enable it one project at a time.</li>
+        <li>It makes no accuracy, speed or token-saving claim, and it does not claim the paper’s benchmark results.</li>
+        <li>It never reads, copies or stores credentials. It uses the login your runner already has.</li>
+        <li>A packet over 32,000 bytes is refused, never truncated.</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="setup">
+      <SectionHeading id="setup" title="Try it on your own machine" />
+      <div class="prose">
+        <p>
+          Each repository README starts with a prompt you can give your agent. It tells the agent to check your Node and
+          runner versions, install into a throwaway project first, and prove with test strings that an edit changes the
+          next request before it touches a real project.
+        </p>
+      </div>
+      <nav class="actions" aria-label="Setup links">
+        <LinkButton href={`${CLAUDE_REPO}#give-this-prompt-to-your-agent-to-set-it-up`} variant="primary">Claude Code setup prompt</LinkButton>
+        <LinkButton href={`${CODEX_REPO}#readme`}>Codex README</LinkButton>
+      </nav>
+    </section>
+
+    <section aria-labelledby="credit">
+      <SectionHeading id="credit" title="Where the idea comes from" />
+      <div class="prose">
+        <p>
+          Context Engine adapts the mechanism of <a href={PAPER}><cite>Context Language Models</cite></a> by Rulin Shao,
+          Shannon Zejiang Shen, Junjie Oscar Yin, Yuetai Li, Minheng Wang, Hamish Ivison, Radha Poovendran, Nathan
+          Lambert, Teng Xiao, Mike Lewis, Wen-tau Yih, Luke Zettlemoyer and Pang Wei Koh (arXiv:2609.37725, CC BY 4.0).
+          Their code is published separately under CC BY-NC 4.0. None of it is copied here. Context Engine re-implements
+          parts of the behavior from a prose description, and it is MIT-licensed.
+        </p>
+      </div>
+    </section>
+  </article>
+</BaseLayout>
+
+<script src="../scripts/context-engine-demo.ts"></script>
+
+<style>
+  article {
+    padding-block: clamp(2.5rem, 7vh, 4rem) calc(var(--space) * 8);
+  }
+
+  .intro {
+    display: grid;
+    gap: calc(var(--space) * 2);
+  }
+
+  .crumb a {
+    font-size: 0.9rem;
+    color: var(--ink-faint);
+    text-decoration: none;
+  }
+
+  .crumb a:hover {
+    color: var(--accent);
+  }
+
+  .lede {
+    font-size: 1.125rem;
+    color: var(--ink-soft);
+  }
+
+  .actions,
+  .row,
+  .step-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--space) * 1.5);
+  }
+
+  .actions {
+    margin-top: calc(var(--space) * 2);
+  }
+
+  .mono {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: var(--ink-faint);
+  }
+
+  .faint {
+    color: var(--ink-faint);
+  }
+
+  .label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .aside {
+    margin-top: calc(var(--space) * 3);
+    font-size: 0.95rem;
+    color: var(--ink-muted);
+  }
+
+  .flow {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: calc(var(--space) * 2);
+    counter-reset: flow;
+  }
+
+  .flow li {
+    counter-increment: flow;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    padding: calc(var(--space) * 2.5);
+    display: grid;
+    gap: var(--space);
+    align-content: start;
+  }
+
+  .flow h3::before {
+    content: counter(flow) '. ';
+    color: var(--accent);
+  }
+
+  .flow p {
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+  }
+
+  .demo {
+    display: grid;
+    gap: calc(var(--space) * 3);
+  }
+
+  .scenarios {
+    border: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--space) * 1) calc(var(--space) * 3);
+  }
+
+  .scenarios legend {
+    padding: 0;
+    font-weight: 600;
+    margin-bottom: var(--space);
+  }
+
+  .scenarios label {
+    display: inline-flex;
+    gap: 0.5rem;
+    align-items: center;
+    min-height: 44px;
+    cursor: pointer;
+  }
+
+  .scenarios input {
+    accent-color: var(--accent);
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+
+  .panes {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: calc(var(--space) * 3);
+  }
+
+  @media (max-width: 52rem) {
+    .panes {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .pane {
+    display: grid;
+    gap: calc(var(--space) * 1.5);
+    align-content: start;
+    min-width: 0;
+  }
+
+  .pane-title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space);
+  }
+
+  textarea {
+    width: 100%;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    line-height: 1.55;
+    color: var(--ink);
+    background: var(--bg-raised);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    padding: calc(var(--space) * 1.5);
+    resize: vertical;
+  }
+
+  textarea:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  button.btn {
+    cursor: pointer;
+  }
+
+  button.btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .notices {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: var(--space);
+  }
+
+  .notices :global(li) {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    line-height: 1.5;
+    padding: var(--space) calc(var(--space) * 1.5);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    color: var(--ink-soft);
+    overflow-wrap: anywhere;
+  }
+
+  .notices :global(li[data-tone='ok']) {
+    border-color: var(--accent-tint);
+  }
+
+  .notices :global(li[data-tone='refused']) {
+    border-color: var(--rust);
+    color: var(--ink);
+  }
+
+  .request {
+    display: grid;
+    gap: var(--space);
+  }
+
+  .blocks {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: calc(var(--space) * 0.75);
+  }
+
+  .blocks :global(li) {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    padding: var(--space) calc(var(--space) * 1.5);
+    min-width: 0;
+  }
+
+  .blocks :global(.block-head) {
+    display: flex;
+    gap: var(--space);
+    align-items: baseline;
+    font-size: 0.85rem;
+    max-width: none;
+  }
+
+  .blocks :global(.role) {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--ink-faint);
+    min-width: 4.5rem;
+  }
+
+  .blocks :global(li[data-role='user'] .role) {
+    color: var(--accent);
+  }
+
+  .blocks :global(.weight) {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--ink-faint);
+  }
+
+  .blocks :global(pre) {
+    margin: var(--space) 0 0;
+    padding: var(--space);
+    max-height: 7.5rem;
+    overflow: auto;
+    font-size: 0.72rem;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
+  .replay {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 0;
+  }
+
+  .replay li {
+    display: grid;
+    grid-template-columns: 16rem minmax(0, 1fr);
+    gap: calc(var(--space) * 2);
+    padding-block: calc(var(--space) * 2);
+    border-top: 1px solid var(--line);
+  }
+
+  .replay li:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .replay-head {
+    display: grid;
+    gap: calc(var(--space) * 0.5);
+    align-content: start;
+  }
+
+  .replay-head code {
+    justify-self: start;
+    color: var(--accent-bright);
+  }
+
+  .replay li > p:last-child {
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 40rem) {
+    .replay li {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space);
+    }
+  }
+
+  .limits {
+    display: grid;
+    gap: var(--space);
+    padding-left: 1.25rem;
+    max-width: var(--measure);
+    color: var(--ink-soft);
+  }
+
+  .prose {
+    display: grid;
+    gap: calc(var(--space) * 2);
+    color: var(--ink-soft);
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+</style>

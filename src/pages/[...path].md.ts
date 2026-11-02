@@ -32,8 +32,8 @@ function homeMarkdown(featured: { title: string; slug: string; description: stri
 I'm a self-taught developer working with AI coding agents and looking for developer roles.
 My current projects are [Vivary](${SITE}/projects/vivary/), an agent workspace with
 V1 alpha acceptance underway, and [Context Engine](${SITE}/projects/context-engine/),
-experimental, opt-in tooling for Claude Code and Codex. Release review and live
-acceptance for Context Engine remain open.
+experimental, opt-in tooling for Claude Code and Codex. Context Engine is a Linux-only pre-release, with a
+[browser demo](${SITE}/context-engine/).
 
 ## Selected work
 
@@ -43,6 +43,65 @@ ${featured.map((p) => `- ${link(p.title, `${SITE}/projects/${p.slug}/`)}: ${p.de
 
 Every page here answers to \`Accept: text/markdown\`, and there is an MCP server
 at ${SITE}/api/mcp. Documented at ${SITE}/for-agents/
+`;
+}
+
+function contextEngineMarkdown(): string {
+  return `# Let the agent decide what stays in its context.
+
+Context Engine is an experimental plugin for Claude Code and Codex. It keeps the
+agent's working notes in a plain file, the Working Context, and the agent edits
+that file with its ordinary tools. Claude Code rebuilds the request from the file at
+the next user turn. Codex rebuilds it when the agent calls \`new_context\`. After a
+rebuild, text the agent deleted or saved elsewhere is not sent again.
+Pre-release 0.1.5, Linux only.
+
+- ${link('Context Engine for Claude Code', 'https://github.com/Jeff-Kazzee/context-engine-claude')}
+- ${link('Context Engine for Codex', 'https://github.com/Jeff-Kazzee/context-engine-codex')}
+
+## How a turn works
+
+1. The agent edits context.md with Read, Edit and Write.
+2. The core makes each accepted edit a numbered revision. It refuses a bad edit
+   and restores the last good revision.
+3. The request is rebuilt from the file: in Claude Code at the next user turn, in
+   Codex when the agent calls \`new_context\`. The rebuilt request holds the pinned
+   prefix, the Working Context and the new input. Earlier turns are not in it.
+
+Inside a turn, an edit produces a notice with the revision number and a SHA-256
+digest, and no Working Context text.
+
+## The demo
+
+The HTML page has a browser simulation of three made-up sessions: a coding agent,
+a writer's agent and an agent directing three workers. No model is called.
+
+## What a real run showed
+
+Claude Code 2.1.300 with Claude Haiku, on a Linux server, October 16, 2026:
+
+1. First prompt: the model replied \`CE_READY\`. The runner recorded revision 1.
+2. Next turn: the request opened with the Working Context frame as a user message.
+3. Second prompt: the model read the file, made one Edit and replied \`CE_EDIT_DONE\`.
+4. Next turn: the replacement frame carried the edited Working Context (revision 3).
+5. Third prompt: the model answered \`CE_B7R_TEST\` from the edited context, with no tool call.
+6. The recall request held the frame and the prompt. The earlier turns were not in it.
+
+The Codex version passed its own live check on October 15, 2026.
+
+## What it does not do
+
+- It runs only on Linux with \`/proc\` mounted and Node 24 or newer.
+- It starts off in every project.
+- It makes no accuracy, speed or token-saving claim.
+- It never reads, copies or stores credentials.
+- A packet over 32,000 bytes is refused, never truncated.
+
+## Credit
+
+Context Engine adapts the mechanism of
+${link('Context Language Models', 'https://arxiv.org/abs/2609.37725')} by Rulin Shao and
+colleagues (CC BY 4.0). None of the paper's code is copied. Context Engine is MIT-licensed.
 `;
 }
 
@@ -142,6 +201,13 @@ export const getStaticPaths: GetStaticPaths = async () => {
       description: 'Every machine-readable interface this site publishes, and how to call it.',
       canonical: `${SITE}/for-agents/`,
       body: forAgentsMarkdown(),
+    },
+    {
+      path: 'context-engine',
+      title: 'Context Engine demo',
+      description: "Edit an agent's Working Context in the browser and see what the next request contains.",
+      canonical: `${SITE}/context-engine/`,
+      body: contextEngineMarkdown(),
     },
     {
       path: 'work-with-me',
