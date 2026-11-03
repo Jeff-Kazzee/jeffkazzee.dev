@@ -21,11 +21,10 @@ const d = post.data;
   description={d.description}
   ogType="article"
   canonicalUrl={d.canonicalUrl}
->
-  <article class="wrap">
-    <header>
+ hero={{ title: d.title, description: d.description }}>
+  <div slot="hero-meta">
       <p class="crumb"><a href="/blog/">← All writing</a></p>
-      <h1>{d.title}</h1>
+
       <p class="meta">
         <FormattedDate date={d.pubDate} />
         {d.updatedDate && (
@@ -41,7 +40,9 @@ const d = post.data;
           </>
         )}
       </p>
-    </header>
+    </div>
+  <article class="wrap">
+
 
     <div class="prose">
       <Content />

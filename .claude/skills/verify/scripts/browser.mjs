@@ -162,6 +162,87 @@ try {
   report('A4', errorLines.length ? 'FAIL' : 'PASS', `${paths.length} pages load with no console error, exception or CSP violation`, errorLines.slice(0, 20).join('\n'));
   report('A6', seasonal.length ? 'FAIL' : 'PASS', 'no Halloween requests or attribute after the cutoff', seasonal.join('\n'));
 
+  // Additive visual proof for task 125, independent of existing A1 to A12.
+  const heroMetrics = [];
+  const heroPaths = [...new Set(paths.filter((path) => path !== '/').concat(['/404/', '/offline/', '/contact-thanks/']))];
+  const fixedHarnessImages = {
+    '/deepseek-harness/': 'pillars-miri',
+    '/deepseek-harness/advisor-models/': 'arp142',
+    '/deepseek-harness/browser-verification/': 'rho-ophiuchi',
+    '/deepseek-harness/team-worktree/': 'stephans-quintet',
+    '/deepseek-harness/plugin-lab/': 'pillars-nircam',
+  };
+  const primaryAppearance = `(() => {
+    const luminance = (color) => {
+      const channels = (color.match(/[0-9.]+/g) ?? []).slice(0, 3).map((value) => { const channel = Number(value) / 255; return channel <= .04045 ? channel / 12.92 : ((channel + .055) / 1.055) ** 2.4; });
+      return .2126 * channels[0] + .7152 * channels[1] + .0722 * channels[2];
+    };
+    const expectedText = getComputedStyle(document.body).backgroundColor;
+    return [...document.querySelectorAll('[data-space-hero] a.btn.primary')].map((button) => {
+      const style = getComputedStyle(button), foreground = luminance(style.color), background = luminance(style.backgroundColor);
+      return { text: button.textContent.trim(), color: style.color, background: style.backgroundColor, darkText: style.color === expectedText, contrast: (Math.max(foreground, background) + .05) / (Math.min(foreground, background) + .05) };
+    });
+  })()`;
+  for (const viewport of [{ name: 'desktop', width: 1440, height: 1000 }, { name: 'mobile', width: 390, height: 844 }]) {
+    await send('Emulation.setDeviceMetricsOverride', { width: viewport.width, height: viewport.height, deviceScaleFactor: 1, mobile: viewport.name === 'mobile' });
+    for (const path of heroPaths) {
+      await open(local + path);
+      await evaluate(`Promise.all([document.fonts.ready, ...[...document.querySelectorAll('[data-space-hero] img')].map((image) => image.decode().catch(() => {}))]).then(() => true)`);
+      const metrics = await evaluate(`(() => {
+        const hero = document.querySelector('[data-space-hero]');
+        const image = hero?.querySelector('img');
+        const heading = document.querySelector('h1');
+        const header = document.querySelector('body > header');
+        const rect = heading?.getBoundingClientRect();
+        return {
+          heroCount: document.querySelectorAll('[data-space-hero]').length,
+          headingCount: document.querySelectorAll('h1').length,
+          heading: heading?.textContent.trim(),
+          headingFontSize: heading ? parseFloat(getComputedStyle(heading).fontSize) : null,
+          heroHeight: hero?.getBoundingClientRect().height,
+          copyWidth: hero?.querySelector('.space-copy')?.getBoundingClientRect().width,
+          copyLeft: hero?.querySelector('.space-copy')?.getBoundingClientRect().left,
+          objectPosition: image ? getComputedStyle(image).objectPosition : null,
+          imageId: hero?.getAttribute('data-space-image'),
+          loaded: Boolean(image?.complete && image.naturalWidth > 0),
+          localImage: Boolean(image?.currentSrc && new URL(image.currentSrc).origin === location.origin),
+          overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+          headingWithinViewport: Boolean(rect && rect.left >= 0 && rect.right <= innerWidth + 1),
+          clearOfNavigation: Boolean(rect && header && rect.top >= header.getBoundingClientRect().bottom),
+          sourceLink: Boolean(hero?.querySelector('a[href^="https://esawebb.org/images/"]')),
+          licenseLink: Boolean(hero?.querySelector('a[href="https://creativecommons.org/licenses/by/4.0/"]')),
+          cropNotice: Boolean(hero?.textContent.includes('Cropped for this banner')),
+          formats: [...(hero?.querySelectorAll('source') ?? [])].map((source) => source.type),
+        };
+      })()`);
+      metrics.primaryNormal = await evaluate(primaryAppearance);
+      metrics.primaryHover = [];
+      for (let index = 0; index < metrics.primaryNormal.length; index++) {
+        const box = await evaluate(`(() => { const button = document.querySelectorAll('[data-space-hero] a.btn.primary')[${index}]; button.scrollIntoView({ block: 'center' }); const rect = button.getBoundingClientRect(); return { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 }; })()`);
+        await send('Input.dispatchMouseEvent', { type: 'mouseMoved', ...box });
+        await sleep(300);
+        metrics.primaryHover.push((await evaluate(primaryAppearance))[index]);
+      }
+      await send('Input.dispatchMouseEvent', { type: 'mouseMoved', x: 0, y: 0 });
+      const requiredPrimary = path === '/context-engine/' ? 'Try the demo' : path === '/work-with-me/' ? 'Reserve a session' : null;
+      const buttonsOk = [...metrics.primaryNormal, ...metrics.primaryHover].every((button) => button.darkText && button.contrast >= 4.5) && (!requiredPrimary || (metrics.primaryNormal.some((button) => button.text === requiredPrimary) && metrics.primaryHover.some((button) => button.text === requiredPrimary)));
+      const expectedImage = fixedHarnessImages[path];
+      const expectedPosition = path === '/deepseek-harness/' ? (viewport.name === 'desktop' ? '50% 54%' : '62% 50%') : path === '/deepseek-harness/advisor-models/' ? (viewport.name === 'desktop' ? '50% 40%' : '37% 40%') : null;
+      const compositionOk = (!expectedPosition || metrics.objectPosition === expectedPosition) && (path !== '/deepseek-harness/advisor-models/' || (viewport.name === 'desktop' ? metrics.copyWidth <= 401 && metrics.copyLeft >= viewport.width / 2 : metrics.copyLeft < viewport.width / 2));
+      const ok = buttonsOk && compositionOk && metrics.heroCount === 1 && metrics.headingCount === 1 && metrics.headingFontSize <= 56.1 && Boolean(metrics.heading) && metrics.loaded && metrics.localImage && metrics.overflow <= 1 && metrics.headingWithinViewport && metrics.clearOfNavigation && metrics.sourceLink && metrics.licenseLink && metrics.cropNotice && metrics.formats.includes('image/avif') && metrics.formats.includes('image/webp') && (!expectedImage || expectedImage === metrics.imageId) && page.errors.length === 0;
+      heroMetrics.push({ path, viewport: viewport.name, ...metrics, errors: [...page.errors], ok });
+      report('SPACE-HERO', ok ? 'PASS' : 'FAIL', `${viewport.name} ${path}: image, single heading, credits and no overflow`, ok ? '' : JSON.stringify(metrics));
+      if (path === '/deepseek-harness/' || path === '/deepseek-harness/advisor-models/') {
+        await sleep(1000);
+        await shot(`2026-11-02-dsh-${path === '/deepseek-harness/' ? 'hub' : 'advisor'}-${viewport.name}-preview`);
+      }
+    }
+  }
+  const heroVariety = new Set(heroMetrics.map((metric) => metric.imageId));
+  report('SPACE-VARIETY', heroVariety.size === 5 ? 'PASS' : 'FAIL', 'the five approved Harness routes use five distinct local images', [...heroVariety].join(', '));
+  writeFileSync(join(evidence, 'space-hero-metrics.json'), JSON.stringify(heroMetrics, null, 2));
+  await send('Emulation.clearDeviceMetricsOverride');
+
   // A5. Palette against live production, rendered in the same browser.
   const palette = `(() => { const b = getComputedStyle(document.body), r = getComputedStyle(document.documentElement);
     return { background: b.backgroundColor, color: b.color, bg: r.getPropertyValue('--bg').trim(), ink: r.getPropertyValue('--ink').trim() }; })()`;

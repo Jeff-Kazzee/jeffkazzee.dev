@@ -1,24 +1,42 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import SectionHeading from '../../components/SectionHeading.astro';
 import GuideList from '../../components/GuideList.astro';
 import { getGuides } from '../../lib/content-index';
-import { HARNESS_DESCRIPTION, HARNESS_INTRODUCTION, HARNESS_LIMITS, HARNESS_NOTES, HARNESS_TOOLS, HARNESS_FUTURE } from '../../lib/guide-policy.mjs';
+import { HARNESS_DESCRIPTION, HARNESS_INTRODUCTION, HARNESS_GUIDANCE, HARNESS_LIMITS, HARNESS_NOTES, HARNESS_TOOLS, HARNESS_FUTURE } from '../../lib/guide-policy.mjs';
 const guides = (await getGuides()).filter((guide) => guide.series === 'deepseek-harness');
 const tools = HARNESS_TOOLS.filter((tool) => guides.some((guide) => new URL(guide.url).pathname === tool.path));
 ---
-<BaseLayout title="DeepSeek Harness · jeffkazzee.dev" description={HARNESS_DESCRIPTION}>
-  <section class="wrap flow">
-    <SectionHeading title="DeepSeek Harness" level="h1" note={HARNESS_DESCRIPTION} />
-    <p>{HARNESS_INTRODUCTION}</p>
-    <h2>Start with the tools</h2>
-    {tools.length ? <ul>{tools.map((tool) => <li><a href={tool.path}>{tool.title}</a>: {tool.description}</li>)}</ul> : <p>No guides are published here yet.</p>}
-    <p>{HARNESS_LIMITS}</p>
-    <h2>Build notes, not just releases</h2>
-    <p>{HARNESS_NOTES}</p>
-    {guides.some((guide) => !tools.some((tool) => new URL(guide.url).pathname === tool.path)) && <GuideList guides={guides.filter((guide) => !tools.some((tool) => new URL(guide.url).pathname === tool.path))} />}
-    <h2>Possible connections to Vivary</h2>
-    <p>{HARNESS_FUTURE}</p>
-    <p><a href="/blog/">Back to Writing</a>.</p>
-  </section>
+<BaseLayout title="DeepSeek Harness · jeffkazzee.dev" description={HARNESS_DESCRIPTION} hero={{ title: 'DeepSeek Harness', description: HARNESS_DESCRIPTION }}>
+  <div class="wrap harness-intro"><p>{HARNESS_INTRODUCTION}</p><p>{HARNESS_GUIDANCE}</p></div>
+  <div class="wrap harness-grid">
+    <section aria-labelledby="choose-guide">
+      <h2 id="choose-guide">Choose a guide</h2>
+      {tools.length ? <ol class="tool-rows">{tools.map((tool) => <li><a href={tool.path}><div><h3>{tool.title}</h3><p>{tool.description}</p></div><span aria-hidden="true">→</span></a></li>)}</ol> : <p>No guides are published here yet.</p>}
+      {guides.some((guide) => !tools.some((tool) => new URL(guide.url).pathname === tool.path)) && <GuideList guides={guides.filter((guide) => !tools.some((tool) => new URL(guide.url).pathname === tool.path))} />}
+    </section>
+    <aside class="harness-aside">
+      <section><h2>Working notes</h2><p>{HARNESS_NOTES}</p></section>
+      <section><h2>Where Vivary fits</h2><p>{HARNESS_FUTURE}</p></section>
+    </aside>
+  </div>
+  <div class="wrap harness-footer"><p>{HARNESS_LIMITS}</p><p><a href="/blog/">Back to Writing</a>.</p></div>
 </BaseLayout>
+<style>
+  .harness-intro { padding-top: 2.5rem; }
+  .harness-intro p, .harness-footer p { max-width: 70ch; color: var(--ink-soft); line-height: 1.7; margin-bottom: .8rem; }
+  .harness-grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(15rem, 1fr); gap: clamp(2rem, 6vw, 5rem); padding-block: 2.5rem 2rem; }
+  h2 { font-size: 1.1rem; margin-bottom: 1.5rem; }
+  .tool-rows { list-style: none; padding: 0; }
+  .tool-rows li { border-top: 1px solid var(--line-strong); }
+  .tool-rows li:last-child { border-bottom: 1px solid var(--line-strong); }
+  .tool-rows a { display: grid; grid-template-columns: minmax(0, 1fr) 1rem; gap: 1rem; padding-block: 1.5rem; color: inherit; text-decoration: none; }
+  .tool-rows a:hover h3 { color: var(--accent); }
+  h3 { font-size: 1.35rem; font-weight: 540; margin-bottom: .6rem; }
+  .tool-rows p { font-size: .97rem; }
+  .tool-rows p, .harness-aside p { color: var(--ink-soft); line-height: 1.7; }
+  .harness-aside { display: grid; align-content: start; gap: 2rem; }
+  .harness-aside section { border-top: 1px solid var(--line); padding-top: 1.5rem; }
+  .harness-aside h2 { margin-bottom: .7rem; }
+  .harness-footer { padding-bottom: 5rem; }
+  @media(max-width: 760px) { .harness-grid { grid-template-columns: minmax(0, 1fr); } }
+</style>

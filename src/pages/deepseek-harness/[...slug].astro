@@ -13,21 +13,19 @@ const { Content } = await render(guide);
 const d = guide.data;
 const metadata = guideMetadata(guide);
 ---
-<BaseLayout title={d.title + ' · jeffkazzee.dev'} description={d.description} ogType="article" canonicalUrl={metadata.canonicalUrl}>
+<BaseLayout title={d.title + ' · jeffkazzee.dev'} description={d.description} ogType="article" canonicalUrl={metadata.canonicalUrl} hero={{ title: d.title, description: d.description, align: guide.id === 'deepseek-harness/advisor-models' ? 'right' : 'left' }}>
+  <div slot="hero-meta">
+    <p><a href="/deepseek-harness/">DeepSeek Harness</a> · <a href="/blog/">Writing</a></p>
+    <p>{metadata.kindLabel} · Published <FormattedDate date={d.pubDate} />{d.updatedDate && <>{' · Updated '}<FormattedDate date={d.updatedDate} /></>}</p>
+  </div>
   <article class="wrap">
-    <header class="flow">
-      <p><a href="/deepseek-harness/">DeepSeek Harness</a> · <a href="/blog/">Writing</a></p>
-      <p class="label">{metadata.kindLabel}</p>
-      <h1>{d.title}</h1>
-      <p class="label">Published <FormattedDate date={d.pubDate} />
-        {d.updatedDate && <>{' · Updated '}<FormattedDate date={d.updatedDate} /></>}
-      </p>
-      <p class="label">Source checked <FormattedDate date={d.verifiedDate} />. This is a source-check date, not runtime verification.</p>
-    </header>
+
     <div class="prose"><Content /></div>
+    <footer class="source-check">Source checked <FormattedDate date={d.verifiedDate} />. This is a source-check date, not runtime verification.</footer>
   </article>
 </BaseLayout>
 <style>
+  .source-check { font-size: .82rem; line-height: 1.6; color: var(--ink-faint); border-top: 1px solid var(--line); padding-top: 1rem; }
   article { padding-block: clamp(2.5rem, 7vh, 4rem) calc(var(--space) * 5); display: grid; gap: calc(var(--space) * 5); max-width: calc(38rem + 2 * clamp(1rem, 5vw, 3rem)); }
   .prose { font-family: var(--font-serif); font-size: 1.125rem; line-height: 1.7; }
   .prose :global(h2), .prose :global(h3) { margin-block: calc(var(--space) * 5) calc(var(--space) * 2); }

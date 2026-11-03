@@ -1,9 +1,9 @@
 name: CI
 on:
   push:
-    branches: [main]
+    branches: [main, dev]
   pull_request:
-    branches: [main]
+    branches: [main, dev]
   workflow_dispatch:
 permissions:
   contents: read
@@ -39,7 +39,7 @@ jobs:
       - run: pnpm run agent-surface
       - run: pnpm run build
       - run: pnpm run verify
-      - run: node --test scripts/check-live.test.mjs scripts/prepare-ci.test.mjs scripts/guides.test.mjs
+      - run: node --test scripts/check-live.test.mjs scripts/prepare-ci.test.mjs scripts/guides.test.mjs scripts/space-heroes.test.mjs
 
       - name: Check preinstalled Linux verification tools
         run: |

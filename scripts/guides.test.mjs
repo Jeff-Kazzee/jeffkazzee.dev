@@ -44,7 +44,7 @@ test('every kind uses owned canonical and Markdown URLs with a source-check date
     }
   }
   assert.equal(new Set(Object.values(guideKindLabels)).size, 3);
-  assert.equal(HARNESS_FUTURE, 'Some of these experiments may inform my work on Vivary. That is a possibility, not a claim that these features already exist there or a committed roadmap.');
+  assert.equal(HARNESS_FUTURE, 'Some of this work may feed into Vivary. Those connections are ideas, not shipped features.');
 });
 
 test('schema fails closed and every guide reader uses the shared gate', async () => {

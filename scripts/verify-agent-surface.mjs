@@ -248,7 +248,7 @@ const guideAnswerResult = await guideAnswerResponse.json();
 const guideAnswerText = guideAnswerResult.result?.message?.parts?.[0]?.text ?? '';
 check('A2A Harness question points to guides', guideAnswerText.includes('https://jeffkazzee.dev/deepseek-harness/'));
 check('A2A Harness answer excludes drafts', needles.every((needle) => !guideAnswerText.includes(needle)));
-const { HARNESS_DESCRIPTION, HARNESS_INTRODUCTION, HARNESS_LIMITS, HARNESS_NOTES, HARNESS_FUTURE } = await import(pathToFileURL(join(SRC, 'guide-policy.mjs')).href);
+const { HARNESS_DESCRIPTION, HARNESS_INTRODUCTION, HARNESS_GUIDANCE, HARNESS_LIMITS, HARNESS_NOTES, HARNESS_FUTURE } = await import(pathToFileURL(join(SRC, 'guide-policy.mjs')).href);
 const decode = (text) => text.replaceAll('&#39;', "'").replaceAll('&#x27;', "'").replaceAll('&amp;', '&').replaceAll('&quot;', '"');
 for (const path of ['/deepseek-harness/']) {
   const html = await (await fetch(origin + path)).text();
@@ -256,7 +256,7 @@ for (const path of ['/deepseek-harness/']) {
   check('guide landing canonical: ' + path, html.includes('rel="canonical" href="https://jeffkazzee.dev' + path + '"'));
   check('guide landing Markdown canonical: ' + path, twin.includes('url: https://jeffkazzee.dev' + path));
   if (path.includes('deepseek-harness')) {
-    for (const paragraph of [HARNESS_DESCRIPTION, HARNESS_INTRODUCTION, HARNESS_LIMITS, HARNESS_NOTES, HARNESS_FUTURE]) {
+    for (const paragraph of [HARNESS_DESCRIPTION, HARNESS_INTRODUCTION, HARNESS_GUIDANCE, HARNESS_LIMITS, HARNESS_NOTES, HARNESS_FUTURE]) {
       check('approved hub paragraph matches HTML and Markdown', decode(html).includes(paragraph) && twin.includes(paragraph));
     }
   }
