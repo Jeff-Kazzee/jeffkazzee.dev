@@ -28,7 +28,6 @@ const PLAN = {
   'llm-arcade.md': ['side', 7, true],
   'puckwork.md': ['side', 9, false],
   'neon-noir-detective-agency.md': ['side', 10, false],
-  'dumpling-cafe.md': ['side', 11, false],
   // Kept on /projects/ only
   'braincheck.md': [null, 20, false],
   'loam.md': [null, 21, false],
