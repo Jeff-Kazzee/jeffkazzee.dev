@@ -20,15 +20,16 @@ const d = project.data;
 const dated = d.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
 ---
 
-<BaseLayout title={`${d.title} · jeffkazzee.dev`} description={d.description}>
-  <article class="wrap">
-    <header>
+<BaseLayout title={`${d.title} · jeffkazzee.dev`} description={d.description} hero={{ title: d.title, description: d.description }}>
+  <div slot="hero-meta">
       <p class="crumb"><a href="/projects/">← All projects</a></p>
-      <h1>{d.title}</h1>
+
       <p class="status-line">
         <Status status={d.status} suffix={dated} />
       </p>
-    </header>
+    </div>
+  <article class="wrap">
+
 
     <div class="meta">
       {d.stack.length > 0 && (

@@ -1,0 +1,46 @@
+---
+import { Picture } from 'astro:assets';
+import type { HeroOptions, SpaceImage } from '../lib/space-images';
+interface Props extends HeroOptions { image: SpaceImage; hasMeta?: boolean; }
+const { title, description, align = 'left', image, hasMeta = false } = Astro.props;
+---
+<section class:list={['space-hero', { 'space-hero-right': align === 'right' }]} aria-labelledby="space-hero-title" data-space-hero data-space-image={image.id} style={'--image-position: ' + image.position + '; --image-mobile-position: ' + (image.mobilePosition ?? image.position)}>
+  <Picture pictureAttributes={{ class: 'space-photo' }} src={image.src} alt={image.alt} widths={[640, 828, 1080, 1280, 1440, 1680, 1920]} sizes="100vw" formats={['avif', 'webp']} fallbackFormat="webp" quality={44} loading="eager" fetchpriority="high" />
+  <div class="space-shade" aria-hidden="true"></div>
+  <div class="wrap space-content">
+    <div class="space-copy">
+      <h1 id="space-hero-title">{title}</h1>
+      {description && <p class="space-description">{description}</p>}
+      {hasMeta && <div class="space-meta"><slot name="meta" /></div>}
+    </div>
+  </div>
+  <div class="wrap space-credit">
+    <p><a href={image.source}>{image.title}</a> · {image.credit} · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. Cropped for this banner. <a href="https://esawebb.org/copyright/">Image policy</a>.</p>
+  </div>
+</section>
+<style>
+  .space-hero { position: relative; isolation: isolate; min-height: 480px; display: flex; align-items: center; overflow: hidden; background: var(--bg); }
+  .space-hero :global(.space-photo) { position: absolute; inset: 0; z-index: -3; width: 100%; height: 100%; }
+  .space-hero :global(.space-photo img) { display: block; width: 100%; height: 100%; object-fit: cover; object-position: var(--image-position); }
+  .space-shade { position: absolute; inset: 0; z-index: -2; background: linear-gradient(90deg, rgb(5 8 17 / .9), rgb(5 8 17 / .48) 55%, rgb(5 8 17 / .1)), linear-gradient(0deg, var(--bg), transparent 45%, rgb(5 8 17 / .5)); }
+  .space-content { width: 100%; padding-block: 130px 100px; }
+  .space-copy { max-width: 46rem; min-width: 0; }
+  h1 { font-size: clamp(2.25rem, 4.5vw, 3.5rem); line-height: 1.02; text-wrap: balance; overflow-wrap: anywhere; }
+  .space-description { max-width: 48ch; margin-top: 1.5rem; color: var(--ink-soft); font-size: clamp(1.1rem, 1.7vw, 1.35rem); line-height: 1.6; }
+  .space-meta { margin-top: 1.5rem; color: var(--ink-soft); font-size: .93rem; line-height: 1.65; }
+  .space-meta :global(p), .space-meta :global(nav) { margin-block: .65rem; }
+  .space-meta :global(a:not(.btn)) { color: var(--ink); }
+  .space-credit { position: absolute; inset-inline: 0; bottom: 18px; width: 100%; }
+  .space-credit p { max-width: 100ch; color: var(--ink-soft); font-size: .75rem; line-height: 1.5; }
+  .space-credit a { color: inherit; text-underline-offset: .18em; }
+  .space-hero-right .space-copy { margin-left: auto; max-width: 25rem; }
+  .space-hero-right .space-shade { background: linear-gradient(270deg, rgb(5 8 17 / .92), rgb(5 8 17 / .5) 52%, rgb(5 8 17 / .05)), linear-gradient(0deg, var(--bg), transparent 45%, rgb(5 8 17 / .5)); }
+  @media (max-width: 640px) {
+    .space-hero { min-height: 430px; }
+    .space-hero :global(.space-photo img) { object-position: var(--image-mobile-position); }
+    .space-content { padding-block: 135px 115px; }
+    .space-copy, .space-hero-right .space-copy { margin-left: 0; max-width: 100%; }
+    .space-shade, .space-hero-right .space-shade { background: linear-gradient(0deg, var(--bg), rgb(5 8 17 / .68) 55%, rgb(5 8 17 / .35)), linear-gradient(90deg, rgb(5 8 17 / .6), transparent); }
+    .space-credit p { font-size: .7rem; }
+  }
+</style>

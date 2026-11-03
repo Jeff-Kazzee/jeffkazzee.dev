@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 
 import { SITE, availability, documents } from '../data/agent-surface.mjs';
 import { getPublishedGuides } from '../lib/content-index';
-import { guideMetadata, HARNESS_DESCRIPTION, HARNESS_INTRODUCTION, HARNESS_LIMITS, HARNESS_NOTES, HARNESS_TOOLS, HARNESS_FUTURE } from '../lib/guide-policy.mjs';
+import { guideMetadata, HARNESS_DESCRIPTION, HARNESS_INTRODUCTION, HARNESS_GUIDANCE, HARNESS_LIMITS, HARNESS_NOTES, HARNESS_TOOLS, HARNESS_FUTURE } from '../lib/guide-policy.mjs';
 
 /**
  * A Markdown twin for every page.
@@ -180,7 +180,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
   const guides = await getPublishedGuides();
   const harnessTools = HARNESS_TOOLS.filter((tool) => guides.some((guide) => new URL(guideMetadata(guide).url).pathname === tool.path));
-  const harnessBody = `# DeepSeek Harness\n\n${HARNESS_DESCRIPTION}\n\n${HARNESS_INTRODUCTION}\n\n## Start with the tools\n\n${harnessTools.map((tool) => `- ${link(tool.title, SITE + tool.path)}: ${tool.description}`).join('\n') || 'No guides are published here yet.'}\n\n${HARNESS_LIMITS}\n\n## Build notes, not just releases\n\n${HARNESS_NOTES}\n\n## Possible connections to Vivary\n\n${HARNESS_FUTURE}\n\n[Back to Writing](${SITE}/blog/).`;
+  const harnessBody = `# DeepSeek Harness\n\n${HARNESS_DESCRIPTION}\n\n${HARNESS_INTRODUCTION}\n\n${HARNESS_GUIDANCE}\n\n## Choose a guide\n\n${harnessTools.map((tool) => `- ${link(tool.title, SITE + tool.path)}: ${tool.description}`).join('\n') || 'No guides are published here yet.'}\n\n## Working notes\n\n${HARNESS_NOTES}\n\n## Where Vivary fits\n\n${HARNESS_FUTURE}\n\n${HARNESS_LIMITS}\n\n[Back to Writing](${SITE}/blog/).`;
 
   const featured = projects
     .filter((project) => project.data.featured && !project.data.archived)

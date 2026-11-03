@@ -1,7 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import SectionHeading from '../../components/SectionHeading.astro';
 import PostCard from '../../components/PostCard.astro';
 import { getGuides } from '../../lib/content-index';
 const guides = await getGuides();
@@ -13,10 +12,11 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
 
 <BaseLayout
   title="Writing · jeffkazzee.dev"
+  hero={{ title: 'Writing', description: 'Essays and field notes on AI-assisted building.' }}
   description="Essays and field notes on AI-assisted building: what worked, what didn't, and the path actually taken. Originals on Substack, mirrored here."
 >
   <section class="wrap">
-    <SectionHeading title="Writing" level="h1" note="Essays and field notes on AI-assisted building." />
+
     <p class="note">
       The essays below have originals on <a href="https://jeffkazzee.substack.com" rel="noopener">Substack</a>,
       mirrored here so the archive lives on a URL I control.
