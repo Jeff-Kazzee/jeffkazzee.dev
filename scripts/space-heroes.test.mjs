@@ -21,6 +21,12 @@ test('five Harness routes have distinct fixed local images', () => {
   }
 });
 
+test('the four main menu pages have distinct fixed images', () => {
+  const menu = { '/projects/': 'pillars-nircam', '/blog/': 'arp142', '/for-agents/': 'stephans-quintet', '/work-with-me/': 'rho-ophiuchi' };
+  assert.equal(new Set(Object.values(menu)).size, 4);
+  for (const [path, id] of Object.entries(menu)) assert.equal(spaceImageId(path), id);
+});
+
 test('other routes select a stable varied image without runtime randomness', () => {
   const seen = new Set();
   for (let i = 0; i < 200; i++) {

@@ -1,6 +1,6 @@
 ---
-title: "Team Worktree: separate checkouts, reviewed merges"
-description: "Give DeepSeek Harness teammates isolated Git worktrees while keeping review, tests and merge decisions with the Lead."
+title: "Team Worktree"
+description: "Keep each agent's changes separate, then review the combined result."
 pubDate: 2026-11-02
 draft: false
 verifiedDate: 2026-11-02
@@ -9,42 +9,29 @@ series: deepseek-harness
 tags: [deepseek-harness, team-worktree, git]
 ---
 
-Two coding agents can have separate conversations and still edit the same working files. Team Worktree addresses that filesystem problem. It gives a DSH Agent Teams teammate its own Git worktree, then leaves review and merging with the coordinating agent, called the Lead.
+Separate conversations do not separate files. Two agents sharing one checkout can leave you untangling their edits before you can review either job.
 
-Agent Teams and the worktree runtime ship with DeepSeek Harness. My addition composes them into one Lead-only tool, `spawn_teammate_in_worktree`. It is not a replacement task scheduler or a separate concurrency engine.
+Team Worktree starts a teammate in a Git worktree, a separate working copy on its own branch. My tool, `spawn_teammate_in_worktree`, combines DSH's existing Agent Teams and worktree runtime. Only the coordinating agent can call it. It is not a task scheduler or concurrency engine.
 
-## Prerequisites and installation
+## Give one teammate a bounded job
 
-Use a Git repository with a committed starting point. You need Git 2.45 or newer, the experimental Agent Teams packages available in DSH and a session file policy that permits creating and editing the checkout. The bundle's declared DSH range is `>=0.2.1-rc.5 <0.3.0`.
+1. Commit the shared starting code. Uncommitted, untracked and ignored files do not travel into the new worktree.
+2. Supply a unique lowercase `name`, `description`, absolute `repositoryRoot` and self-contained `prompt`. Name the allowed files, expected behavior and test command.
+3. Use `from` to choose a local starting commit, or accept `HEAD`. Set `context` to `fresh` for a new conversation or `fork` to inherit the coordinating agent's conversation.
+4. Wait for the teammate's receipt: branch, head commit, changed files, test command and exit code.
 
-Open **Plugins**, enable **Custom plugin markets** under Experimental plugins, then open **Discover**. Add:
+The tool tells the teammate to stay in its checkout, test, commit and report without merging. It restores the coordinating agent's directory even if spawning fails. That does not establish whether the teammate finished.
 
-```text
-https://raw.githubusercontent.com/Jeff-Kazzee/dsh-plugins/main/index.json
-```
+Read the diff and run the relevant tests. Merge only the accepted change, then check the combined result. The [published example](https://github.com/Jeff-Kazzee/dsh-plugins/blob/2c443a867806b30382f2bafc851c53b30abbc7d2/team-worktree/README.md) includes a clean merge and a later conflict. Separate working files do not make branches compatible.
 
-Install `dsh-plugin-team-worktree`. The inspected index lists version 1.0.0 pinned to commit `2c443a867806b30382f2bafc851c53b30abbc7d2`. These are source-checked installation steps, not a fresh-machine installation receipt.
+## Setup and source limits
 
-The bundle adds its tool and the shipped worktree runtime. Check for an existing runtime row before changing an established profile.
+You need Git 2.45 or newer, the experimental Agent Teams packages and permission to create and edit the checkout. Plan dependency, generated-file and ignored-configuration setup separately.
 
-## Delegate from a known base
+In **Plugins**, enable **Custom plugin markets** under Experimental plugins. In **Discover**, add the [public index](https://raw.githubusercontent.com/Jeff-Kazzee/dsh-plugins/main/index.json), then install `dsh-plugin-team-worktree`. Check for an existing worktree runtime row first.
 
-A hypothetical task might be to add a CSV export to a small reporting app while the Lead updates help text. Before spawning the teammate, commit the shared starting code. Uncommitted and untracked files do not travel into the new worktree.
+The November 2, 2026 [index review](https://github.com/Jeff-Kazzee/dsh-plugins/blob/9cd00145e3817f1c0e0e122593b2b38b983ba625/index.json) lists version 1.0.0 at commit `2c443a867806b30382f2bafc851c53b30abbc7d2`. The [package](https://github.com/Jeff-Kazzee/dsh-plugins/blob/2c443a867806b30382f2bafc851c53b30abbc7d2/team-worktree/package.json) declares DSH `>=0.2.1-rc.5 <0.3.0`. These are source-checked steps, not a fresh-machine install receipt or speedup claim.
 
-Give the tool a unique lowercase `name`, a short `description`, the source repository's absolute `repositoryRoot` and a self-contained `prompt`. The optional `from` selects a local starting commit. It defaults to `HEAD`. Context can be fresh or forked.
+Disable `team-worktree` and `worktrees`, or uninstall the bundle, to stop activation. That does not undo merges or remove retained branches and worktrees. Preserve needed work before deliberate cleanup.
 
-For the hypothetical CSV task, the prompt should name the export behavior, allowed files and test command. It should also say what is outside scope. The tool supplies a protocol requiring the teammate to stay in its checkout, test, commit and send a receipt without merging.
-
-During creation, the tool temporarily enters the repository, creates the worktree and spawns the teammate there. It restores the Lead's directory even if spawning fails. That directory restoration is separate from whether the teammate completes its assignment.
-
-## Review before combining work
-
-The receipt should identify the branch, head commit, changed files, exact test command and exit code. Read the diff rather than treating the receipt as approval. Run the relevant tests, merge only the accepted change, then verify the combined result.
-
-Separate worktrees prevent simultaneous writes to the same working files. They do not prevent two branches from changing the same lines. The public README records both a clean merge and a later conflict that the Lead resolved. Isolation makes the changes separable, not automatically compatible.
-
-Dependencies, generated files and ignored configuration are not copied from the source checkout. Plan their setup explicitly. Removing the bundle does not remove retained branches or worktrees. Cleanup remains a separate, deliberate action after preserving anything needed.
-
-## Sources and limits
-
-Checked on November 2, 2026 against the pinned [Team Worktree README](https://github.com/Jeff-Kazzee/dsh-plugins/blob/2c443a867806b30382f2bafc851c53b30abbc7d2/team-worktree/README.md), [package requirements](https://github.com/Jeff-Kazzee/dsh-plugins/blob/2c443a867806b30382f2bafc851c53b30abbc7d2/team-worktree/package.json) and [market index](https://github.com/Jeff-Kazzee/dsh-plugins/blob/9cd00145e3817f1c0e0e122593b2b38b983ba625/index.json). Disable the `team-worktree` and `worktrees` rows, or uninstall the bundle, to roll back activation. That does not undo merges. The CSV scenario is hypothetical, and no speedup or conflict-free parallelism is claimed.
+[Back to DeepSeek Harness](/deepseek-harness/).

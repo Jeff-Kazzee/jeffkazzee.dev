@@ -3,7 +3,7 @@
 // check and exits 1 when any check fails. Writes checks.json and live/ to evidence,
 // plus built/ with the local copy of every page A11 reports as changed.
 import { execFileSync } from 'node:child_process';
-import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import { answerKey, table } from './answer-key.mjs';
 
@@ -133,9 +133,12 @@ const parity = await pool(pages.filter((p) => !p.endsWith('404.html')), 4, async
   mkdirSync(dirname(out), { recursive: true });
   writeFileSync(out, live);
   const built = readFileSync(page);
-  if (live.equals(built)) return [path, 'identical'];
-  // Keep the local copy so a reviewer can read the actual difference.
   const builtOut = join(evidence, 'built', (path.slice(1) || 'home').replaceAll('/', '_') + '.html');
+  if (live.equals(built)) {
+    rmSync(builtOut, { force: true });
+    return [path, 'identical'];
+  }
+  // Keep the local copy so a reviewer can read the actual difference.
   mkdirSync(dirname(builtOut), { recursive: true });
   writeFileSync(builtOut, built);
   return [path, 'changed'];
