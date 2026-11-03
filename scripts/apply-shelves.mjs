@@ -38,7 +38,7 @@ const PLAN = {
 };
 
 /** Earlier work, kept for the record. */
-const ARCHIVED = new Set(['obscura.md']);
+const ARCHIVED = new Set([]);
 
 for (const [name, [shelf, order, featured]] of Object.entries(PLAN)) {
   const path = join(DIR, name);

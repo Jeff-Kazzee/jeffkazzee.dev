@@ -85,7 +85,7 @@ r = await post(handleMcp, {
 });
 j = await r.json();
 check('list_projects(tag=agents) returns Bellamente', j.result?.content?.[0]?.text?.includes('Bellamente'));
-check('list_projects excludes archived Obscura', !j.result?.content?.[0]?.text?.includes('Obscura'));
+check('list_projects(tag=agents) returns PS5 Agent Remote', j.result?.content?.[0]?.text?.includes('PS5 Agent Remote'));
 
 r = await post(handleMcp, {
   jsonrpc: '2.0',
