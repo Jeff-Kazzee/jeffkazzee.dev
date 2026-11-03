@@ -28,7 +28,6 @@ const PLAN = {
   'llm-arcade.md': ['side', 7, true],
   'puckwork.md': ['side', 9, false],
   'neon-noir-detective-agency.md': ['side', 10, false],
-  'dumpling-cafe.md': ['side', 11, false],
   // Kept on /projects/ only
   'braincheck.md': [null, 20, false],
   'loam.md': [null, 21, false],
@@ -38,7 +37,7 @@ const PLAN = {
 };
 
 /** Earlier work, kept for the record. */
-const ARCHIVED = new Set(['obscura.md']);
+const ARCHIVED = new Set([]);
 
 for (const [name, [shelf, order, featured]] of Object.entries(PLAN)) {
   const path = join(DIR, name);
