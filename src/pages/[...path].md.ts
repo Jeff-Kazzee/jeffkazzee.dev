@@ -31,11 +31,11 @@ const link = (label: string, href: string) => `[${label}](${href})`;
 function homeMarkdown(featured: { title: string; slug: string; description: string }[]): string {
   return `# I build tools for working with AI.
 
-I'm a self-taught developer working with AI coding agents and looking for developer roles.
-My current projects are [Vivary](${SITE}/projects/vivary/), an agent workspace with
-V1 alpha acceptance underway, and [Context Engine](${SITE}/projects/context-engine/),
-experimental, opt-in tooling for Claude Code and Codex. Context Engine is a Linux-only pre-release, with a
-[browser demo](${SITE}/context-engine/).
+I'm a self-taught developer who builds with AI coding agents. My projects include
+[Vivary](${SITE}/projects/vivary/), a desktop workspace for agents, and
+[Context Engine](${SITE}/projects/context-engine/), an experimental tool for changing the context
+an agent receives. Context Engine is a Linux-only pre-release, with a
+[browser demo](${SITE}/context-engine/). I'm looking for developer roles.
 
 ## Selected work
 
@@ -196,7 +196,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
       path: 'index',
       title: 'Jeff Kazzee',
       description:
-        'Jeff Kazzee builds agent tools with AI-assisted workflows. Vivary and experimental Context Engine tooling. Open to developer roles.',
+        'Jeff Kazzee builds tools with AI coding agents. See Vivary, experimental Context Engine work and other projects. Open to developer roles.',
       canonical: `${SITE}/`,
       body: homeMarkdown(featured),
     },

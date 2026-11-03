@@ -37,6 +37,19 @@ const feature = pick(FEATURE, true);
 const cards = CARDS.map((slug) => pick(slug, true));
 const rows = ROWS.map((slug) => pick(slug, false));
 
+/** Homepage wording for each listed project. Project pages keep their own descriptions. */
+const HOME_COPY: Record<string, string> = {
+  'vivary': "A desktop workspace for project files, agent conversations, tools and memory. Still in development.",
+  'open-world-factbook': "An open-source database of countries and territories. Browse the site or inspect the data in the source repository.",
+  'llm-arcade': "A pre-launch preview of 11 browser games built with AI coding agents.",
+  'puckwork': "A single-file air hockey demo that simulates the air cushion beneath the puck. It has no dependencies.",
+  'neon-noir-detective-agency': "A fictional detective agency website built with HTML and CSS, without JavaScript.",
+  'context-engine': "An experimental, opt-in plugin for Claude Code and Codex. Agents edit their Working Context file. Pre-release 0.1.6, Linux only.",
+  'sdlc-skills': "Written procedures for coding agents: plan, design, test, implement, review and learn.",
+  'ps5-agent-remote': "A Windows-only early alpha for controlling a PS5 from a PC or an AI agent. Supports screen viewing, buttons, typing and library/store searches.",
+};
+const homeDescription = (p: Project) => HOME_COPY[p.id] ?? p.data.description;
+
 const host = (url?: string) => (url ? new URL(url).host.replace(/^www\./, '') : undefined);
 
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
@@ -49,7 +62,7 @@ const jsonLd = JSON.stringify({
   name: 'Jeff Kazzee',
   url: SITE,
   description:
-    'Self-taught developer building agent tools with AI-assisted workflows.',
+    'Self-taught developer building tools for AI coding agents.',
   sameAs: [
     'https://github.com/Jeff-Kazzee',
     'https://x.com/jeffkazzee',
@@ -60,7 +73,7 @@ const jsonLd = JSON.stringify({
 
 <BaseLayout
   title="Jeff Kazzee"
-  description="Jeff Kazzee builds agent tools with AI-assisted workflows. Explore Vivary and experimental Context Engine tooling. Open to developer roles."
+  description="Jeff Kazzee builds tools with AI coding agents. See Vivary, experimental Context Engine work and other projects. Open to developer roles."
   overlayHeader
 >
   <script type="application/ld+json" set:html={jsonLd} is:inline />
@@ -82,10 +95,7 @@ const jsonLd = JSON.stringify({
     <div class="wrap hero-inner">
       <h1 id="hero-title">I build tools for working with AI.</h1>
       <p class="lede">
-        I'm a self-taught developer working with AI coding agents. My current projects are
-        <a href="/projects/vivary/">Vivary</a>, an agent workspace, and
-        <a href="/projects/context-engine/">Context Engine</a>, experimental context tooling.
-        I'm looking for developer roles.
+        I'm a self-taught developer who builds with AI coding agents. My projects include <a href="/projects/vivary/">Vivary</a>, a desktop workspace for agents, and <a href="/projects/context-engine/">Context Engine</a>, an experimental tool for changing the context an agent receives. I'm looking for developer roles.
       </p>
       <div class="actions">
         <a class="btn primary" href="#projects">See the work</a>
@@ -115,7 +125,7 @@ const jsonLd = JSON.stringify({
         <span>{feature.data.stack.slice(0, 3).join(' · ')}</span>
       </p>
       <h2 id="feature-title"><a href={`/projects/${feature.id}/`}>{feature.data.title}</a></h2>
-      <p class="desc">{feature.data.description}</p>
+      <p class="desc">{homeDescription(feature)}</p>
       <p class="links">
         <a href="https://vivaryagent.xyz">vivaryagent.xyz</a>
         <a href={`/projects/${feature.id}/`}>Project notes</a>
@@ -143,7 +153,7 @@ const jsonLd = JSON.stringify({
             />
           </span>
           <span class="card-title">{p.data.title}</span>
-          <span class="card-desc">{p.data.description}</span>
+          <span class="card-desc">{homeDescription(p)}</span>
           <span class="meta">
             <Status status={p.data.status} />
             {host(p.data.liveUrl) && <span>{host(p.data.liveUrl)}</span>}
@@ -157,7 +167,7 @@ const jsonLd = JSON.stringify({
         <li>
           <a class="row" href={`/projects/${p.id}/`}>
             <span class="row-title">{p.data.title}</span>
-            <span class="row-desc">{p.data.description}</span>
+            <span class="row-desc">{homeDescription(p)}</span>
             <Status status={p.data.status} />
           </a>
         </li>
@@ -189,11 +199,9 @@ const jsonLd = JSON.stringify({
     <div class="agent-note reveal">
       <div class="agent-text">
         <p class="eyebrow">For agents</p>
-        <h2 id="agents-title">This site answers to machines, not just browsers.</h2>
+        <h2 id="agents-title">Agents can read this site as text.</h2>
         <p class="say">
-          Ask any page for <code>Accept: text/markdown</code> and it returns Markdown. There is an
-          MCP server, an A2A agent card, WebMCP tools registered in the page, a published set of
-          agent skills, and DNS records that point agents here before they fetch anything.
+          Request a page with <code>Accept: text/markdown</code> to read its Markdown version. The site also provides an MCP server, an A2A agent card and published agent skills. WebMCP tools register in browsers that support them. Use the links here to inspect the interfaces.
         </p>
       </div>
       <div class="agent-links">
@@ -212,8 +220,7 @@ const jsonLd = JSON.stringify({
     <div class="contact-text">
       <h2 id="contact-title">Get in touch</h2>
       <p>
-        I'm open to developer roles and conversations about agent tooling, practical workflows,
-        and technical documentation. I also teach people to build with AI.
+        I'm looking for developer roles. Email me about tools for agents, development workflows or technical documentation. I also teach people to build with AI.
       </p>
     </div>
     <div class="actions">
