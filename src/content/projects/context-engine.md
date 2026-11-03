@@ -1,6 +1,6 @@
 ---
 title: Context Engine
-description: An experimental, opt-in plugin that lets Claude Code or Codex edit its own Working Context with ordinary tools. Based on the Context Language Models paper. Pre-release 0.1.5, Linux only.
+description: An experimental, opt-in plugin that lets Claude Code or Codex edit its own Working Context with ordinary tools. Based on the Context Language Models paper. Pre-release 0.1.6, Linux only.
 tags: [agents, context, experimental]
 stack: [TypeScript, Claude Code, Codex]
 repoUrl: https://github.com/Jeff-Kazzee/context-engine-claude
@@ -21,7 +21,7 @@ I build it with AI coding agents. Install copies every runner config file it tou
 
 ## What is established
 
-- **Pre-release 0.1.5** was published on October 18, 2026 for [Claude Code](https://github.com/Jeff-Kazzee/context-engine-claude/releases/tag/v0.1.5) and [Codex](https://github.com/Jeff-Kazzee/context-engine-codex/releases/tag/v0.1.5).
+- **Pre-release 0.1.6** was published on November 2, 2026 for [Claude Code](https://github.com/Jeff-Kazzee/context-engine-claude/releases/tag/v0.1.6) and [Codex](https://github.com/Jeff-Kazzee/context-engine-codex/releases/tag/v0.1.6).
 - **Codex live acceptance** passed on October 15, 2026 on a Linux server. The recorded requests after an edit carry the full edited Working Context. After a reset, the discarded history is gone from them.
 - **Claude Code live acceptance** passed on October 16, 2026 on Claude Code 2.1.300. The model edited its Working Context, the next turn's request carried the edit, and the model recalled the edited value with no tool call. The recall request held only the Working Context frame and the prompt.
 
