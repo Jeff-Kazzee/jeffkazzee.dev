@@ -10,8 +10,8 @@
  * check the live origin too, as the agent-ready-site skill describes.
  */
 import { createServer } from 'node:http';
-import { readFile, stat } from 'node:fs/promises';
-import { extname, join, resolve as resolvePath } from 'node:path';
+import { readFile, readdir, stat } from 'node:fs/promises';
+import { extname, join, relative, resolve as resolvePath } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = process.argv[2] ?? fileURLToPath(new URL('../dist', import.meta.url));
@@ -190,6 +190,102 @@ for (const path of ['/llms.txt', '/llms-full.txt', '/index.md', '/projects.md', 
   check(`${path} links to no Zo host`, res.ok && !ZO_HOST.test(text), text.match(ZO_HOST)?.[0]);
 }
 
-console.log(`\n${failures === 0 ? 'all checks passed' : `${failures} FAILURES`}`);
+/* ---------- guides: independent build-output checks ---------- */
+console.log('\n== guides ==');
+const indexResponse = await fetch(origin + '/api/content.json');
+const contentIndex = await indexResponse.json();
+const publishedGuides = contentIndex.guides ?? [];
+check('content API includes a guides array', Array.isArray(contentIndex.guides));
+// Independent approved-publication fixture, not derived from the API under test.
+const approvedGuideIds = ['advisor-models', 'browser-verification', 'team-worktree', 'plugin-lab'].map((slug) => 'deepseek-harness/' + slug);
+check('exact approved guides published', publishedGuides.length === approvedGuideIds.length && approvedGuideIds.every((slug) => publishedGuides.some((guide) => guide.slug === slug)));
+
+async function* walk(directory) {
+  for (const item of await readdir(directory, { withFileTypes: true })) {
+    const path = join(directory, item.name);
+    if (item.isDirectory()) yield* walk(path);
+    else if (item.isFile()) yield path;
+  }
+}
+const sourceRoot = resolvePath(ROOT, '..', 'src', 'content', 'guides');
+const drafts = [];
+for await (const file of walk(sourceRoot)) {
+  if (!file.endsWith('.md')) continue;
+  const text = await readFile(file, 'utf8');
+  const frontMatter = /^---\r?\n([\s\S]*?)\r?\n---/.exec(text)?.[1] ?? '';
+  if (/^draft:\s*false\s*$/m.test(frontMatter)) continue;
+  drafts.push({ slug: relative(sourceRoot, file).replaceAll('\\', '/').replace(/\.md$/, ''), text, frontMatter });
+}
+check('sentinel is a real draft collection entry', drafts.some(({ slug, frontMatter }) => slug === 'deepseek-harness/draft-sentinel' && /^draft:\s*true\s*$/m.test(frontMatter)));
+// Astro 7 builds use cacheDir (default node_modules/.astro), not the dev .astro directory.
+const store = await readFile(resolvePath(ROOT, '..', 'node_modules', '.astro', 'data-store.json'), 'utf8').catch(() => '');
+check('Astro loaded the sentinel before publication filtering', store.includes('deepseek-harness/draft-sentinel') && store.includes('GUIDE_DRAFT_SENTINEL_TITLE_7e31b8'));
+const needles = drafts.flatMap(({ slug, text, frontMatter }) => [
+  '/' + slug,
+  ...[...frontMatter.matchAll(/^(?:title|description):\s*(.+)$/gm)].map((match) => match[1].trim().replace(/^['"]|['"]$/g, '')),
+  ...(text.match(/GUIDE_DRAFT_SENTINEL_[A-Z_0-9a-z]+/g) ?? []),
+]);
+let scanned = 0;
+for await (const file of walk(ROOT)) {
+  scanned++;
+  const body = await readFile(file);
+  check('draft exclusion: ' + relative(ROOT, file), needles.every((needle) => !body.includes(Buffer.from(needle))) && !drafts.some(({ slug }) => relative(ROOT, file).replaceAll('\\', '/').includes(slug)), 'A draft marker leaked into generated output');
+}
+check('draft output scan covered generated files', scanned > 0);
+for (const { slug } of drafts) {
+  check('draft missing from content API: ' + slug, !publishedGuides.some((guide) => guide.slug === slug));
+  for (const path of ['/' + slug + '/', '/' + slug, '/' + slug + '.md', '/' + slug + '/index.html']) {
+    const response = await fetch(origin + path);
+    check('draft URL is not generated: ' + path, response.status === 404);
+  }
+}
+const writingResponse = await post(handleMcp, { jsonrpc: '2.0', id: 31, method: 'tools/call', params: { name: 'list_writing' } });
+const writingResult = await writingResponse.json();
+const writingText = writingResult.result?.content?.[0]?.text ?? '';
+check('MCP writing excludes drafts', needles.every((needle) => !writingText.includes(needle)));
+const guideAnswerResponse = await post(handleA2a, { jsonrpc: '2.0', id: 32, method: 'SendMessage', params: { message: { role: 'ROLE_USER', parts: [{ text: 'Where are the DeepSeek Harness guides?' }], messageId: 'guides' } } });
+const guideAnswerResult = await guideAnswerResponse.json();
+const guideAnswerText = guideAnswerResult.result?.message?.parts?.[0]?.text ?? '';
+check('A2A Harness question points to guides', guideAnswerText.includes('https://jeffkazzee.dev/deepseek-harness/'));
+check('A2A Harness answer excludes drafts', needles.every((needle) => !guideAnswerText.includes(needle)));
+const { HARNESS_DESCRIPTION, HARNESS_INTRODUCTION, HARNESS_LIMITS, HARNESS_NOTES, HARNESS_FUTURE } = await import(pathToFileURL(join(SRC, 'guide-policy.mjs')).href);
+const decode = (text) => text.replaceAll('&#39;', "'").replaceAll('&#x27;', "'").replaceAll('&amp;', '&').replaceAll('&quot;', '"');
+for (const path of ['/deepseek-harness/']) {
+  const html = await (await fetch(origin + path)).text();
+  const twin = await (await fetch(origin + path.replace(/\/$/, '.md'))).text();
+  check('guide landing canonical: ' + path, html.includes('rel="canonical" href="https://jeffkazzee.dev' + path + '"'));
+  check('guide landing Markdown canonical: ' + path, twin.includes('url: https://jeffkazzee.dev' + path));
+  if (path.includes('deepseek-harness')) {
+    for (const paragraph of [HARNESS_DESCRIPTION, HARNESS_INTRODUCTION, HARNESS_LIMITS, HARNESS_NOTES, HARNESS_FUTURE]) {
+      check('approved hub paragraph matches HTML and Markdown', decode(html).includes(paragraph) && twin.includes(paragraph));
+    }
+  }
+}
+const publicOutputs = {};
+for (const path of ['/deepseek-harness/', '/rss.xml', '/llms.txt', '/llms-full.txt', '/deepseek-harness.md', '/sitemap-0.xml']) {
+  const response = await fetch(origin + path);
+  check('guide derived output exists: ' + path, response.ok);
+  publicOutputs[path] = await response.text();
+}
+for (const guide of publishedGuides) {
+  const canonical = 'https://jeffkazzee.dev/' + guide.slug + '/';
+  const twin = canonical.slice(0, -1) + '.md';
+  check('published guide canonical metadata: ' + guide.slug, guide.url === canonical && guide.canonicalUrl === canonical && guide.markdownUrl === twin);
+  const htmlResponse = await fetch(origin + new URL(canonical).pathname);
+  const html = await htmlResponse.text();
+  const mdResponse = await fetch(origin + new URL(twin).pathname);
+  const markdown = await mdResponse.text();
+  check('published guide HTML canonical: ' + guide.slug, htmlResponse.ok && html.includes('rel="canonical" href="' + canonical + '"') && !html.includes('originally on'));
+  check('published guide source-check label: ' + guide.slug, html.includes('Source checked') && html.includes('not runtime verification'));
+  check('published guide Markdown twin: ' + guide.slug, mdResponse.ok && markdown.includes('url: ' + canonical) && markdown.includes('Source checked ' + guide.verifiedDate));
+  for (const [path, body] of Object.entries(publicOutputs)) {
+    const expected = path === '/rss.xml' || path.startsWith('/sitemap') ? canonical : '/' + guide.slug + '/';
+    check('published guide appears in ' + path + ': ' + guide.slug, body.includes(expected));
+  }
+  check('published guide appears in MCP writing: ' + guide.slug, writingText.includes(canonical));
+  check('published guide appears in A2A Harness answer: ' + guide.slug, guideAnswerText.includes(canonical));
+}
+
+console.log('\n' + (failures === 0 ? 'all checks passed' : failures + ' FAILURES'));
 server.close();
 process.exit(failures === 0 ? 0 : 1);

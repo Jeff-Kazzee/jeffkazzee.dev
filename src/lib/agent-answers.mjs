@@ -7,7 +7,8 @@
  * and the functions fetch site documents from it.
  */
 
-import { availability } from '../data/agent-surface.mjs';
+import { SITE, availability } from '../data/agent-surface.mjs';
+import { HARNESS_PATH } from './guide-policy.mjs';
 
 /** Cache the content index for the life of the isolate. */
 let contentCache = null;
@@ -76,10 +77,11 @@ async function listProjects({ tag, status } = {}, origin) {
 }
 
 async function listWriting(_args, origin) {
-  const { posts } = await loadContent(origin);
+  const { posts, guides = [] } = await loadContent(origin);
 
-  return posts
-    .map((post) => `- ${post.pubDate} ${post.title}\n  ${post.description}\n  ${post.url}`)
+  return [...posts, ...guides]
+    .sort((a, b) => b.pubDate.localeCompare(a.pubDate) || a.title.localeCompare(b.title))
+    .map((post) => `- ${post.pubDate} ${post.title}${post.kindLabel ? ` (${post.kindLabel})` : ''}\n  ${post.description}\n  ${post.url}`)
     .join('\n');
 }
 
@@ -128,6 +130,17 @@ export async function answerQuestion(question, origin) {
 
   if (asks('contact', 'hire', 'hiring', 'available', 'availability', 'reach', 'email', 'rate')) {
     return contactDetails();
+  }
+
+  const { guides = [] } = await loadContent(origin);
+  const guideQuestion = asks('deepseek harness', 'deepseek-harness', 'advisor models', 'advisor-models', 'browser verification', 'browser-verification', 'team worktree', 'team-worktree', 'plugin lab', 'plugin-lab') || /\bdsh\b/.test(text) ||
+    guides.some((guide) => text.includes(guide.title.toLowerCase()) || text.includes(guide.slug.toLowerCase()));
+  if (guideQuestion) {
+    return bullet([
+      'DeepSeek Harness guides: ' + new URL(HARNESS_PATH, SITE).href,
+      ...guides.map((guide) => `- ${guide.title} (${guide.kindLabel}): ${guide.description}\n  ${guide.url}`),
+      guides.length ? '' : 'No guides are published here yet.',
+    ]);
   }
 
   if (asks('write', 'writing', 'blog', 'essay', 'post', 'article')) {

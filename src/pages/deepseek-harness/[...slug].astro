@@ -1,0 +1,36 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import { getPublishedGuides } from '../../lib/content-index';
+import { guideMetadata } from '../../lib/guide-policy.mjs';
+
+export async function getStaticPaths() {
+  return (await getPublishedGuides()).map((guide) => ({ params: { slug: guide.id.slice('deepseek-harness/'.length) }, props: { guide } }));
+}
+const { guide } = Astro.props;
+const { Content } = await render(guide);
+const d = guide.data;
+const metadata = guideMetadata(guide);
+---
+<BaseLayout title={d.title + ' · jeffkazzee.dev'} description={d.description} ogType="article" canonicalUrl={metadata.canonicalUrl}>
+  <article class="wrap">
+    <header class="flow">
+      <p><a href="/deepseek-harness/">DeepSeek Harness</a> · <a href="/blog/">Writing</a></p>
+      <p class="label">{metadata.kindLabel}</p>
+      <h1>{d.title}</h1>
+      <p class="label">Published <FormattedDate date={d.pubDate} />
+        {d.updatedDate && <>{' · Updated '}<FormattedDate date={d.updatedDate} /></>}
+      </p>
+      <p class="label">Source checked <FormattedDate date={d.verifiedDate} />. This is a source-check date, not runtime verification.</p>
+    </header>
+    <div class="prose"><Content /></div>
+  </article>
+</BaseLayout>
+<style>
+  article { padding-block: clamp(2.5rem, 7vh, 4rem) calc(var(--space) * 5); display: grid; gap: calc(var(--space) * 5); max-width: calc(38rem + 2 * clamp(1rem, 5vw, 3rem)); }
+  .prose { font-family: var(--font-serif); font-size: 1.125rem; line-height: 1.7; }
+  .prose :global(h2), .prose :global(h3) { margin-block: calc(var(--space) * 5) calc(var(--space) * 2); }
+  .prose :global(p), .prose :global(ul), .prose :global(ol) { margin-block-end: calc(var(--space) * 2.5); max-width: var(--measure); }
+  .prose :global(img) { border: 1px solid var(--line); border-radius: var(--radius); margin-block: calc(var(--space) * 4); }
+</style>

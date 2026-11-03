@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import GuideList from '../../components/GuideList.astro';
+import { getGuides } from '../../lib/content-index';
+import { HARNESS_DESCRIPTION, HARNESS_INTRODUCTION, HARNESS_LIMITS, HARNESS_NOTES, HARNESS_TOOLS, HARNESS_FUTURE } from '../../lib/guide-policy.mjs';
+const guides = (await getGuides()).filter((guide) => guide.series === 'deepseek-harness');
+const tools = HARNESS_TOOLS.filter((tool) => guides.some((guide) => new URL(guide.url).pathname === tool.path));
+---
+<BaseLayout title="DeepSeek Harness · jeffkazzee.dev" description={HARNESS_DESCRIPTION}>
+  <section class="wrap flow">
+    <SectionHeading title="DeepSeek Harness" level="h1" note={HARNESS_DESCRIPTION} />
+    <p>{HARNESS_INTRODUCTION}</p>
+    <h2>Start with the tools</h2>
+    {tools.length ? <ul>{tools.map((tool) => <li><a href={tool.path}>{tool.title}</a>: {tool.description}</li>)}</ul> : <p>No guides are published here yet.</p>}
+    <p>{HARNESS_LIMITS}</p>
+    <h2>Build notes, not just releases</h2>
+    <p>{HARNESS_NOTES}</p>
+    {guides.some((guide) => !tools.some((tool) => new URL(guide.url).pathname === tool.path)) && <GuideList guides={guides.filter((guide) => !tools.some((tool) => new URL(guide.url).pathname === tool.path))} />}
+    <h2>Possible connections to Vivary</h2>
+    <p>{HARNESS_FUTURE}</p>
+    <p><a href="/blog/">Back to Writing</a>.</p>
+  </section>
+</BaseLayout>

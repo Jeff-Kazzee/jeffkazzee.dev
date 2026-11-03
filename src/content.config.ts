@@ -63,4 +63,19 @@ const blog = defineCollection({
   }),
 });
 
-export const collections = { projects, blog };
+const guides = defineCollection({
+  loader: glob({ pattern: '**/[^_]*.md', base: './src/content/guides' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    pubDate: z.coerce.date(),
+    updatedDate: z.coerce.date().optional(),
+    verifiedDate: z.coerce.date(),
+    kind: z.enum(['guide', 'build-note', 'idea']),
+    series: z.literal('deepseek-harness'),
+    tags: z.array(z.string()).default([]),
+    draft: z.boolean().default(true),
+  }),
+});
+
+export const collections = { projects, blog, guides };

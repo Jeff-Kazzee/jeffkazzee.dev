@@ -1,0 +1,24 @@
+---
+import FormattedDate from './FormattedDate.astro';
+import type { GuideRecord } from '../lib/content-index';
+interface Props { guides: GuideRecord[]; }
+const { guides } = Astro.props;
+---
+{guides.length ? (
+  <ul class="guide-list">
+    {guides.map((guide) => (
+      <li>
+        <p class="label">{guide.kindLabel}</p>
+        <h2><a href={guide.url}>{guide.title}</a></h2>
+        <p>{guide.description}</p>
+        <p class="label">Published <FormattedDate date={new Date(guide.pubDate)} />
+          {' · Source checked '}<FormattedDate date={new Date(guide.verifiedDate)} /></p>
+      </li>
+    ))}
+  </ul>
+) : <p>No guides are published here yet.</p>}
+<style>
+  .guide-list { list-style: none; padding: 0; }
+  li { display: grid; gap: var(--space); border-top: 1px solid var(--line); padding-block: calc(var(--space) * 3); }
+  h2 { font-size: 1.3rem; }
+</style>
