@@ -17,6 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
       - uses: pnpm/action-setup@v4
         with:
@@ -26,9 +27,35 @@ jobs:
           node-version: 22
           cache: pnpm
           cache-dependency-path: .github/ci-pnpm-lock.yaml
+      - name: Read current main answer key and record tested SHA
+        run: |
+          git fetch origin main:refs/remotes/origin/main
+          mkdir -p verify-evidence
+          git rev-parse HEAD | tee verify-evidence/tested-sha.txt
+          git rev-parse origin/main | tee verify-evidence/answer-key-sha.txt
+          git show origin/main:.claude/skills/verify/acceptance.md > verify-evidence/acceptance-from-main.md
       - run: node scripts/prepare-ci.mjs
       - run: pnpm install --frozen-lockfile
       - run: pnpm run agent-surface
       - run: pnpm run build
       - run: pnpm run verify
-      - run: node --test scripts/check-live.test.mjs scripts/prepare-ci.test.mjs
+      - run: node --test scripts/check-live.test.mjs scripts/prepare-ci.test.mjs scripts/guides.test.mjs
+
+      - name: Check preinstalled Linux verification tools
+        run: |
+          for tool in google-chrome curl ss ps jq; do command -v "$tool"; done
+          google-chrome --version
+      - name: Full exact-head website verification
+        env:
+          VERIFY_EVIDENCE_ROOT: ${{ github.workspace }}/verify-evidence
+        run: .claude/skills/verify/scripts/run-all.sh
+      - name: Clean up website verification processes
+        if: always()
+        run: .claude/skills/verify/scripts/cleanup.sh
+      - name: Upload verification evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: website-verification-${{ github.event.pull_request.head.sha || github.sha }}
+          path: verify-evidence/
+          if-no-files-found: warn

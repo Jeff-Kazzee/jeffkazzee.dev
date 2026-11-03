@@ -2,6 +2,8 @@ import type { APIRoute, GetStaticPaths } from 'astro';
 import { getCollection } from 'astro:content';
 
 import { SITE, availability, documents } from '../data/agent-surface.mjs';
+import { getPublishedGuides } from '../lib/content-index';
+import { guideMetadata, HARNESS_DESCRIPTION, HARNESS_INTRODUCTION, HARNESS_LIMITS, HARNESS_NOTES, HARNESS_TOOLS, HARNESS_FUTURE } from '../lib/guide-policy.mjs';
 
 /**
  * A Markdown twin for every page.
@@ -176,6 +178,9 @@ ${availability.contact.map((item) => `- ${link(item.label, item.href)}`).join('\
 export const getStaticPaths: GetStaticPaths = async () => {
   const projects = await getCollection('projects');
   const posts = await getCollection('blog', ({ data }) => !data.draft);
+  const guides = await getPublishedGuides();
+  const harnessTools = HARNESS_TOOLS.filter((tool) => guides.some((guide) => new URL(guideMetadata(guide).url).pathname === tool.path));
+  const harnessBody = `# DeepSeek Harness\n\n${HARNESS_DESCRIPTION}\n\n${HARNESS_INTRODUCTION}\n\n## Start with the tools\n\n${harnessTools.map((tool) => `- ${link(tool.title, SITE + tool.path)}: ${tool.description}`).join('\n') || 'No guides are published here yet.'}\n\n${HARNESS_LIMITS}\n\n## Build notes, not just releases\n\n${HARNESS_NOTES}\n\n## Possible connections to Vivary\n\n${HARNESS_FUTURE}\n\n[Back to Writing](${SITE}/blog/).`;
 
   const featured = projects
     .filter((project) => project.data.featured && !project.data.archived)
@@ -236,7 +241,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
       title: 'Writing',
       description: 'Essays and field notes on AI-assisted building.',
       canonical: `${SITE}/blog/`,
-      body: `# Writing\n\n${posts
+      body: `# Writing\n\n[DeepSeek Harness](${SITE}/deepseek-harness/) has guides, build notes, and ideas about plugins and practical harness tweaks.\n\n${posts
         .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
         .map(
           (post) =>
@@ -247,6 +252,21 @@ export const getStaticPaths: GetStaticPaths = async () => {
         .join('\n')}\n`,
     },
   ];
+
+  twins.push(
+    { path: 'deepseek-harness', title: 'DeepSeek Harness', description: HARNESS_DESCRIPTION, canonical: `${SITE}/deepseek-harness/`, body: harnessBody },
+  );
+
+  for (const guide of guides) {
+    const metadata = guideMetadata(guide);
+    twins.push({
+      path: guide.id,
+      title: metadata.title,
+      description: metadata.description,
+      canonical: metadata.canonicalUrl,
+      body: `# ${metadata.title}\n\n> ${metadata.description}\n\nKind: ${metadata.kindLabel}\nPublished ${metadata.pubDate}\nSource checked ${metadata.verifiedDate}. This is a source-check date, not runtime verification.\n\n${guide.body ?? ''}`,
+    });
+  }
 
   for (const project of projects) {
     twins.push({

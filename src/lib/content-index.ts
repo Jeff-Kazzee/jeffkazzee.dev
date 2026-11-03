@@ -1,6 +1,7 @@
 import { getCollection } from 'astro:content';
 
 import { SITE } from '../data/agent-surface.mjs';
+import { guideMetadata, selectPublishedGuides } from './guide-policy.mjs';
 
 /** Absolute URL for a site path. */
 export const abs = (path: string) => new URL(path, SITE).href;
@@ -75,4 +76,15 @@ export async function getPosts(): Promise<PostRecord[]> {
       tags: post.data.tags,
       canonicalUrl: post.data.canonicalUrl,
     }));
+}
+
+/** The only collection reader for guides. All outputs use this publication gate. */
+export async function getPublishedGuides() {
+  return selectPublishedGuides(await getCollection('guides'));
+}
+
+export type GuideRecord = ReturnType<typeof guideMetadata>;
+
+export async function getGuides(): Promise<GuideRecord[]> {
+  return (await getPublishedGuides()).map(guideMetadata);
 }

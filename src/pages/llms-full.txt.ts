@@ -1,11 +1,12 @@
 import type { APIRoute } from 'astro';
 
 import { SITE, availability, documents } from '../data/agent-surface.mjs';
-import { getPosts, getProjects } from '../lib/content-index';
+import { getGuides, getPosts, getProjects } from '../lib/content-index';
 
 export const GET: APIRoute = async () => {
   const projects = await getProjects();
   const posts = await getPosts();
+  const guides = await getGuides();
 
   const projectBlocks = projects
     .filter((project) => !project.archived)
@@ -69,6 +70,14 @@ ${post.description}
 - Page: ${post.url} (Markdown: ${post.markdownUrl})${post.canonicalUrl ? `\n- Original: ${post.canonicalUrl}` : ''}`,
   )
   .join('\n\n')}
+
+---
+
+## Guides
+
+[DeepSeek Harness](${SITE}/deepseek-harness/)
+
+${guides.map((guide) => `### ${guide.title}\n\n${guide.description}\n\n- Kind: ${guide.kindLabel}\n- Published: ${guide.pubDate}\n- Source checked: ${guide.verifiedDate} (not runtime verification)\n- Page: ${guide.url} (Markdown: ${guide.markdownUrl})`).join('\n\n')}
 
 ---
 

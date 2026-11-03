@@ -12,7 +12,7 @@ export const SITE = 'https://jeffkazzee.dev';
 export const OWNER = 'Jeff Kazzee';
 
 /** Bumped when the machine surface changes shape, not on every content edit. */
-export const SURFACE_VERSION = '1.0.0';
+export const SURFACE_VERSION = '1.1.0';
 
 /** MCP protocol revision this server implements. */
 export const MCP_PROTOCOL_VERSION = '2026-07-28';
@@ -80,7 +80,7 @@ export const documents = [
   {
     path: '/llms-full.txt',
     title: 'Expanded overview',
-    description: 'Every project and post, in one file.',
+    description: 'Every project, post, and published guide, in one file.',
     contentType: 'text/plain',
     spec: 'llmstxt.org',
     specUrl: 'https://llmstxt.org/',
@@ -197,7 +197,7 @@ export const tools = [
     name: 'read_page',
     title: 'Read a page as Markdown',
     description:
-      'Fetch any page of this site as Markdown. Pass the path, for example / or /projects/llm-arcade/ or /blog/<slug>/.',
+      'Fetch any page of this site as Markdown. Pass the path, for example / or /projects/llm-arcade/ or /blog/<slug>/ or /deepseek-harness/<slug>/.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -210,7 +210,7 @@ export const tools = [
   {
     name: 'list_writing',
     title: 'List writing',
-    description: 'List the essays and field notes published on this site, newest first.',
+    description: 'List published essays, field notes, guides, build notes, and ideas, newest first. Includes DeepSeek Harness writing.',
     inputSchema: { type: 'object', properties: {}, additionalProperties: false },
   },
   {
@@ -232,8 +232,8 @@ export const a2aSkills = [
     name: 'Summarize the work',
     description:
       'Summarize the projects and writing published at jeffkazzee.dev, including LLM Arcade, with status and links.',
-    tags: ['portfolio', 'projects', 'games', 'writing'],
-    examples: ['What has Jeff shipped?', 'Tell me about LLM Arcade.', 'What does he write about?'],
+    tags: ['portfolio', 'projects', 'games', 'writing', 'guides', 'deepseek-harness'],
+    examples: ['What has Jeff shipped?', 'Tell me about LLM Arcade.', 'What does he write about?', 'Where are the DeepSeek Harness guides?'],
     inputModes: ['text/plain'],
     outputModes: ['text/plain', 'text/markdown'],
   },

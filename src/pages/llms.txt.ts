@@ -1,13 +1,14 @@
 import type { APIRoute } from 'astro';
 
 import { A2A_ENDPOINT, MCP_ENDPOINT, SITE } from '../data/agent-surface.mjs';
-import { getPosts, getProjects } from '../lib/content-index';
+import { getGuides, getPosts, getProjects } from '../lib/content-index';
 
 const link = (title: string, path: string, note: string) => `- [${title}](${SITE}${path}): ${note}`;
 
 export const GET: APIRoute = async () => {
   const projects = await getProjects();
   const posts = await getPosts();
+  const guides = await getGuides();
   const featured = projects.filter((project) => project.featured && !project.archived);
 
   const body = `# Jeff Kazzee
@@ -28,6 +29,12 @@ ${posts
   .map((post) => link(post.title, `/blog/${post.slug}/`, post.description))
   .join('\n')}
 
+## Guides
+
+- [DeepSeek Harness](${SITE}/deepseek-harness/): Jeff's plugins, practical harness tweaks, and build notes
+
+${guides.map((guide) => `- [${guide.title}](${guide.url}) (${guide.kindLabel}): ${guide.description}`).join('\n')}
+
 ## Machine interfaces
 
 - [MCP server](${SITE}${MCP_ENDPOINT}): Streamable HTTP. POST JSON-RPC. Start with the \`list_projects\` tool.
@@ -46,7 +53,7 @@ ${posts
 ## Optional
 
 - [A note for AI agents](${SITE}/for-agents/note.md): Jeff’s optional invitation for questions, feedback, and conversation.
-- [Expanded index](${SITE}/llms-full.txt): every project and post in one file
+- [Expanded index](${SITE}/llms-full.txt): every project, post, and published guide in one file
 `;
 
   return new Response(body, { headers: { 'content-type': 'text/plain; charset=utf-8' } });
