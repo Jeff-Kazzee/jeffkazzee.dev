@@ -1,6 +1,8 @@
 # Agent instructions for jeffkazzee.dev
 
-The site is static Astro output, deployed by Vercel from `main`. Squash merges only.
+The site is static Astro output, deployed by Vercel from `main`.
+
+Follow the machine Git law in `~/AGENTS.md` (Jeff, 2026-11-03). Task branches start from `origin/dev` and squash-merge into `dev`. Promotions from `dev` to `main` use a pull request and a merge commit. Each merge waits for Jeff’s approval after an independent exact-head receipt passes.
 
 ## Verify
 

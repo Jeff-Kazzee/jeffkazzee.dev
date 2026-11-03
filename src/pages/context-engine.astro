@@ -27,11 +27,10 @@ const replay = [
 <BaseLayout
   title="Context Engine demo · jeffkazzee.dev"
   description="Try Context Engine in your browser: edit an agent's Working Context and watch what the next request contains. Plus a recorded run on Claude Code."
->
-  <article class="wrap">
-    <header class="intro">
+ hero={{ title: 'Let the agent decide what stays in its context.' }}>
+  <div slot="hero-meta">
       <p class="crumb"><a href="/projects/context-engine/">← Context Engine project</a></p>
-      <h1>Let the agent decide what stays in its context.</h1>
+
       <p class="status-line"><Status status="alpha" suffix="pre-release 0.1.6, Linux only" /></p>
       <p class="lede">
         Context Engine is an experimental plugin for Claude Code and Codex. It keeps the agent’s working notes in a plain
@@ -44,7 +43,9 @@ const replay = [
         <LinkButton href={CLAUDE_REPO}>For Claude Code</LinkButton>
         <LinkButton href={CODEX_REPO}>For Codex</LinkButton>
       </nav>
-    </header>
+    </div>
+  <article class="wrap">
+
 
     <section aria-labelledby="how">
       <SectionHeading id="how" title="How a turn works" />

@@ -31,11 +31,10 @@ const markdownExample = `curl -s -H 'Accept: text/markdown' ${SITE}/projects/llm
 <BaseLayout
   title="For agents · Jeff Kazzee"
   description="Every machine-readable interface jeffkazzee.dev publishes: Link headers, Content Signals, Markdown negotiation, an API catalog, agent skills, an MCP server, and an A2A agent card."
->
-  <article>
-    <header class="wrap intro">
+ hero={{ title: 'This site has a machine interface.' }}>
+  <div slot="hero-meta">
       <p class="crumb"><a href="/">← Home</a></p>
-      <h1>This site has a machine interface.</h1>
+
       <p class="lede">
         Most sites are built for a browser and leave agents to scrape the HTML. This one publishes
         the same content in the formats agents already read, and exposes two endpoints that answer
@@ -50,7 +49,9 @@ const markdownExample = `curl -s -H 'Accept: text/markdown' ${SITE}/projects/llm
         <a href="/for-agents/note.md">A note for AI agents</a>: Jeff’s optional invitation
         for questions, feedback, and conversation.
       </p>
-    </header>
+    </div>
+  <article>
+
 
     {
       groups.map((group) => (

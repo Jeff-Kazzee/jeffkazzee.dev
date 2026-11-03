@@ -3,6 +3,8 @@ import '../styles/global.css';
 import BaseHead from '../components/BaseHead.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import SpaceHero from '../components/SpaceHero.astro';
+import { spaceImageForPath, type HeroOptions } from '../lib/space-images';
 
 interface Props {
   title: string;
@@ -13,9 +15,10 @@ interface Props {
   noindex?: boolean;
   /** Lay the header over a full-bleed hero (home page only). */
   overlayHeader?: boolean;
+  hero?: HeroOptions;
 }
 
-const { overlayHeader = false, ...head } = Astro.props;
+const { overlayHeader = false, hero, ...head } = Astro.props;
 ---
 
 <!doctype html>
@@ -26,8 +29,9 @@ const { overlayHeader = false, ...head } = Astro.props;
   </head>
   <body>
     <a class="skip" href="#main">skip to content</a>
-    <SiteHeader overlay={overlayHeader} />
+    <SiteHeader overlay={overlayHeader || !!hero} />
     <main id="main">
+      {hero && <SpaceHero {...hero} image={spaceImageForPath(Astro.url.pathname)} hasMeta={Astro.slots.has('hero-meta')}><slot name="hero-meta" slot="meta" /></SpaceHero>}
       <slot />
     </main>
     <SiteFooter />

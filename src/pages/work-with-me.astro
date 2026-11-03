@@ -107,14 +107,14 @@ const faqs = [
 
 <BaseLayout
   title="Learn to build with AI, live with Jeff Kazzee"
+  hero={{ title: "You don't need a degree to build with AI. You need an hour and someone who has done it." }}
   description="Live, screen-shared coaching. Learn to code with AI, use AI for your real work, or build something real. One-on-one and small-group sessions."
 >
-  <section class="hero wrap">
+  <div slot="hero-meta">
     <p class="now rise" style="--i: 0">
       <span class="dot" aria-hidden="true"></span>
       One-on-one and group sessions, live and screen-shared
     </p>
-    <h1 class="rise" style="--i: 1">You don't need a degree to build with AI. You need an hour and someone who has done it.</h1>
     <p class="lede rise" style="--i: 2">
       This is live teaching, not a course you watch alone. We get on a call, share a screen, and
       work on your thing: your first program, your real job, or the idea you keep not shipping. You
@@ -124,7 +124,7 @@ const faqs = [
       <LinkButton href="#pricing" variant="primary">Reserve a session</LinkButton>
       <LinkButton href="#tracks">See what you'll learn</LinkButton>
     </div>
-  </section>
+  </div>
 
   <section class="wrap">
     <SectionHeading

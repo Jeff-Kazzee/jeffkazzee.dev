@@ -1,6 +1,7 @@
 // Usage: node checks.mjs <repo> <port> <evidence-dir>
 // HTTP and static journeys A7 to A11 from acceptance.md. Prints one line per
-// check and exits 1 when any check fails. Writes checks.json and live/ to evidence.
+// check and exits 1 when any check fails. Writes checks.json and live/ to evidence,
+// plus built/ with the local copy of every page A11 reports as changed.
 import { execFileSync } from 'node:child_process';
 import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
@@ -131,7 +132,13 @@ const parity = await pool(pages.filter((p) => !p.endsWith('404.html')), 4, async
   const out = join(evidence, 'live', (path.slice(1) || 'home').replaceAll('/', '_') + '.html');
   mkdirSync(dirname(out), { recursive: true });
   writeFileSync(out, live);
-  return [path, live.equals(readFileSync(page)) ? 'identical' : 'changed'];
+  const built = readFileSync(page);
+  if (live.equals(built)) return [path, 'identical'];
+  // Keep the local copy so a reviewer can read the actual difference.
+  const builtOut = join(evidence, 'built', (path.slice(1) || 'home').replaceAll('/', '_') + '.html');
+  mkdirSync(dirname(builtOut), { recursive: true });
+  writeFileSync(builtOut, built);
+  return [path, 'changed'];
 });
 const changed = parity.filter(([, s]) => s !== 'identical');
 report('A11', changed.length ? 'CHANGED' : 'PASS', `${parity.length - changed.length} of ${parity.length} pages byte-identical to live`,

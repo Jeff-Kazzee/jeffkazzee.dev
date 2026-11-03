@@ -24,3 +24,5 @@ the feature file.
 - [Home page and theme](./home-and-theme.md) covers the home heading, the phone budget, the palette, and the expired Halloween theme.
 - [Security headers](./security-headers.md) covers the CSP and what client code may connect to.
 - [Guides](./guides.md) covers Writing discovery, source-check labels, and draft exclusion.
+
+- [Space heroes](./space-heroes.md) covers local image loading, varied route choices, one heading, mobile overflow, linked credits, and four explicit Harness previews.

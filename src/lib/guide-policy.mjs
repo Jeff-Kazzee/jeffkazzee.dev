@@ -2,33 +2,34 @@ import { SITE } from '../data/agent-surface.mjs';
 
 export const guideKindLabels = Object.freeze({ guide: 'Guide', 'build-note': 'Build note', idea: 'Idea' });
 export const HARNESS_PATH = '/deepseek-harness/';
-export const HARNESS_DESCRIPTION = "My plugins, workflow changes and build notes from working with DeepSeek Harness.";
-export const HARNESS_INTRODUCTION = "I am using DeepSeek Harness as a place to build and test additions to how my agents work. This section documents those additions, the checks behind them and the parts that still need work. These are my extensions and notes, not official DeepSeek documentation.";
-export const HARNESS_LIMITS = "The articles distinguish an authored addition from a stock Harness feature. They also separate source review, local checks and fresh installation testing. A public source link does not mean a ready-made download or an included model subscription.";
-export const HARNESS_NOTES = "This section also has room for practical configuration changes, failed attempts and what I learn from testing them. A useful experiment does not have to become another plugin.";
+export const HARNESS_DESCRIPTION = "Tools and working notes from my coding-agent setup.";
+export const HARNESS_GUIDANCE = "Pick a guide to see what each tool does, how it works and what I have checked.";
+export const HARNESS_INTRODUCTION = "I build tools for my coding agents. DeepSeek Harness is where I put them to work.";
 export const HARNESS_TOOLS = [
   {
     "title": "Advisor Models",
     "path": "/deepseek-harness/advisor-models/",
-    "description": "ask another model a bounded question without handing it tools or the whole conversation."
+    "description": "Ask another model to review a decision. Your working agent supplies the evidence, reads the reply and keeps control of the job."
   },
   {
     "title": "Browser Verification",
     "path": "/deepseek-harness/browser-verification/",
-    "description": "inspect the running page and check a specific interaction rather than treating a build as proof."
+    "description": "Open the running page and test an interaction. A successful build cannot tell you whether a button works."
   },
   {
     "title": "Team Worktree",
     "path": "/deepseek-harness/team-worktree/",
-    "description": "give teammates separate Git checkouts and review their changes before merging."
+    "description": "Give teammates separate Git checkouts. Review the changes before bringing their work back into the project."
   },
   {
     "title": "Plugin Lab",
     "path": "/deepseek-harness/plugin-lab/",
-    "description": "define the checks before installation, then use a separate channel to decide whether a capability should stay."
+    "description": "Set the checks before installing a capability. Use a separate review channel to decide whether it should stay."
   }
 ];
-export const HARNESS_FUTURE = 'Some of these experiments may inform my work on Vivary. That is a possibility, not a claim that these features already exist there or a committed roadmap.';
+export const HARNESS_NOTES = "There is room here for small fixes, configuration changes and tests that went wrong.";
+export const HARNESS_FUTURE = "Some of this work may feed into Vivary. Those connections are ideas, not shipped features.";
+export const HARNESS_LIMITS = "These are my additions to DeepSeek Harness, separate from its official documentation. Each guide links the source and explains setup and testing limits.";
 
 const isHarnessGuideId = (id) => typeof id === 'string' && /^deepseek-harness\/[a-z0-9]+(?:-[a-z0-9]+)*(?:\/[a-z0-9]+(?:-[a-z0-9]+)*)*$/.test(id);
 

@@ -25,13 +25,10 @@ const archived = allProjects.filter(retired).sort(rank);
 <BaseLayout
   title="Projects · Jeff Kazzee"
   description="Vivary, experimental Context Engine tooling, and earlier projects by Jeff Kazzee. Status and source links for each project."
+  hero={{ title: 'Projects', description: `${active.length} active, ${archived.length} archived. Current agent tools and technical writing first, with each project's status shown.` }}
 >
   <section class="wrap">
-    <SectionHeading
-      title="Projects"
-      level="h1"
-      note={`${active.length} active, ${archived.length} archived. Current agent tools and technical writing first, with each project's status shown.`}
-    />
+
     <div class="grid">
       {active.map((p, i) => (
         <ProjectCard project={p} index={i % 6} priority={i < 3} />
