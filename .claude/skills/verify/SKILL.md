@@ -105,6 +105,7 @@ checkout, outside git, or to `$VERIFY_EVIDENCE_ROOT` when set:
 - `build.log` is the CI build log.
 - `checks.json` and `browser.json` hold the verdicts.
 - `live/` holds the live HTML each parity check compared against.
+- `built/` holds the local HTML of each page A11 reports as changed.
 - `screens/` holds the home page, each nav destination, and the palette pages.
 - `reports.txt` holds the Sentry envelopes A12 captured.
 
