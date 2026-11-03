@@ -15,15 +15,14 @@
   "src/content/guides/deepseek-harness/team-worktree.md": "a063ee65c99087b108c50dee4d55ccbea9cae04426d705d14feeb2ef5ba12ff2",
   "src/content/projects/bellamente.md": "b92574abc2ca881f9f8e6ee8e9e66b2c8e37eae375911c968148a9beb3af4eb9",
   "src/content/projects/context-engine.md": "e872c0d8d2dee3459db6c857e3d01c5201bf7e25e004bc2441cfba050bd29fb2",
-  "src/content/projects/dumpling-cafe.md": "271b01420b238953512d861e2bc5d15d00acb8612841d211a54219817531ce31",
   "src/content/projects/llm-arcade.md": "acb2311cc4c5e2c6e841d32e56cf4cdce5ca5e46b2a3a75bb572126c9ff0e80e",
   "src/content/projects/neon-noir-detective-agency.md": "9f872224f67899ec46f8c139cc53d2a7df11ca78bf12abb08a8f268b2d36dc20",
-  "src/content/projects/obscura.md": "06836b50f88e5f0611fd8ac1ae9badc66a5bd9410401436a6c6050fab2edfb01",
   "src/content/projects/open-world-factbook.md": "b4577faf7fa7334ad6b759ee510162dda737ab8daac5484377dcea0714e0e541",
+  "src/content/projects/ps5-agent-remote.md": "3c0f7a6a5e7788b2ff397bf02c375bca57b626b4755c84d5bb3858e8de3ae9b7",
   "src/content/projects/puckwork.md": "7e3cda6797b57c5d2e0a2e46e8fd63eea40b0fd15061f7dd9e8d3b4690173006",
   "src/content/projects/sdlc-skills.md": "a0cd8caf9c6090041b9930d673c1e9aa8c3b7b11c13c7c70fe7f2e9e0d24a4bc",
   "src/content/projects/vivary.md": "67b489342720fc4bfef7dda2ab40a52ea7b92aa17db486db5c6009067b1272d6",
-  "src/pages/index.astro": "e7ed32a2ab3d0c54facb892808ac1be9f24d3fb31858d95a1778493215a05f5d",
+  "src/pages/index.astro": "4a9ef08400f6cbbd0f84d6e355b542112b294f6d8303ef678ba48b4b60a46ad1",
   "src/styles/global.css": "205b7b5f7e3371e167f19dd55faf5a517e1f9dd85dbb4a606785445d0bfd9434",
-  "vercel.json": "1af524c9d350a914aa9a72ae91d61c097040859344df1e2fe464bd933ef9ea4e"
+  "vercel.json": "e88f35ccb41e1c71ec165aa6c894a2f8d9279861e6c91faa1489a6703140b118"
 }
