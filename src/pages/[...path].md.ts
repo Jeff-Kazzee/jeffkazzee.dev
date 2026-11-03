@@ -56,7 +56,7 @@ agent's working notes in a plain file, the Working Context, and the agent edits
 that file with its ordinary tools. Claude Code rebuilds the request from the file at
 the next user turn. Codex rebuilds it when the agent calls \`new_context\`. After a
 rebuild, text the agent deleted or saved elsewhere is not sent again.
-Pre-release 0.1.5, Linux only.
+Pre-release 0.1.6, Linux only.
 
 - ${link('Context Engine for Claude Code', 'https://github.com/Jeff-Kazzee/context-engine-claude')}
 - ${link('Context Engine for Codex', 'https://github.com/Jeff-Kazzee/context-engine-codex')}

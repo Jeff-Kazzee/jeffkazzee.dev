@@ -1,0 +1,37 @@
+# Agent instructions for jeffkazzee.dev
+
+The site is static Astro output, deployed by Vercel from `main`. Squash merges only.
+
+## Verify
+
+Before a change is called done, a session that did not build it runs the verify
+skill in `.claude/skills/verify/` on the exact pull request head. Its answer key is
+`acceptance.md` on `main`. Run it on a Linux build host.
+
+## Git contract (agent-git, v1)
+
+You work one task from the tasks table at a time.
+
+Start
+- Claim before you touch code: `agent-git claim <id> --repo Jeff-Kazzee/jeffkazzee.dev --agent <role> --runtime <rt> --session <id>`
+- If the claim fails, pick another task. Never work an unclaimed task.
+- Work only in the task's worktree, `jeffkazzee.dev-t<id>-<yyyymmdd>`, on branch `task/<id>-<slug>`.
+
+While working
+- Every commit ends with the trailers `Task: <id>`, `Agent: <role>`, `Agent-Session: <runtime>:<session id>`.
+- After each step, run `agent-git stage <id> <Stage> "<artifact>"`.
+- Push your branch at least once a day. Nothing stays on one machine overnight.
+
+Finishing
+- Open a pull request and set the stage to Checking.
+- You never verify your own change. A different session runs the verify skill on the exact head and records `agent-git receipt`.
+- A review finding counts only with a command that fails on the current head.
+- Land only with `agent-git land <id>`. It refuses a stale or failed receipt.
+
+Never
+- Never push `refs/entire/*` or `refs/notes/*` to this public remote.
+- Never put a transcript, email address, or secret in a commit, pull request, or comment.
+- Never push to `main` directly. Never force-push a branch you did not claim.
+- Never delete a branch or ref outside `agent-git land`.
+
+Ask the owner only for deleting refs or history, changing a GitHub setting, anything public that is not a pull request or its comments, and anything that costs money or creates an account.
