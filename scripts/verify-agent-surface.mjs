@@ -217,7 +217,8 @@ for await (const file of walk(sourceRoot)) {
   drafts.push({ slug: relative(sourceRoot, file).replaceAll('\\', '/').replace(/\.md$/, ''), text, frontMatter });
 }
 check('sentinel is a real draft collection entry', drafts.some(({ slug, frontMatter }) => slug === 'deepseek-harness/draft-sentinel' && /^draft:\s*true\s*$/m.test(frontMatter)));
-const store = await readFile(resolvePath(ROOT, '..', '.astro', 'data-store.json'), 'utf8').catch(() => '');
+// Astro 7 builds use cacheDir (default node_modules/.astro), not the dev .astro directory.
+const store = await readFile(resolvePath(ROOT, '..', 'node_modules', '.astro', 'data-store.json'), 'utf8').catch(() => '');
 check('Astro loaded the sentinel before publication filtering', store.includes('deepseek-harness/draft-sentinel') && store.includes('GUIDE_DRAFT_SENTINEL_TITLE_7e31b8'));
 const needles = drafts.flatMap(({ slug, text, frontMatter }) => [
   '/' + slug,
