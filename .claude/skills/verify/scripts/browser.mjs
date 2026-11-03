@@ -229,11 +229,16 @@ try {
       const expectedImage = fixedHarnessImages[path];
       const expectedPosition = path === '/deepseek-harness/' ? (viewport.name === 'desktop' ? '50% 54%' : '62% 50%') : path === '/deepseek-harness/advisor-models/' ? (viewport.name === 'desktop' ? '50% 40%' : '37% 40%') : null;
       const compositionOk = (!expectedPosition || metrics.objectPosition === expectedPosition) && (path !== '/deepseek-harness/advisor-models/' || (viewport.name === 'desktop' ? metrics.copyWidth <= 401 && metrics.copyLeft >= viewport.width / 2 : metrics.copyLeft < viewport.width / 2));
-      const ok = buttonsOk && compositionOk && metrics.heroCount === 1 && metrics.headingCount === 1 && metrics.headingFontSize <= 56.1 && Boolean(metrics.heading) && metrics.loaded && metrics.localImage && metrics.overflow <= 1 && metrics.headingWithinViewport && metrics.clearOfNavigation && metrics.sourceLink && metrics.licenseLink && metrics.cropNotice && metrics.formats.includes('image/avif') && metrics.formats.includes('image/webp') && (!expectedImage || expectedImage === metrics.imageId) && page.errors.length === 0;
+      // The 404 page is served with status 404 on purpose. Only that one document error is expected.
+      const ownNotFound = `network: Failed to load resource: the server responded with a status of 404 (Not Found) (${local}/404/)`;
+      const pageErrors = path === '/404/' ? page.errors.filter((error) => error !== ownNotFound) : page.errors;
+      const ok = buttonsOk && compositionOk && metrics.heroCount === 1 && metrics.headingCount === 1 && metrics.headingFontSize <= 56.1 && Boolean(metrics.heading) && metrics.loaded && metrics.localImage && metrics.overflow <= 1 && metrics.headingWithinViewport && metrics.clearOfNavigation && metrics.sourceLink && metrics.licenseLink && metrics.cropNotice && metrics.formats.includes('image/avif') && metrics.formats.includes('image/webp') && (!expectedImage || expectedImage === metrics.imageId) && pageErrors.length === 0;
       heroMetrics.push({ path, viewport: viewport.name, ...metrics, errors: [...page.errors], ok });
       report('SPACE-HERO', ok ? 'PASS' : 'FAIL', `${viewport.name} ${path}: image, single heading, credits and no overflow`, ok ? '' : JSON.stringify(metrics));
+      await sleep(500);
+      await shot(`space-${viewport.name}-${path.replace(/^\/+|\/+$/g, '').replace(/[^a-z0-9]+/gi, '-') || 'root'}`);
       if (path === '/deepseek-harness/' || path === '/deepseek-harness/advisor-models/') {
-        await sleep(1000);
+        await sleep(500);
         await shot(`2026-11-02-dsh-${path === '/deepseek-harness/' ? 'hub' : 'advisor'}-${viewport.name}-preview`);
       }
     }

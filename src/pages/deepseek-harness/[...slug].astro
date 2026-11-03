@@ -26,7 +26,8 @@ const metadata = guideMetadata(guide);
 </BaseLayout>
 <style>
   .source-check { font-size: .82rem; line-height: 1.6; color: var(--ink-faint); border-top: 1px solid var(--line); padding-top: 1rem; }
-  article { padding-block: clamp(2.5rem, 7vh, 4rem) calc(var(--space) * 5); display: grid; gap: calc(var(--space) * 5); max-width: calc(38rem + 2 * clamp(1rem, 5vw, 3rem)); }
+  article { padding-block: clamp(2.5rem, 7vh, 4rem) calc(var(--space) * 5); display: grid; grid-template-columns: minmax(0, 1fr); gap: calc(var(--space) * 5); max-width: calc(38rem + 2 * clamp(1rem, 5vw, 3rem)); }
+  .prose :global(:not(pre) > code) { overflow-wrap: anywhere; }
   .prose { font-family: var(--font-serif); font-size: 1.125rem; line-height: 1.7; }
   .prose :global(h2), .prose :global(h3) { margin-block: calc(var(--space) * 5) calc(var(--space) * 2); }
   .prose :global(p), .prose :global(ul), .prose :global(ol) { margin-block-end: calc(var(--space) * 2.5); max-width: var(--measure); }

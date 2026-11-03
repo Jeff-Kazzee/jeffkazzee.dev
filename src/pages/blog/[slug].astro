@@ -54,6 +54,8 @@ const d = post.data;
   article {
     padding-block: clamp(2.5rem, 7vh, 4rem) calc(var(--space) * 5);
     display: grid;
+    /* minmax(0, 1fr) lets a wide code block scroll inside the column instead of widening the page. */
+    grid-template-columns: minmax(0, 1fr);
     gap: calc(var(--space) * 5);
     /* About 68 characters a line: the column a laptop reader can hold. The
        header and images share the same left and right edges. */
