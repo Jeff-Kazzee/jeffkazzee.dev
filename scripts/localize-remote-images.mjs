@@ -46,7 +46,7 @@ for (const name of readdirSync(BLOG).filter((n) => n.endsWith('.md') && !n.start
     if (!existsSync(join(OUT, file))) {
       writeFileSync(join(OUT, file), Buffer.from(await response.arrayBuffer()));
     }
-    next = next.replace(whole, `![${alt}](./_images/${file})`);
+    next = next.replace(whole, () => `![${alt}](./_images/${file})`);
     copied += 1;
     console.log(`  ${file}`);
   }

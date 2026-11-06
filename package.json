@@ -15,6 +15,7 @@
     "verify": "node scripts/verify-agent-surface.mjs",
     "dns:aid": "node scripts/publish-dns-aid.mjs",
     "verify:projects": "node scripts/verify-projects.mjs",
+    "draft:substack": "node scripts/draft-substack.mjs",
     "audit:properties": "node scripts/audit-properties.mjs"
   },
   "dependencies": {
