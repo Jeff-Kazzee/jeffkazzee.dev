@@ -83,8 +83,9 @@ const guides = defineCollection({
  * Posts from the public Substack feed, read at build time. The writing page
  * shows any of these that are not mirrored in `blog` yet, as links to Substack.
  *
- * A failed fetch must not fail the build: the loader logs a warning and keeps
- * whatever the store already holds (nothing on a cold build). Set
+ * A failed fetch, or a feed with no usable posts, must not fail the build: the
+ * loader logs a warning and keeps whatever the store already holds (nothing on
+ * a cold build, so the page lists mirrored posts only). Set
  * SUBSTACK_FEED=off to skip the fetch, for an offline build.
  */
 const substack = defineCollection({
@@ -99,9 +100,14 @@ const substack = defineCollection({
       let posts;
       try {
         posts = parseFeed(await fetchFeed());
+        // A 200 answer can still be an error page or a cut-off feed. Treat no
+        // usable posts as a failed read, so the last good posts stay.
+        if (posts.length === 0) throw new Error('no posts in the feed');
       } catch (error) {
         const reason = error instanceof Error ? error.message : String(error);
-        logger.warn(`Substack feed unavailable (${reason}). The writing page lists mirrored posts only.`);
+        logger.warn(
+          `Substack feed unavailable (${reason}). Keeping the posts from the last good read, if any.`,
+        );
         return;
       }
 
