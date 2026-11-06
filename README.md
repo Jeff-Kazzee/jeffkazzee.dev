@@ -16,7 +16,7 @@ skills. See [/for-agents/](https://jeffkazzee.dev/for-agents/).
 - Returns the Markdown version of a page when a client asks for `text/markdown`.
 - Answers MCP and A2A requests about the work, the writing and availability.
 - Publishes discovery documents under `/.well-known/`.
-- Checks each listed project against the live site and GitHub before it ships.
+- Refuses to build a home-page project without a dated verification stamp.
 
 ## Try it from a terminal
 
@@ -75,7 +75,7 @@ data.
 
 - **`npm run verify:projects`** fetches each live URL and queries each repo. It fails on a 404 or a fork. The build refuses to ship a shelved project without its `verified:` stamp.
 - **`npm run verify`** drives the MCP and A2A handlers and checks each discovery document against a real build.
-- **`scripts/check-budget.mjs`** fails the build if a first phone visit to the home page passes 240 KB. The previous README recorded about 88 KB. Not remeasured. <!-- source: scripts/check-budget.mjs, and the Speed section of the previous README -->
+- **`scripts/check-budget.mjs`** fails the build if a first phone visit to the home page passes 240 KB. An earlier measurement recorded about 88 KB. Not remeasured. <!-- source: scripts/check-budget.mjs, and the Speed section of the previous README -->
 
 ## Speed
 
