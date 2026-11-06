@@ -1,0 +1,45 @@
+name: Substack refresh
+# The site is static, so a new Substack post shows on /blog/ only after a
+# build. Once a day this checks whether the newest post in the feed is on the
+# live writing page. If it is missing, it asks Vercel for a production build.
+#
+# It does nothing until the repository secret VERCEL_DEPLOY_HOOK_URL holds a
+# Vercel deploy hook for the main branch.
+on:
+  schedule:
+    - cron: '41 14 * * *'
+  workflow_dispatch:
+permissions: {}
+concurrency:
+  group: substack-refresh
+  cancel-in-progress: false
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Rebuild when the newest post is missing from the live site
+        env:
+          HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$HOOK" ]; then
+            echo "VERCEL_DEPLOY_HOOK_URL is not set. Nothing to do."
+            exit 0
+          fi
+          link=$(curl -fsS --max-time 20 https://jeffkazzee.substack.com/feed \
+            | tr -d '\n' | grep -o '<item>.*' | grep -o '<link>[^<]*</link>' | head -n 1 \
+            | sed -e 's|<link>||' -e 's|</link>||' -e 's|[?#].*||' -e 's|/*$||')
+          slug=${link##*/}
+          if [ -z "$slug" ]; then
+            echo "No post found in the feed. Nothing to do."
+            exit 0
+          fi
+          # Read the whole page first. grep -q exits early, which can kill
+          # curl mid-download and fail the pipe.
+          page=$(curl -fsS --max-time 20 https://jeffkazzee.dev/blog/)
+          if grep -qF "/$slug" <<< "$page"; then
+            echo "Newest post \"$slug\" is already on the live site."
+            exit 0
+          fi
+          echo "Newest post \"$slug\" is missing from the live site. Requesting a build."
+          curl -fsS --max-time 20 -X POST "$HOOK" > /dev/null

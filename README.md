@@ -42,6 +42,17 @@ scripts/lib/frontmatter.mjs Block-preserving front matter read and write.
 Content lives in `src/content/projects/*.md` and `src/content/blog/*.md`. Blog
 posts mirrored from Substack carry `canonicalUrl` pointing at the original.
 
+The build also reads the Substack feed (`src/lib/substack-feed.mjs`). A post in
+the feed that has no mirror yet shows on `/blog/` as a link
+to Substack, marked "On Substack". Mirror it and the link switches to the local
+page on the next build. If the feed is down, the build warns and lists the
+mirrored posts only. `SUBSTACK_FEED=off` skips the fetch.
+
+`.github/workflows/substack-refresh.yml` checks once a day whether the newest
+feed post is on the live `/blog/` page and, if not, triggers a production
+build. It needs a Vercel deploy hook for `main` saved as the repository secret
+`VERCEL_DEPLOY_HOOK_URL`. Without the secret it does nothing.
+
 ## The two halves
 
 **Static.** `astro build` produces the pages, a Markdown twin of every page, the
