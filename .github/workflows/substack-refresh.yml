@@ -34,10 +34,15 @@ jobs:
             echo "No post found in the feed. Nothing to do."
             exit 0
           fi
-          # Read the whole page first. grep -q exits early, which can kill
-          # curl mid-download and fail the pipe.
+          # A post counts as listed when the live writing page links to its
+          # Substack URL (not mirrored yet), links to /blog/<slug>/ (mirrored
+          # under the same slug), or the content index names it as a mirrored
+          # post's canonicalUrl. Each match ends at a delimiter, so one slug
+          # never matches a longer one. Read the pages first: grep -q exits
+          # early, which can kill curl mid-download.
           page=$(curl -fsS --max-time 20 https://jeffkazzee.dev/blog/)
-          if grep -qF "/$slug" <<< "$page"; then
+          index=$(curl -fsS --max-time 20 https://jeffkazzee.dev/api/content.json || true)
+          if grep -qF -e "\"$link\"" -e "/$slug/" <<< "$page$index"; then
             echo "Newest post \"$slug\" is already on the live site."
             exit 0
           fi
