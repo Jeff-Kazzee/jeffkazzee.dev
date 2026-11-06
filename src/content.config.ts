@@ -1,6 +1,7 @@
 import { defineCollection } from 'astro:content';
 import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
+import { fetchFeed, parseFeed } from './lib/substack-feed.mjs';
 
 const projects = defineCollection({
   loader: glob({ pattern: '**/[^_]*.md', base: './src/content/projects' }),
@@ -78,4 +79,45 @@ const guides = defineCollection({
   }),
 });
 
-export const collections = { projects, blog, guides };
+/**
+ * Posts from the public Substack feed, read at build time. The writing page
+ * shows any of these that are not mirrored in `blog` yet, as links to Substack.
+ *
+ * A failed fetch must not fail the build: the loader logs a warning and keeps
+ * whatever the store already holds (nothing on a cold build). Set
+ * SUBSTACK_FEED=off to skip the fetch, for an offline build.
+ */
+const substack = defineCollection({
+  loader: {
+    name: 'substack-feed',
+    load: async ({ store, logger, parseData }) => {
+      if (process.env.SUBSTACK_FEED === 'off') {
+        logger.info('SUBSTACK_FEED=off, skipping the Substack feed.');
+        return;
+      }
+
+      let posts;
+      try {
+        posts = parseFeed(await fetchFeed());
+      } catch (error) {
+        const reason = error instanceof Error ? error.message : String(error);
+        logger.warn(`Substack feed unavailable (${reason}). The writing page lists mirrored posts only.`);
+        return;
+      }
+
+      store.clear();
+      for (const { id, ...post } of posts) {
+        store.set({ id, data: await parseData({ id, data: post }) });
+      }
+      logger.info(`${posts.length} post(s) read from the Substack feed.`);
+    },
+  },
+  schema: z.object({
+    title: z.string(),
+    url: z.url(),
+    pubDate: z.coerce.date(),
+    description: z.string(),
+  }),
+});
+
+export const collections = { projects, blog, guides, substack };

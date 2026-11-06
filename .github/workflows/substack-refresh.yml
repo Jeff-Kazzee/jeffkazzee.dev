@@ -1,0 +1,50 @@
+name: Substack refresh
+# The site is static, so a new Substack post shows on /blog/ only after a
+# build. Once a day this checks whether the newest post in the feed is on the
+# live writing page. If it is missing, it asks Vercel for a production build.
+#
+# It does nothing until the repository secret VERCEL_DEPLOY_HOOK_URL holds a
+# Vercel deploy hook for the main branch.
+on:
+  schedule:
+    - cron: '41 14 * * *'
+  workflow_dispatch:
+permissions: {}
+concurrency:
+  group: substack-refresh
+  cancel-in-progress: false
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Rebuild when the newest post is missing from the live site
+        env:
+          HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$HOOK" ]; then
+            echo "VERCEL_DEPLOY_HOOK_URL is not set. Nothing to do."
+            exit 0
+          fi
+          link=$(curl -fsS --max-time 20 https://jeffkazzee.substack.com/feed \
+            | tr -d '\n' | grep -o '<item>.*' | grep -o '<link>[^<]*</link>' | head -n 1 \
+            | sed -e 's|<link>||' -e 's|</link>||' -e 's|[?#].*||' -e 's|/*$||')
+          slug=${link##*/}
+          if [ -z "$slug" ]; then
+            echo "No post found in the feed. Nothing to do."
+            exit 0
+          fi
+          # A post counts as listed when the live writing page links to its
+          # Substack URL (not mirrored yet), links to /blog/<slug>/ (mirrored
+          # under the same slug), or the content index names it as a mirrored
+          # post's canonicalUrl. Each match ends at a delimiter, so one slug
+          # never matches a longer one. Read the pages first: grep -q exits
+          # early, which can kill curl mid-download.
+          page=$(curl -fsS --max-time 20 https://jeffkazzee.dev/blog/)
+          index=$(curl -fsS --max-time 20 https://jeffkazzee.dev/api/content.json || true)
+          if grep -qF -e "\"$link\"" -e "/$slug/" <<< "$page$index"; then
+            echo "Newest post \"$slug\" is already on the live site."
+            exit 0
+          fi
+          echo "Newest post \"$slug\" is missing from the live site. Requesting a build."
+          curl -fsS --max-time 20 -X POST "$HOOK" > /dev/null

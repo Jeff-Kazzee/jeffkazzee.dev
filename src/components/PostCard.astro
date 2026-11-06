@@ -1,9 +1,9 @@
 ---
-import type { CollectionEntry } from 'astro:content';
 import FormattedDate from './FormattedDate.astro';
+import type { WritingItem } from '../lib/writing';
 
 interface Props {
-  post: CollectionEntry<'blog'>;
+  post: WritingItem;
   index?: number;
 }
 
@@ -11,9 +11,11 @@ const { post, index = 0 } = Astro.props;
 ---
 
 <article class="post reveal" style={`--i: ${index}`}>
-  <p class="date"><FormattedDate date={post.data.pubDate} /></p>
-  <h2><a href={`/blog/${post.id}/`}>{post.data.title}</a></h2>
-  <p class="desc">{post.data.description}</p>
+  <p class="date">
+    <FormattedDate date={post.pubDate} />{post.external && <span> · On Substack</span>}
+  </p>
+  <h2><a href={post.href} rel={post.external ? 'noopener' : undefined}>{post.title}</a></h2>
+  <p class="desc">{post.description}</p>
 </article>
 
 <style>
