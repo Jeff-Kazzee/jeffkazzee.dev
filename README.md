@@ -23,6 +23,7 @@ Built with [Astro](https://astro.build) and hand-rolled CSS. Deployed on
 | `npm run verify` | Check the agent surface against the build |
 | `npm run agent-surface` | Regenerate the well-known documents only |
 | `npm run budget` | Check the home page weight budget against the last build |
+| `npm run draft:substack` | Draft a mirror of each new Substack post, as `draft: true` |
 | `node scripts/localize-remote-images.mjs` | Copy Substack images in posts into the repo |
 
 `agent-surface` runs automatically before `dev` and `build`.
@@ -41,6 +42,13 @@ scripts/lib/frontmatter.mjs Block-preserving front matter read and write.
 
 Content lives in `src/content/projects/*.md` and `src/content/blog/*.md`. Blog
 posts mirrored from Substack carry `canonicalUrl` pointing at the original.
+
+`npm run draft:substack` writes a `draft: true` file for each feed post with no
+mirror, then copies its images into the repo. It never publishes and never
+changes an existing file. Read the draft, fix anything marked **Not mirrored**,
+and set `draft: false` by hand. Until then the post stays off the site and
+`/blog/` keeps linking to Substack. Pass slugs to draft only those posts. The
+feed holds the 20 newest posts, so an older one needs copying by hand.
 
 The build also reads the Substack feed (`src/lib/substack-feed.mjs`). A post in
 the feed that has no mirror yet shows on `/blog/` as a link

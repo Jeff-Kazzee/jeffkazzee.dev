@@ -239,10 +239,34 @@ for (const { slug } of drafts) {
     check('draft URL is not generated: ' + path, response.status === 404);
   }
 }
+// Blog drafts: the Substack draft step writes these into the public repo. A
+// draft's title may legitimately show as an "On Substack" link, so this checks
+// the local page and the sentinel's markers, not the title of every draft.
+const blogRoot = resolvePath(ROOT, '..', 'src', 'content', 'blog');
+const blogDrafts = [];
+for (const name of await readdir(blogRoot)) {
+  if (!name.endsWith('.md')) continue;
+  const text = await readFile(join(blogRoot, name), 'utf8');
+  const frontMatter = /^---\r?\n([\s\S]*?)\r?\n---/.exec(text)?.[1] ?? '';
+  if (/^draft:\s*true\s*$/m.test(frontMatter)) blogDrafts.push({ slug: name.replace(/\.md$/, ''), text });
+}
+check('blog sentinel is a real draft collection entry', blogDrafts.some(({ slug }) => slug === 'draft-sentinel'));
+check('Astro loaded the blog sentinel before publication filtering', store.includes('BLOG_DRAFT_SENTINEL_TITLE_4c9a27'));
+const blogNeedles = blogDrafts.flatMap(({ slug, text }) => ['/blog/' + slug, ...(text.match(/BLOG_DRAFT_SENTINEL_[A-Z_0-9a-z]+/g) ?? [])]);
+for await (const file of walk(ROOT)) {
+  const body = await readFile(file);
+  check('blog draft exclusion: ' + relative(ROOT, file), blogNeedles.every((needle) => !body.includes(Buffer.from(needle))));
+}
+for (const { slug } of blogDrafts) {
+  for (const path of ['/blog/' + slug + '/', '/blog/' + slug + '.md', '/blog/' + slug + '/index.html']) {
+    const response = await fetch(origin + path);
+    check('blog draft URL is not generated: ' + path, response.status === 404);
+  }
+}
 const writingResponse = await post(handleMcp, { jsonrpc: '2.0', id: 31, method: 'tools/call', params: { name: 'list_writing' } });
 const writingResult = await writingResponse.json();
 const writingText = writingResult.result?.content?.[0]?.text ?? '';
-check('MCP writing excludes drafts', needles.every((needle) => !writingText.includes(needle)));
+check('MCP writing excludes drafts', [...needles, ...blogNeedles].every((needle) => !writingText.includes(needle)));
 const guideAnswerResponse = await post(handleA2a, { jsonrpc: '2.0', id: 32, method: 'SendMessage', params: { message: { role: 'ROLE_USER', parts: [{ text: 'Where are the DeepSeek Harness guides?' }], messageId: 'guides' } } });
 const guideAnswerResult = await guideAnswerResponse.json();
 const guideAnswerText = guideAnswerResult.result?.message?.parts?.[0]?.text ?? '';

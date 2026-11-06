@@ -1,10 +1,11 @@
 /**
  * Reads the public Substack RSS feed.
  *
- * Essays are mirrored into src/content/blog/ by hand, so the archive lives on
- * this domain. A new post can land on Substack before anyone mirrors it. The
- * build reads this feed so the writing page lists that post anyway, linking
- * straight to Substack until the mirror exists.
+ * Essays are mirrored into src/content/blog/, so the archive lives on this
+ * domain. A new post can land on Substack before anyone mirrors it. The build
+ * reads this feed so the writing page lists that post anyway, linking straight
+ * to Substack until the mirror exists. scripts/draft-substack.mjs reads it too,
+ * to draft those mirrors.
  *
  * No XML library: Substack's feed has a fixed, flat item shape, and this file
  * only needs four fields from each item. scripts/substack-feed.test.mjs pins
@@ -18,7 +19,7 @@ const MAX_DESCRIPTION = 280;
 
 const NAMED_ENTITIES = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ' };
 
-function decodeEntities(text) {
+export function decodeEntities(text) {
   return text.replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (whole, code) => {
     if (code[0] === '#') {
       const point = code[1].toLowerCase() === 'x' ? parseInt(code.slice(2), 16) : parseInt(code.slice(1), 10);
@@ -98,6 +99,23 @@ export function parseFeed(xml) {
     });
   }
   return posts.sort((a, b) => b.pubDate.localeCompare(a.pubDate));
+}
+
+/**
+ * Each post's full HTML, by post id. parseFeed leaves it out because the writing
+ * pages never need it.
+ *
+ * @param {string} xml
+ * @returns {Map<string, string>}
+ */
+export function parseBodies(xml) {
+  const bodies = new Map();
+  for (const [, item] of xml.matchAll(/<item>([\s\S]*?)<\/item>/g)) {
+    const body = item.match(/<content:encoded>\s*<!\[CDATA\[([\s\S]*?)\]\]>\s*<\/content:encoded>/);
+    const link = field(item, 'link');
+    if (body && URL.canParse(link)) bodies.set(slugFromUrl(link), body[1]);
+  }
+  return bodies;
 }
 
 /**
