@@ -99,9 +99,12 @@ const substack = defineCollection({
 
       let posts;
       try {
-        posts = parseFeed(await fetchFeed());
-        // A 200 answer can still be an error page or a cut-off feed. Treat no
-        // usable posts as a failed read, so the last good posts stay.
+        const xml = await fetchFeed();
+        // A 200 answer can still be an error page or a cut-off feed. Treat a
+        // feed without its closing tag, or with no usable posts, as a failed
+        // read, so the last good posts stay.
+        if (!xml.includes('</rss>')) throw new Error('the feed is incomplete');
+        posts = parseFeed(xml);
         if (posts.length === 0) throw new Error('no posts in the feed');
       } catch (error) {
         const reason = error instanceof Error ? error.message : String(error);
