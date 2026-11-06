@@ -80,8 +80,19 @@ test('anything it cannot carry is a visible note, never a silent loss', () => {
   ]) {
     const { markdown, notes } = htmlToMarkdown(html);
     assert.deepEqual(notes, [note]);
-    assert.ok(markdown.includes(`**Not mirrored:** ${note}`), markdown);
+    assert.ok(markdown.replaceAll('\\', '').includes(`**Not mirrored:** ${note}`), markdown);
   }
+});
+
+test('feed text in a note stays text, in a paragraph or a figure', () => {
+  const source = '&lt;img src=x onerror=alert(1)&gt;*_`[a](b)';
+  for (const html of [`<p><img src="${source}"></p>`, `<figure><img src="${source}"></figure>`]) {
+    assert.equal(
+      htmlToMarkdown(html).markdown,
+      '**Not mirrored:** an image from \\<img src=x onerror=alert(1)>\\*\\_\\`\\[a\\](b). Check the Substack post before publishing.\n',
+    );
+  }
+  assert.ok(htmlToMarkdown('<table></table>').markdown.includes('a \\<table> element'));
 });
 
 test('a link with an unsafe scheme keeps its text and loses the link', () => {

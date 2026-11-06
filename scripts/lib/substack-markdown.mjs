@@ -109,7 +109,7 @@ export function htmlToMarkdown(html) {
 
   const unsupported = (name) => {
     notes.push(name);
-    return `> **Not mirrored:** ${name}. Check the Substack post before publishing.`;
+    return `**Not mirrored:** ${escapeText(name)}. Check the Substack post before publishing.`;
   };
 
   const image = (node) => {
