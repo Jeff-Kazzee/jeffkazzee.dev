@@ -1,6 +1,7 @@
 import { defineCollection } from 'astro:content';
 import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
+import { fetchFeed, parseFeed } from './lib/substack-feed.mjs';
 
 const projects = defineCollection({
   loader: glob({ pattern: '**/[^_]*.md', base: './src/content/projects' }),
@@ -78,4 +79,54 @@ const guides = defineCollection({
   }),
 });
 
-export const collections = { projects, blog, guides };
+/**
+ * Posts from the public Substack feed, read at build time. The writing page
+ * shows any of these that are not mirrored in `blog` yet, as links to Substack.
+ *
+ * A failed fetch, or a feed with no usable posts, must not fail the build: the
+ * loader logs a warning and keeps whatever the store already holds (nothing on
+ * a cold build, so the page lists mirrored posts only). Set
+ * SUBSTACK_FEED=off to skip the fetch, for an offline build.
+ */
+const substack = defineCollection({
+  loader: {
+    name: 'substack-feed',
+    load: async ({ store, logger, parseData }) => {
+      if (process.env.SUBSTACK_FEED === 'off') {
+        logger.info('SUBSTACK_FEED=off, skipping the Substack feed.');
+        return;
+      }
+
+      let posts;
+      try {
+        const xml = await fetchFeed();
+        // A 200 answer can still be an error page or a cut-off feed. Treat a
+        // feed without its closing tag, or with no usable posts, as a failed
+        // read, so the last good posts stay.
+        if (!xml.includes('</rss>')) throw new Error('the feed is incomplete');
+        posts = parseFeed(xml);
+        if (posts.length === 0) throw new Error('no posts in the feed');
+      } catch (error) {
+        const reason = error instanceof Error ? error.message : String(error);
+        logger.warn(
+          `Substack feed unavailable (${reason}). Keeping the posts from the last good read, if any.`,
+        );
+        return;
+      }
+
+      store.clear();
+      for (const { id, ...post } of posts) {
+        store.set({ id, data: await parseData({ id, data: post }) });
+      }
+      logger.info(`${posts.length} post(s) read from the Substack feed.`);
+    },
+  },
+  schema: z.object({
+    title: z.string(),
+    url: z.url(),
+    pubDate: z.coerce.date(),
+    description: z.string(),
+  }),
+});
+
+export const collections = { projects, blog, guides, substack };
