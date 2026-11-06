@@ -89,12 +89,12 @@ async function main() {
 
   for (const id of notInFeed) console.log(`Not in the feed: ${id}. The feed holds the 20 newest posts.`);
   for (const id of noBody) console.log(`Skipped ${id}: the feed has no body for it.`);
+  // Runs with no new drafts too, so a rerun finishes images a failed run left remote.
+  execFileSync(process.execPath, [LOCALIZE], { stdio: 'inherit' });
   if (written.length === 0) {
     console.log('No new posts to draft.');
     return;
   }
-
-  execFileSync(process.execPath, [LOCALIZE], { stdio: 'inherit' });
 
   for (const { id, notes } of written) {
     console.log(`Drafted src/content/blog/${id}.md`);
