@@ -2,6 +2,9 @@ name: Substack refresh
 # The site is static, so a new Substack post shows on /blog/ only after a
 # build. Once a day this checks whether the newest post in the feed is on the
 # live writing page. If it is missing, it asks Vercel for a production build.
+# "Newest" means the latest pubDate, not the first item, because a feed does
+# not promise its order. Items the site drops (no title, no https link, no
+# valid date) are skipped here too, so they never trigger a build.
 #
 # It does nothing until the repository secret VERCEL_DEPLOY_HOOK_URL holds a
 # Vercel deploy hook for the main branch.
@@ -26,9 +29,20 @@ jobs:
             echo "VERCEL_DEPLOY_HOOK_URL is not set. Nothing to do."
             exit 0
           fi
-          link=$(curl -fsS --max-time 20 https://jeffkazzee.substack.com/feed \
-            | tr -d '\n' | grep -o '<item>.*' | grep -o '<link>[^<]*</link>' | head -n 1 \
-            | sed -e 's|<link>||' -e 's|</link>||' -e 's|[?#].*||' -e 's|/*$||')
+          feed=$(curl -fsS --max-time 20 https://jeffkazzee.substack.com/feed | tr -d '\n' || true)
+          # One line per item, then "<epoch> <link>" for each item the site
+          # keeps, newest first.
+          link=$(grep -o '<item>.*' <<< "$feed" | sed 's|</item>|</item>\n|g' \
+            | while IFS= read -r item; do
+                title=$(sed -n 's|.*<title>\(.*\)</title>.*|\1|p' <<< "$item" \
+                  | sed -e 's|<!\[CDATA\[||' -e 's|\]\]>||' | tr -d '[:space:]')
+                url=$(grep -o '<link>[^<]*</link>' <<< "$item" | head -n 1 \
+                  | sed -e 's|<link>||' -e 's|</link>||' -e 's|[?#].*||' -e 's|/*$||')
+                when=$(sed -n 's|.*<pubDate>\([^<]*\)</pubDate>.*|\1|p' <<< "$item")
+                epoch=$(date -d "$when" +%s 2>/dev/null) || continue
+                case "$url" in https://*/*) ;; *) continue ;; esac
+                [ -n "$title" ] && [ -n "$when" ] && echo "$epoch $url"
+              done | sort -rn | head -n 1 | cut -d ' ' -f 2)
           slug=${link##*/}
           if [ -z "$slug" ]; then
             echo "No post found in the feed. Nothing to do."
@@ -38,11 +52,13 @@ jobs:
           # Substack URL (not mirrored yet), links to /blog/<slug>/ (mirrored
           # under the same slug), or the content index names it as a mirrored
           # post's canonicalUrl. Each match ends at a delimiter, so one slug
-          # never matches a longer one. Read the pages first: grep -q exits
-          # early, which can kill curl mid-download.
+          # never matches a longer one, and the /blog/ prefix keeps a page
+          # elsewhere on the site, like /deepseek-harness/, from counting.
+          # Read the pages first: grep -q exits early, which can kill curl
+          # mid-download.
           page=$(curl -fsS --max-time 20 https://jeffkazzee.dev/blog/)
           index=$(curl -fsS --max-time 20 https://jeffkazzee.dev/api/content.json || true)
-          if grep -qF -e "\"$link\"" -e "/$slug/" <<< "$page$index"; then
+          if grep -qF -e "\"$link\"" -e "/blog/$slug/" <<< "$page$index"; then
             echo "Newest post \"$slug\" is already on the live site."
             exit 0
           fi

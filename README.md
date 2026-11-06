@@ -45,8 +45,10 @@ posts mirrored from Substack carry `canonicalUrl` pointing at the original.
 The build also reads the Substack feed (`src/lib/substack-feed.mjs`). A post in
 the feed that has no mirror yet shows on `/blog/` as a link
 to Substack, marked "On Substack". Mirror it and the link switches to the local
-page on the next build. If the feed is down, the build warns and lists the
-mirrored posts only. `SUBSTACK_FEED=off` skips the fetch.
+page on the next build. If the feed is down, cut off, or has no usable posts,
+the build warns and keeps the feed posts from the last good read. A fresh build
+with no good read lists the mirrored posts only. `SUBSTACK_FEED=off` skips the
+fetch.
 
 `.github/workflows/substack-refresh.yml` checks once a day whether the newest
 feed post is on the live `/blog/` page and, if not, triggers a production
