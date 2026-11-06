@@ -1,148 +1,132 @@
 # jeffkazzee.dev
 
-Personal site: the projects and the writing.
+My portfolio site, which also answers AI agents directly.
 
-It is also a working example of an agent-ready site. Every page is served as
-Markdown on request, and the site exposes an MCP server, an A2A agent card,
-published agent skills, and the well-known discovery documents. See
-[/for-agents/](https://jeffkazzee.dev/for-agents/), or the
-[agent-ready-site skill](public/.well-known/agent-skills/agent-ready-site/SKILL.md)
-that describes how it was done.
+Live: <https://jeffkazzee.dev>
 
-Built with [Astro](https://astro.build) and hand-rolled CSS. Deployed on
-**Vercel**.
+![The home page. The headline reads I build tools for working with AI, over the Cosmic Cliffs image from the James Webb Space Telescope.](assets/site-home.png)
 
-## Commands
+Most sites make an agent scrape HTML. This one serves each page as Markdown on
+request. It also exposes an MCP server, an A2A agent card and published agent
+skills. See [/for-agents/](https://jeffkazzee.dev/for-agents/).
 
-| Command | Action |
-| :--- | :--- |
-| `npm install` | Install dependencies |
-| `npm run dev` | Dev server at `localhost:4321` |
-| `npm run build` | Type-check, build to `dist/`, then check the page weight budget |
-| `npm run preview` | Serve the build locally |
-| `npm run verify` | Check the agent surface against the build |
-| `npm run agent-surface` | Regenerate the well-known documents only |
-| `npm run budget` | Check the home page weight budget against the last build |
-| `node scripts/localize-remote-images.mjs` | Copy Substack images in posts into the repo |
+## What it does
 
-`agent-surface` runs automatically before `dev` and `build`.
+- Lists my projects and writing, with status and links.
+- Returns the Markdown version of a page when a client asks for `text/markdown`.
+- Answers MCP and A2A requests about the work, the writing and availability.
+- Publishes discovery documents under `/.well-known/`.
+- Checks each listed project against the live site and GitHub before it ships.
 
-## Layout
+## Try it from a terminal
 
-```
-src/data/agent-surface.mjs  Endpoints, tools, skills, Link headers.
-src/lib/agent-answers.mjs   The answers behind MCP, A2A, and WebMCP.
-src/lib/mcp-server.mjs      MCP over Streamable HTTP.
-src/lib/a2a-server.mjs      A2A JSON-RPC binding.
-middleware.ts               Markdown negotiation and the two endpoints.
-scripts/                    Surface generator, verifiers, DNS publisher.
-scripts/lib/frontmatter.mjs Block-preserving front matter read and write.
+Ask for a page as Markdown:
+
+```sh
+curl -s -H 'Accept: text/markdown' https://jeffkazzee.dev/projects/ | head -n 8
 ```
 
-Content lives in `src/content/projects/*.md` and `src/content/blog/*.md`. Blog
-posts mirrored from Substack carry `canonicalUrl` pointing at the original.
+<!-- tested: 2026-11-06, curl on Windows against the live site, no project files -->
 
-The build also reads the Substack feed (`src/lib/substack-feed.mjs`). A post in
-the feed that has no mirror yet shows on `/blog/` as a link
-to Substack, marked "On Substack". Mirror it and the link switches to the local
-page on the next build. If the feed is down, cut off, or has no usable posts,
-the build warns and keeps the feed posts from the last good read. A fresh build
-with no good read lists the mirrored posts only. `SUBSTACK_FEED=off` skips the
-fetch.
+List the MCP tools:
 
-`.github/workflows/substack-refresh.yml` checks once a day whether the newest
-feed post is on the live `/blog/` page and, if not, triggers a production
-build. It needs a Vercel deploy hook for `main` saved as the repository secret
-`VERCEL_DEPLOY_HOOK_URL`. Without the secret it does nothing.
+```sh
+curl -s -X POST https://jeffkazzee.dev/api/mcp \
+  -H 'content-type: application/json' -H 'accept: application/json' \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}'
+```
 
-## The two halves
+<!-- tested: 2026-11-06, curl on Windows against the live site, no project files -->
 
-**Static.** `astro build` produces the pages, a Markdown twin of every page, the
-content index at `/api/content.json`, `robots.txt`, and `llms.txt`.
-`scripts/build-agent-surface.mjs` writes the well-known documents from the data
-modules before the build runs.
+| Tool | What it does |
+| --- | --- |
+| `list_projects` | Lists the projects with status, stack and links |
+| `read_page` | Fetches a page of the site as Markdown |
+| `list_writing` | Lists published writing, newest first |
+| `contact_details` | Returns ways to contact me and what I am open to |
 
-**Runtime.** `middleware.ts` is the only server-side code. It handles content
-negotiation on `Accept`, the MCP endpoint, and the A2A endpoint. Link and
-security headers live in `vercel.json` instead, so they survive even if the
-middleware fails to deploy.
+![The Interfaces section of the For agents page. It lists the /api/mcp endpoint for Model Context Protocol and the /api/a2a endpoint for Agent2Agent.](assets/site-for-agents.png)
 
-Vercel does not support `vercel.json` rewrites on Astro projects, which is why
-negotiation runs in middleware rather than as a rewrite rule.
+## How it works
+
+The site has a static half and a runtime half.
+
+```mermaid
+flowchart LR
+  R[Request] --> M{middleware.ts}
+  M -- /api/mcp --> C[MCP handler]
+  M -- /api/a2a --> A[A2A handler]
+  M -- "Accept: text/markdown" --> T[Markdown twin]
+  M -- anything else --> H[Static HTML]
+  B[astro build] --> H
+  B --> T
+  B --> W["/.well-known documents"]
+```
+
+- **Static.** `astro build` produces the pages, a Markdown twin of each page, a content index, `robots.txt` and `llms.txt`. `scripts/build-agent-surface.mjs` writes the well-known documents from data modules.
+- **Runtime.** [`middleware.ts`](middleware.ts) is the only server-side code. It handles content negotiation and the two endpoints.
+- **Headers.** Link and security headers live in [`vercel.json`](vercel.json), so they still apply if the middleware fails to deploy.
+
+## Checks that protect the content
+
+Three projects once described things that did not exist. Two dead URLs once sat
+under the words "live right now". The site now derives those lists from checked
+data.
+
+- **`npm run verify:projects`** fetches each live URL and queries each repo. It fails on a 404 or a fork. The build refuses to ship a shelved project without its `verified:` stamp.
+- **`npm run verify`** drives the MCP and A2A handlers and checks each discovery document against a real build.
+- **`scripts/check-budget.mjs`** fails the build if a first phone visit to the home page passes 240 KB. The previous README recorded about 88 KB. Not remeasured. <!-- source: scripts/check-budget.mjs, and the Speed section of the previous README -->
 
 ## Speed
 
-The site is static HTML with no framework on the client. What makes it fast:
+The site is static HTML with no framework on the client.
 
-- **Instant navigation.** A `<script type="speculationrules">` in `BaseHead.astro` tells Chrome and Edge to render a page in the background once its link is hovered for about 200 ms (or pressed on a phone). The click shows a page that is already painted. Agent endpoints and raw files are excluded. Other browsers get Astro's hover prefetch.
-- **No render-blocking requests.** CSS is inlined into each page. Fonts are self-hosted, Latin-subset, and only the body font is preloaded. Fallback fonts are scaled to the same width, so nothing moves when the real fonts arrive.
-- **Images.** The hero is AVIF with a WebP fallback, 21 KB on a phone. Every image has width and height set. The first image on a page loads at once; the rest load lazily. Blog images are served from this site, not Substack.
-- **Native page transitions.** `@view-transition` in `global.css` cross-fades between pages with no JavaScript router.
-- **Service worker** (`public/sw.js`). Pages are network-first with a 3 second timeout, then the saved copy, then `/offline/`. Hashed `/_astro/` files are cache-first. The main pages are saved on install. It never handles `/api/`, `/.well-known/`, or `.md`/`.txt`/`.json`/`.xml`, so Markdown negotiation and the MCP and A2A endpoints always reach the network. To retire it, see the comment at the top of the file.
-- **Budget.** `scripts/check-budget.mjs` fails the build if a first phone visit to the home page passes 240 KB. It is about 88 KB, of which about 30 KB is the Sentry error reporter. The check follows the chunks a linked script imports.
+- **Instant navigation.** Speculation rules render a page in the background after a hover of about 200 ms. Other browsers get Astro's hover prefetch.
+- **No render-blocking requests.** CSS is inlined. Fonts are self-hosted, subset and scaled to match their fallbacks.
+- **Native transitions.** `@view-transition` cross-fades pages with no JavaScript router.
+- **Service worker.** Pages are network-first with a 3 second timeout, then the saved copy, then `/offline/`. It never handles `/api/` or `/.well-known/`.
+<!-- source: public/sw.js, src/components/BaseHead.astro, previous README -->
 
-## Adding or changing a project
+## Run it
 
-Project front matter drives the home page. `shelf` picks the section
-(`community`, `tools`, or `side`), and omitting it keeps the project on
-`/projects/` only. `metric` supplies one exact number to show where a
-screenshot would go when there isn't one.
-
-Then run the check:
-
-```bash
-npm run verify:projects -- --write
+```sh
+npm install
+npm run dev
 ```
 
-It fetches every `liveUrl`, follows redirects, and queries every `repoUrl` to
-confirm the repository exists, isn't a fork of someone else's work, and holds
-more than a README. Passing stamps `verified:` into the front matter, and the
-build refuses to ship a shelved project without that stamp.
+<!-- tested: 2026-11-06, clean clone on Ubuntu, Node 24.22.1, npm 11.19.0 -->
 
-Three projects once described things that did not exist, and a second
-hand-written link list on `/work-with-me/` carried two dead URLs under the
-words "live right now". Both now derive from checked data.
+The dev server runs at `http://localhost:4321`.
 
-Edit front matter through `scripts/lib/frontmatter.mjs`, not with regex. Ad-hoc
-regex flattened every nested `screenshots:` block twice.
+Check the full build and the agent surface:
 
-## Adding an agent skill
-
-Create `public/.well-known/agent-skills/<name>/SKILL.md` with `name` and
-`description` in the front matter. The build hashes it and adds it to
-`index.json`. A skill missing a description fails the build.
-
-## Verifying
-
-```bash
-npm run build && npm run verify
+```sh
+npm run build
+npm run verify
 ```
 
-That drives the MCP and A2A handlers and checks every discovery document
-against a real build. It does not exercise the deployed middleware, so after a
-deploy check the live origin too:
+<!-- tested: 2026-11-06, clean clone on Ubuntu, Node 24.22.1, npm 11.19.0 -->
 
-```bash
-curl -sI https://jeffkazzee.dev | grep -i '^link'
-curl -s -D- -o /dev/null -H 'Accept: text/markdown' https://jeffkazzee.dev | grep -i 'content-type'
-```
+`npm run verify` does not
+exercise the deployed middleware. Run the terminal examples above against the
+live origin after a deploy.
 
-## DNS
+Content lives in `src/content/projects/` and `src/content/blog/`. To add an agent
+skill, create `public/.well-known/agent-skills/<name>/SKILL.md`. The build hashes
+it and adds it to the index.
 
-The DNS-AID records are the one part of the agent surface that does not deploy
-with the site. See [docs/dns-aid.md](docs/dns-aid.md).
+## Stack
 
-## The other sites
+Astro, TypeScript and hand-written CSS, deployed on Vercel with Node 22.
 
-Four of the other public sites ship an empty shell and publish almost nothing a
-crawler or agent can read. Findings, priority, and the work each one needs:
-[docs/agent-readiness-audit.md](docs/agent-readiness-audit.md).
+## Status
 
-```bash
-npm run audit:properties
-```
+Deployed at <https://jeffkazzee.dev>. On 2026-11-06 the home page, the Markdown
+response, the MCP tool list and the agent card each answered from the live origin.
 
-## Deploy
+- Missing: DNS-AID records deploy separately from the site ([docs/dns-aid.md](docs/dns-aid.md)).
 
-Vercel, framework preset **Astro**, build `npm run build`, output `dist`,
-`NODE_VERSION=22`.
+## License
+
+No license file yet. Until one is added, all rights are reserved. The space images
+are NASA, ESA, CSA and STScI images. The site credits each one where it appears.
