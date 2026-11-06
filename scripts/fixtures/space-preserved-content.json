@@ -9,7 +9,7 @@
   "src/content/blog/how-to-learn-with-ai-without-getting.md": "5f1d4e63987a769c4fdadba04e7b6d8609ce4134b5b9259571578d11b95e58c7",
   "src/content/blog/techs-silence-on-ice-is-not-neutral.md": "7790a356712ab00b966e618e48a5da2cc5f6a25e84142860e9d30f24434e5277",
   "src/content/blog/whose-computer-are-you-building-on.md": "3e13fbf3e9e48ed79a0197314f51b47d4f03d6cfced31105ed824ef1b7b2919b",
-  "src/content/guides/deepseek-harness/browser-verification.md": "3b4bca0ea82e470951ef6a8068e9a32585b4786b91cdd6cf4b9aa664765ed992",
+  "src/content/guides/deepseek-harness/browser-verification.md": "ddf23b6563bed5e0aee3395459a4ee00a1933cd90b2e61e316a78d63cc82d4ef",
   "src/content/guides/deepseek-harness/draft-sentinel.md": "c29bc856f840e4b6d55bb4830dd1142c719714f7b678dfbe26c7e53bd80f5a0c",
   "src/content/guides/deepseek-harness/plugin-lab.md": "7a3b535ff48160140eba2de98668919c54bb7d2dc95e1beafc479a530b0b7757",
   "src/content/guides/deepseek-harness/team-worktree.md": "0aae4f14ba50966002bf0e7d09358f3249f939ae4be8844e112ab8b8a9a57e92",
@@ -22,7 +22,7 @@
   "src/content/projects/puckwork.md": "7e3cda6797b57c5d2e0a2e46e8fd63eea40b0fd15061f7dd9e8d3b4690173006",
   "src/content/projects/sdlc-skills.md": "a0cd8caf9c6090041b9930d673c1e9aa8c3b7b11c13c7c70fe7f2e9e0d24a4bc",
   "src/content/projects/vivary.md": "67b489342720fc4bfef7dda2ab40a52ea7b92aa17db486db5c6009067b1272d6",
-  "src/pages/index.astro": "4a9ef08400f6cbbd0f84d6e355b542112b294f6d8303ef678ba48b4b60a46ad1",
+  "src/pages/index.astro": "f32d1a0f1432fe62ceafecb0fdc58099c28a6f2f0d6619db104ec272637f534d",
   "src/styles/global.css": "205b7b5f7e3371e167f19dd55faf5a517e1f9dd85dbb4a606785445d0bfd9434",
   "vercel.json": "e88f35ccb41e1c71ec165aa6c894a2f8d9279861e6c91faa1489a6703140b118"
 }
