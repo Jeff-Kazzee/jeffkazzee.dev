@@ -1,14 +1,15 @@
 import { fetchFeed, parseFeed } from './substack-feed.mjs';
 import { mergeWriting, renderWritingCard } from './writing-list.mjs';
 
-const START = '<template id="writing-start"></template>';
-const END = '<template id="writing-end"></template>';
+// Astro adds scoped attributes to these tags; match their IDs, not exact markup.
+const START = /<template\b[^>]*\bid="writing-start"[^>]*><\/template>/;
+const END = /<template\b[^>]*\bid="writing-end"[^>]*><\/template>/;
 
 /** Refresh on reads, coalescing concurrent requests. Cache is per warm function instance. */
 export function createWritingPage({ template, localPosts, fetchImpl = fetch, now = Date.now }) {
-  const start = template.indexOf(START);
-  const end = template.indexOf(END);
-  if (start < 0 || end < start) throw new Error('Built Writing page is missing its article boundaries');
+  const start = START.exec(template);
+  const end = END.exec(template);
+  if (!start || !end || end.index < start.index) throw new Error('Built Writing page is missing its article boundaries');
   let html = template;
   let fresh = false;
   let retryAt = 0;
@@ -26,7 +27,7 @@ export function createWritingPage({ template, localPosts, fetchImpl = fetch, now
         });
         if (!posts.length) throw new Error('No usable feed posts');
         const cards = mergeWriting(localPosts, posts).map(renderWritingCard).join('');
-        html = template.slice(0, start + START.length) + cards + template.slice(end);
+        html = template.slice(0, start.index + start[0].length) + cards + template.slice(end.index);
         fresh = true;
         retryAt = now() + 60000;
       } catch {

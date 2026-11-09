@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import { createWritingPage } from '../src/lib/writing-page.mjs';
 import { mergeWriting, renderWritingCard } from '../src/lib/writing-list.mjs';
 
-const template = '<head><link rel="canonical" href="https://jeffkazzee.dev/blog/"></head><main><template id="writing-start"></template>BUILD FALLBACK<template id="writing-end"></template></main>';
+const template = '<head><link rel="canonical" href="https://jeffkazzee.dev/blog/"></head><main><template id="writing-start" data-astro-cid-example></template>BUILD FALLBACK<template id="writing-end" data-astro-cid-example></template></main>';
 const localPosts = [{ slug: 'local', title: 'Local', description: 'Saved', pubDate: '2026-01-01', canonicalUrl: 'https://jeffkazzee.substack.com/p/original' }];
 const feed = (slug, title = slug) => `<rss><channel><item><title>${title}</title><link>https://jeffkazzee.substack.com/p/${slug}</link><pubDate>Mon, 09 Nov 2026 12:00:00 GMT</pubDate><description>New post</description></item></channel></rss>`;
 
@@ -66,7 +66,7 @@ test('the built fallback is packaged and the real function renders HTML with bou
   assert.deepEqual(config.rewrites, [{ source: '/blog', destination: '/api/writing' }, { source: '/blog/', destination: '/api/writing' }]);
   assert.equal(config.functions['api/writing.js'].includeFiles, 'dist/{blog/index.html,api/content.json}');
   const built = readFileSync('dist/blog/index.html', 'utf8');
-  assert.match(built, /<template id="writing-start"><\/template>/);
+  assert.match(built, /<template id="writing-start"[^>]*><\/template>/);
   const originalFetch = globalThis.fetch;
   globalThis.fetch = async () => new Response(feed('published-after-build'));
   try {
