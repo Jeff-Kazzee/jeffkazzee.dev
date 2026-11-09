@@ -1,8 +1,8 @@
 {
   ".claude/skills/verify/acceptance.md": "178f2f3daab4417959f199b065d25339f0732a994ce99442a7032245e5d26f32",
-  "astro.config.mjs": "d21d407dfa68e71fb9b970444102e86959cbcf5c37c89a510808d8f3f3ff79b8",
+  "astro.config.mjs": "9998eb6f5ea5741bc0617fa9a11d79ba6a3b004c4a49e2fcebd393f04dbdab15",
   "middleware.ts": "aa33a1ced6d52dc91546b2953a633c7583bc836c67ab94ba5b3defe8c4a52bfd",
-  "package.json": "275c67d161643ddbc69449ab41b485d55fb35a417bcde6924116121ddb0fdf61",
+  "package.json": "fbeedf13e8fcb9ecbc06c3e37ffe96e903f05be19fce81c2d4fa6e15f96c77b1",
   "src/components/SiteHeader.astro": "296df205789c814ec7c7620c57aebfd7930dd4503ec830c8bb430c8234f67f61",
   "src/content/blog/a-company-paid-me-for-guides-i-gave-away.md": "8da6271072869ff3b2a43085a18334275f572544436b388c7fddd05ca5f36411",
   "src/content/blog/cheap-ai-was-a-sale-the-bill-is-coming.md": "93fa42ce6d8174f05bd57d4c17043779f9437f5689bd602d595e856bcc025ac9",
