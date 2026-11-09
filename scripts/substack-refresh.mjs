@@ -12,11 +12,12 @@ export function missingPosts(posts, html, index) {
   return posts.filter(post => {
     if (links.has(postKey(post.url))) return false;
     return !(index.posts ?? []).some(local => {
-      if (!local.canonicalUrl || !local.url) return false;
+      if (!local.url) return false;
       try {
         const url = new URL(local.url);
         return url.origin === SITE && url.pathname.startsWith('/blog/') &&
-          postKey(local.canonicalUrl) === postKey(post.url) && links.has(postKey(local.url));
+          (local.slug === post.id || (local.canonicalUrl && postKey(local.canonicalUrl) === postKey(post.url))) &&
+          links.has(postKey(local.url));
       } catch { return false; }
     });
   });

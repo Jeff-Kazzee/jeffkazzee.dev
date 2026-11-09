@@ -70,3 +70,19 @@ test('build request uses POST once and rejects unsuccessful responses', async ()
   assert.equal(calls, 1);
   await assert.rejects(requestBuild(hook, { fetchImpl: async () => new Response('no', { status: 403 }) }), /HTTP 403/);
 });
+
+
+test('a linked same-slug mirror counts without canonical metadata, as getWriting does', () => {
+  const local = { slug: posts[0].id, url: `https://jeffkazzee.dev/blog/${posts[0].id}/` };
+  const html = anchor(`/blog/${posts[0].id}/`);
+  assert.deepEqual(missingPosts([posts[0]], html, { posts: [local] }), []);
+  assert.deepEqual(missingPosts([posts[0]], '', { posts: [local] }), [posts[0]], 'unlinked local content remains missing');
+  assert.deepEqual(missingPosts([posts[0]], html, { posts: [] }), [posts[0]], 'a link alone does not establish a published mirror');
+  assert.deepEqual(missingPosts([posts[0]], html, { posts: [{ ...local, canonicalUrl: 'https://example.com/other' }] }), [], 'slug matching agrees with the writing-page policy');
+});
+
+test('same-slug metadata cannot count an external or non-blog page as a local mirror', () => {
+  for (const url of ['https://example.com/blog/other/', 'https://jeffkazzee.dev/projects/other/']) {
+    assert.deepEqual(missingPosts([posts[0]], anchor(url), { posts: [{ slug: posts[0].id, url }] }), [posts[0]]);
+  }
+});
