@@ -7,6 +7,17 @@ import markdownTidy from './src/lib/markdown-tidy.mjs';
 /** Reached only after an action, so there is nothing here to rank for. */
 const NOINDEX_PAGES = ['/contact-thanks/', '/offline/'];
 
+/** These mirrors identify Substack as their canonical location. */
+const EXTERNAL_CANONICAL_PAGES = [
+  '/blog/cheap-ai-was-a-sale-the-bill-is-coming/',
+  '/blog/how-to-learn-with-ai-without-getting/',
+  '/blog/techs-silence-on-ice-is-not-neutral/',
+  '/blog/whose-computer-are-you-building-on/',
+];
+const SITEMAP_EXCLUDED_PAGES = new Set([
+  ...NOINDEX_PAGES, ...EXTERNAL_CANONICAL_PAGES,
+]);
+
 export default defineConfig({
   // src/scripts/sentry.ts reports these as its environment and release, so
   // Vercel previews do not count as production. A build outside Vercel
@@ -29,10 +40,8 @@ export default defineConfig({
   build: { inlineStylesheets: 'always' },
   integrations: [
     sitemap({
-      // Pages a search engine has no reason to hold. Keep this in step with
-      // the `noindex` prop on the page itself: the sitemap stops advertising
-      // it, the meta tag stops it being indexed if something links to it.
-      filter: (page) => !NOINDEX_PAGES.some((path) => page.endsWith(path)),
+      // Advertise canonical pages; keep intentional noindex pages excluded.
+      filter: (page) => !SITEMAP_EXCLUDED_PAGES.has(new URL(page).pathname),
     }),
   ],
   markdown: {
