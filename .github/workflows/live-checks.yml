@@ -4,7 +4,7 @@ on:
     - cron: '23 */3 * * *'
   workflow_dispatch:
   pull_request:
-    branches: [main]
+    branches: [main, prod]
     paths:
       - 'scripts/check-live*'
       - '.github/workflows/live-checks.yml'

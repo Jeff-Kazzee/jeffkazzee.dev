@@ -1,4 +1,4 @@
-import { next } from '@vercel/functions';
+import { next, rewrite } from '@vercel/functions';
 
 import { A2A_ENDPOINT, MCP_ENDPOINT } from './src/data/agent-surface.mjs';
 import { twinUrl } from './src/lib/agent-answers.mjs';
@@ -9,7 +9,7 @@ import { handleMcp } from './src/lib/mcp-server.mjs';
  * The runtime half of the site.
  *
  * The static build produces the pages, the Markdown twins, and the well-known
- * documents. This handles the three things a static file cannot: content
+ * documents. This handles the things a static file cannot: fresh Writing links, content
  * negotiation on Accept, the MCP endpoint, and the A2A endpoint.
  *
  * Link and security headers live in vercel.json instead, so they survive even
@@ -67,6 +67,13 @@ export default async function middleware(request: Request): Promise<Response> {
       });
     }
     // No twin for this path. Fall through and serve the HTML.
+  }
+
+  // Middleware runs before static files: a config rewrite alone can be
+  // shadowed by the build-time /blog/index.html fallback. Negotiate first.
+  if (url.pathname === '/blog' || url.pathname === '/blog/') {
+    url.pathname = '/api/writing';
+    return rewrite(url);
   }
 
   return next();

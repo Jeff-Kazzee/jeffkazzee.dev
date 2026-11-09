@@ -1,20 +1,23 @@
-// The answer key is acceptance.md as origin/main has it, never the copy on the
-// branch under test, so a branch cannot rewrite its own key. A missing key is a
-// failure, not a reason to trust the branch. VERIFY_ANSWER_KEY_REF names
-// another ref for audits.
+// The answer key comes from the fetched production ref, never the branch under test.
 import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
+import { productionRef } from './production-ref.mjs';
+
 const KEY = '.claude/skills/verify/acceptance.md';
 
 export function answerKey(repo) {
-  const ref = process.env.VERIFY_ANSWER_KEY_REF ?? 'origin/main';
+  let ref;
   let text;
   try {
+    ref = productionRef(repo);
+    if (process.env.VERIFY_ANSWER_KEY_REF && process.env.VERIFY_ANSWER_KEY_REF !== ref) {
+      return { text: null, verdict: 'FAIL', note: 'VERIFY_ANSWER_KEY_REF cannot override the independent production key' };
+    }
     text = execFileSync('git', ['-C', repo, 'show', `${ref}:${KEY}`], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] });
   } catch {
-    return { text: null, verdict: 'FAIL', note: `${ref} has no readable ${KEY}. Run git fetch origin main. Every check that needs the key is unverified` };
+    return { text: null, verdict: 'FAIL', note: `${ref ?? "Production ref"} has no readable ${KEY}. Run .claude/skills/verify/scripts/fetch-production.sh. Every check that needs the key is unverified` };
   }
   // Deleting the key is a change to it too.
   const branchCopy = existsSync(join(repo, KEY)) ? readFileSync(join(repo, KEY), 'utf8') : null;

@@ -5,6 +5,9 @@ set -uo pipefail
 . "$(dirname "$0")/env.sh" "${1:-}"
 
 mkdir -p "$STATE" "$EVIDENCE"
+bash "$SKILL/scripts/fetch-production.sh" "$REPO" > "$EVIDENCE/production-ref.log" 2>&1 || { cat "$EVIDENCE/production-ref.log"; echo 'LAUNCH_RESULT=fail production ref unavailable'; exit 1; }
+production_ref="$(node "$SKILL/scripts/production-ref.mjs" "$REPO")" || exit 1
+printf '%s %s\n' "$production_ref" "$(git -C "$REPO" rev-parse "$production_ref")" > "$EVIDENCE/production-ref.txt"
 cd "$REPO"
 # Record the tree before the build, so an edit during the build fails doctor.
 tree="$(build_id)"
@@ -35,9 +38,9 @@ done
   # page still fails but no longer hides every other journey.
   pnpm exec astro check &&
   # Build with the environment and release live production was built with,
-  # so A11 can compare pages byte for byte. Live is deployed from origin/main.
+  # so A11 can compare pages byte for byte. The production ref was independently fetched above.
   # No report leaves the driven browser, so this label reaches no Sentry data.
-  VERCEL_ENV=production VERCEL_GIT_COMMIT_SHA="$(git rev-parse origin/main)" pnpm exec astro build
+  VERCEL_ENV=production VERCEL_GIT_COMMIT_SHA="$(git rev-parse "$production_ref")" pnpm exec astro build
 } > "$EVIDENCE/build.log" 2>&1
 build=$?
 if [ $build -ne 0 ]; then

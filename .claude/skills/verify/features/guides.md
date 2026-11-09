@@ -15,10 +15,10 @@ The main navigation remains unchanged. Discover guides through Writing.
   for every draft ID and sentinel marker, check public guide HTML, Markdown,
   RSS, sitemap, content API, llms files, MCP and A2A.
 
-The answer key is unchanged and must come from origin/main. Full exact-tree
+The answer key is unchanged and must come from the fetched production ref. Full exact-tree
 verification uses the existing Linux skill. CI now runs that full skill after
 the build, agent-surface checks and property tests. CI records the tested SHA,
-fetches the origin/main key, uploads evidence and always attempts cleanup.
+fetches the the fetched production ref key, uploads evidence and always attempts cleanup.
 The workflow has not been run for this unpublished tree.
 
 Do not publish draft articles to make a route check pass. With no approved

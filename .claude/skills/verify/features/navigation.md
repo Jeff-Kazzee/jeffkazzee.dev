@@ -27,7 +27,7 @@ Preconditions:
 
 ## Gotchas
 
-- The nav table in `acceptance.md` is the answer key, read from `origin/main`.
+- The nav table in `acceptance.md` is the answer key, read from the fetched production ref.
   A nav change needs its own reviewed PR to the key first.
 - A click that goes nowhere waits five seconds, then reports where it stayed.
 - Prerendering is off, so a click always loads a fresh document.

@@ -5,15 +5,14 @@ description: Verify the jeffkazzee.dev portfolio site the way a visitor meets it
 
 # Verify jeffkazzee.dev
 
-The site is static Astro output in `dist/`, deployed by Vercel from `main`.
+The site is static Astro output in `dist/`, deployed by Vercel from the active production branch (`main`, then `prod` after the planned rename). The Writing route refreshes server HTML through a native function.
 A visitor meets it in a browser. This skill proves a change against answer keys
 the building agent did not write. Those keys are live production, the repo's own
 budget script, `vercel.json`, and the dated table in
-[acceptance.md](acceptance.md). The table is read from `origin/main`, never from
-the branch under test (`scripts/answer-key.mjs`). Set `VERIFY_ANSWER_KEY_REF` to
-use another ref. The KEY line fails when the branch edits the table and when
-`origin/main` has no readable table. There is no fallback to the branch's copy.
-Run `git fetch origin main` first so the key is current.
+[acceptance.md](acceptance.md). The table is read from the fetched production ref, never from
+the branch under test (`scripts/answer-key.mjs`). Use `fetch-production.sh` to discover the remote default branch, restricted to `main` or `prod`. If the hosting branch differs from that default, set `VERIFY_PRODUCTION_BRANCH=main` or `prod` explicitly after confirming the deployment target. `VERIFY_ANSWER_KEY_REF` cannot replace that independent key. The KEY line fails when the branch edits the table and when
+the fetched production ref has no readable table. There is no fallback to the branch's copy.
+Run `bash .claude/skills/verify/scripts/fetch-production.sh` first so the key is current. Launch also refreshes it and records its name and SHA.
 
 Run it on a Linux build host, not on a laptop. It needs Node, pnpm,
 `google-chrome`, `curl`, `ss`, `ps` and `jq`. It installs nothing beyond the
@@ -42,9 +41,9 @@ It runs CI's sequence (`scripts/prepare-ci.mjs`, `pnpm install
 build`) and logs it to `build.log` in the evidence folder. It leaves out the
 budget step of `pnpm run build`, which A9 runs, so a bloated home page fails A9
 and the other journeys still run. It builds with `VERCEL_ENV=production` and
-`VERCEL_GIT_COMMIT_SHA` set to `origin/main`, the values live was built with,
+`VERCEL_GIT_COMMIT_SHA` set to the fetched production ref, the values live was built with,
 because `astro.config.mjs` bakes both into the script bundle and A11 compares
-pages byte for byte. Run `git fetch origin main` first. Then it serves `dist/` with
+pages byte for byte. Run `bash .claude/skills/verify/scripts/fetch-production.sh` first. Then it serves `dist/` with
 `scripts/serve.mjs`, which applies the redirects and headers from `vercel.json`.
 Ready is the line `LAUNCH_RESULT=pass http://127.0.0.1:<port>`.
 

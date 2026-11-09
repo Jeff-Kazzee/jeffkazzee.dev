@@ -26,7 +26,7 @@ Preconditions:
 - A host that is down returns 503 or similar. That is the failure class that
   caught the retired Zo sites.
 - Rows in the Known defects table of `acceptance.md` report as KNOWN. Remove a
-  row when its fix lands. The table is read from `origin/main`, so a branch
+  row when its fix lands. The table is read from the fetched production ref, so a branch
   cannot add a row for its own broken link.
 - Known gap, not yet fixed (review of 2026-11-01): a host that answers HEAD with
   200 but GET with 503 passes A8, because GET runs only after a failed HEAD. A
