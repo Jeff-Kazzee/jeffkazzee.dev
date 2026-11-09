@@ -4,7 +4,7 @@
 // recorded and failed, so a run never reports to production. Chrome checks CSP
 // before interception, so a CSP violation still shows (tested 2026-11-01).
 import { spawn } from 'node:child_process';
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { answerKey, table as keyTable } from './answer-key.mjs';
 
@@ -149,7 +149,12 @@ try {
 
   // A4 and A6
   const sitemap = readFileSync(join(repo, 'dist/sitemap-0.xml'), 'utf8');
-  const paths = [...new Set([...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]).pathname).concat(nav.map((n) => n.path)))];
+  // Mirrors remain visitor-facing pages even when their canonicals exclude
+  // them from the sitemap. Cover every built article, including future imports.
+  const blogPaths = readdirSync(join(repo, 'dist/blog'), { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => `/blog/${entry.name}/`);
+  const paths = [...new Set([...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]).pathname).concat(nav.map((n) => n.path), blogPaths))];
   const seasonal = [];
   for (const path of paths) {
     await open(`${local}${path}`);

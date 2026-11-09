@@ -3,22 +3,13 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import { satteri } from '@astrojs/markdown-satteri';
 import markdownTidy from './src/lib/markdown-tidy.mjs';
+import { canonicalSitemapFilter } from './src/lib/sitemap-policy.mjs';
 
-/** Reached only after an action, so there is nothing here to rank for. */
-const NOINDEX_PAGES = ['/contact-thanks/', '/offline/'];
-
-/** These mirrors identify Substack as their canonical location. */
-const EXTERNAL_CANONICAL_PAGES = [
-  '/blog/cheap-ai-was-a-sale-the-bill-is-coming/',
-  '/blog/how-to-learn-with-ai-without-getting/',
-  '/blog/techs-silence-on-ice-is-not-neutral/',
-  '/blog/whose-computer-are-you-building-on/',
-];
-const SITEMAP_EXCLUDED_PAGES = new Set([
-  ...NOINDEX_PAGES, ...EXTERNAL_CANONICAL_PAGES,
-]);
+// The filter reads the HTML emitted before the sitemap integration runs.
+const outDir = './dist/';
 
 export default defineConfig({
+  outDir,
   // src/scripts/sentry.ts reports these as its environment and release, so
   // Vercel previews do not count as production. A build outside Vercel
   // reports environment "local" and no release.
@@ -41,7 +32,7 @@ export default defineConfig({
   integrations: [
     sitemap({
       // Advertise canonical pages; keep intentional noindex pages excluded.
-      filter: (page) => !SITEMAP_EXCLUDED_PAGES.has(new URL(page).pathname),
+      filter: canonicalSitemapFilter(new URL(outDir, import.meta.url)),
     }),
   ],
   markdown: {

@@ -1,6 +1,6 @@
 {
   ".claude/skills/verify/acceptance.md": "178f2f3daab4417959f199b065d25339f0732a994ce99442a7032245e5d26f32",
-  "astro.config.mjs": "7a96988a4e62262b3b92e837ce0bc5ac2411ac866162b0960f2a48a16de94721",
+  "astro.config.mjs": "9998eb6f5ea5741bc0617fa9a11d79ba6a3b004c4a49e2fcebd393f04dbdab15",
   "middleware.ts": "aa33a1ced6d52dc91546b2953a633c7583bc836c67ab94ba5b3defe8c4a52bfd",
   "package.json": "fbeedf13e8fcb9ecbc06c3e37ffe96e903f05be19fce81c2d4fa6e15f96c77b1",
   "src/components/SiteHeader.astro": "296df205789c814ec7c7620c57aebfd7930dd4503ec830c8bb430c8234f67f61",
