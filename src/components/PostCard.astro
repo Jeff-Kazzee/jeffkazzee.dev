@@ -1,50 +1,40 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-import FormattedDate from './FormattedDate.astro';
-
-interface Props {
-  post: CollectionEntry<'blog'>;
-  index?: number;
-}
-
+import { renderWritingCard } from '../lib/writing-list.mjs';
+import type { WritingItem } from '../lib/writing';
+interface Props { post: WritingItem; index?: number; }
 const { post, index = 0 } = Astro.props;
 ---
+<Fragment set:html={renderWritingCard(post, index)} />
 
-<article class="post reveal" style={`--i: ${index}`}>
-  <p class="date"><FormattedDate date={post.data.pubDate} /></p>
-  <h2><a href={`/blog/${post.id}/`}>{post.data.title}</a></h2>
-  <p class="desc">{post.data.description}</p>
-</article>
-
-<style>
-  .post {
+<style is:global>
+  .writing-post {
     display: grid;
     gap: calc(var(--space) * 0.75);
     padding-block: calc(var(--space) * 3.5);
     border-top: 1px solid var(--line);
   }
 
-  .date {
+  .writing-post .date {
     font-size: 0.82rem;
     letter-spacing: 0.04em;
     color: var(--ink-faint);
   }
 
-  h2 {
+  .writing-post h2 {
     font-size: 1.35rem;
     font-weight: 540;
   }
 
-  h2 a {
+  .writing-post h2 a {
     color: var(--ink);
     text-decoration: none;
   }
 
-  h2 a:hover {
+  .writing-post h2 a:hover {
     color: var(--accent);
   }
 
-  .desc {
+  .writing-post .desc {
     color: var(--ink-soft);
     font-size: 0.97rem;
     max-width: 58ch;

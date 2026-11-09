@@ -8,7 +8,7 @@
     "predev": "npm run agent-surface",
     "dev": "astro dev",
     "prebuild": "npm run agent-surface",
-    "build": "astro check && astro build && node scripts/check-budget.mjs",
+    "build": "astro check && astro build && node scripts/check-budget.mjs && node --test scripts/sitemap.test.mjs scripts/writing-page.test.mjs",
     "budget": "node scripts/check-budget.mjs",
     "preview": "astro preview",
     "astro": "astro",

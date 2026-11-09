@@ -3,11 +3,13 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import { satteri } from '@astrojs/markdown-satteri';
 import markdownTidy from './src/lib/markdown-tidy.mjs';
+import { canonicalSitemapFilter } from './src/lib/sitemap-policy.mjs';
 
-/** Reached only after an action, so there is nothing here to rank for. */
-const NOINDEX_PAGES = ['/contact-thanks/', '/offline/'];
+// The filter reads the HTML emitted before the sitemap integration runs.
+const outDir = './dist/';
 
 export default defineConfig({
+  outDir,
   // src/scripts/sentry.ts reports these as its environment and release, so
   // Vercel previews do not count as production. A build outside Vercel
   // reports environment "local" and no release.
@@ -29,10 +31,8 @@ export default defineConfig({
   build: { inlineStylesheets: 'always' },
   integrations: [
     sitemap({
-      // Pages a search engine has no reason to hold. Keep this in step with
-      // the `noindex` prop on the page itself: the sitemap stops advertising
-      // it, the meta tag stops it being indexed if something links to it.
-      filter: (page) => !NOINDEX_PAGES.some((path) => page.endsWith(path)),
+      // Advertise canonical pages; keep intentional noindex pages excluded.
+      filter: canonicalSitemapFilter(new URL(outDir, import.meta.url)),
     }),
   ],
   markdown: {

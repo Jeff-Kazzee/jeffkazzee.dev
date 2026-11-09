@@ -1,5 +1,15 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "api/writing.js": {
+      "includeFiles": "dist/{blog/index.html,api/content.json}",
+      "maxDuration": 10
+    }
+  },
+  "rewrites": [
+    { "source": "/blog", "destination": "/api/writing" },
+    { "source": "/blog/", "destination": "/api/writing" }
+  ],
   "redirects": [
     { "source": "/projects/dumpling-cafe", "destination": "/projects/", "permanent": true },
     { "source": "/projects/dumpling-cafe/", "destination": "/projects/", "permanent": true },

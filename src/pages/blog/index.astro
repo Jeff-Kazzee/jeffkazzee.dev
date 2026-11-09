@@ -1,13 +1,11 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/PostCard.astro';
 import { getGuides } from '../../lib/content-index';
+import { getWriting } from '../../lib/writing';
 const guides = await getGuides();
 
-const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+const posts = await getWriting();
 ---
 
 <BaseLayout
@@ -19,15 +17,18 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
 
     <p class="note">
       The essays below have originals on <a href="https://jeffkazzee.substack.com" rel="noopener">Substack</a>,
-      mirrored here so the archive lives on a URL I control.
+      mirrored here so the archive lives on a URL I control. A post marked On Substack is not mirrored yet,
+      so its link goes to Substack.
     </p>
     <p class="note"><a href="/deepseek-harness/">DeepSeek Harness</a> has guides, build notes, and ideas about plugins and practical harness tweaks.
       {guides.length > 0 && ` ${guides.length} published ${guides.length === 1 ? 'guide' : 'guides'}.`}
     </p>
     <div class="posts">
+      <template id="writing-start"></template>
       {posts.map((post, i) => (
         <PostCard post={post} index={i % 6} />
       ))}
+      <template id="writing-end"></template>
     </div>
   </section>
 </BaseLayout>

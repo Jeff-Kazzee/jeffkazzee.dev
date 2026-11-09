@@ -1,9 +1,9 @@
 name: CI
 on:
   push:
-    branches: [main, dev]
+    branches: [main, prod, dev]
   pull_request:
-    branches: [main, dev]
+    branches: [main, prod, dev]
   workflow_dispatch:
 permissions:
   contents: read
@@ -27,19 +27,20 @@ jobs:
           node-version: 22
           cache: pnpm
           cache-dependency-path: .github/ci-pnpm-lock.yaml
-      - name: Read current main answer key and record tested SHA
+      - name: Read current production answer key and record tested SHA
         run: |
-          git fetch origin main:refs/remotes/origin/main
+          bash .claude/skills/verify/scripts/fetch-production.sh
+          production_ref="$(node .claude/skills/verify/scripts/production-ref.mjs)"
           mkdir -p verify-evidence
           git rev-parse HEAD | tee verify-evidence/tested-sha.txt
-          git rev-parse origin/main | tee verify-evidence/answer-key-sha.txt
-          git show origin/main:.claude/skills/verify/acceptance.md > verify-evidence/acceptance-from-main.md
+          git rev-parse "$production_ref" | tee verify-evidence/answer-key-sha.txt
+          git show "$production_ref:.claude/skills/verify/acceptance.md" > verify-evidence/acceptance-from-production.md
       - run: node scripts/prepare-ci.mjs
       - run: pnpm install --frozen-lockfile
       - run: pnpm run agent-surface
       - run: pnpm run build
       - run: pnpm run verify
-      - run: node --test scripts/check-live.test.mjs scripts/prepare-ci.test.mjs scripts/guides.test.mjs scripts/space-heroes.test.mjs
+      - run: node --test scripts/check-live.test.mjs scripts/prepare-ci.test.mjs scripts/guides.test.mjs scripts/space-heroes.test.mjs scripts/substack-feed.test.mjs scripts/substack-refresh.test.mjs scripts/writing-page.test.mjs scripts/production-ref.test.mjs
 
       - name: Check preinstalled Linux verification tools
         run: |

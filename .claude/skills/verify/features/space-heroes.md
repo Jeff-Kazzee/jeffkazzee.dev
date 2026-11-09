@@ -1,6 +1,6 @@
 # Space heroes
 
-Run the existing full Linux verification on the exact PR head, with its answer key from fetched origin/main. Existing A1 to A12 remain mandatory and unchanged. All inner HTML templates intentionally change their hero presentation. Other article bodies, homepage source, header, navigation, fonts, global palette and security configuration are preserved.
+Run the existing full Linux verification on the exact PR head, with its answer key from fetched the fetched production ref. Existing A1 to A12 remain mandatory and unchanged. All inner HTML templates intentionally change their hero presentation. Other article bodies, homepage source, header, navigation, fonts, global palette and security configuration are preserved.
 
 ## Additive proof
 
