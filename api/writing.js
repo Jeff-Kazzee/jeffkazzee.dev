@@ -17,6 +17,7 @@ export default async function handler(request, response) {
   const result = await page();
   response.setHeader('Content-Type', 'text/html; charset=utf-8');
   response.setHeader('Vary', 'Accept');
+  response.setHeader('X-Writing-Source', result.fresh ? 'live-feed' : 'fallback');
   response.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
   response.setHeader('Vercel-CDN-Cache-Control', result.fresh
     ? 'public, s-maxage=300, stale-while-revalidate=60'

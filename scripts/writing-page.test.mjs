@@ -75,6 +75,7 @@ test('the built fallback is packaged and the real function renders HTML with bou
     await handler({ method: 'GET' }, response);
     assert.equal(response.statusCode, 200);
     assert.match(response.body, /href="https:\/\/jeffkazzee.substack.com\/p\/published-after-build"/);
+    assert.equal(response.headers['X-Writing-Source'], 'live-feed');
     assert.equal(response.headers['Vary'], 'Accept');
     assert.equal(response.headers['Content-Type'], 'text/html; charset=utf-8');
     assert.equal(response.headers['Vercel-CDN-Cache-Control'], 'public, s-maxage=300, stale-while-revalidate=60');
@@ -92,4 +93,56 @@ test('a stalled feed read is aborted and returns the fallback', async () => {
   const keepAlive = setTimeout(() => {}, 3000);
   try { assert.deepEqual(await page(), { html: template, fresh: false }); }
   finally { clearTimeout(keepAlive); }
+});
+
+
+test('Writing middleware overrides static HTML while preserving Markdown negotiation and other routes', async () => {
+  const { transpileModule, ModuleKind } = await import('typescript');
+  const source = readFileSync('middleware.ts', 'utf8').replace(/from '([^']+)'/g, (_, specifier) => {
+    const resolved = specifier.startsWith('.') ? new URL('../' + specifier, import.meta.url).href : import.meta.resolve(specifier);
+    return `from '${resolved}'`;
+  });
+  const { outputText } = transpileModule(source, { compilerOptions: { module: ModuleKind.ESNext } });
+  const { default: middleware } = await import('data:text/javascript;base64,' + Buffer.from(outputText).toString('base64'));
+  const originalFetch = globalThis.fetch;
+  let calls = 0;
+  globalThis.fetch = async () => { calls++; return new Response('# Writing'); };
+  try {
+    for (const path of ['/blog', '/blog/']) {
+      for (const method of ['GET', 'HEAD']) {
+        const response = await middleware(new Request('https://example.com' + path + '?verify=route', { method, headers: { accept: 'text/html, text/markdown' } }));
+        assert.equal(response.headers.get('x-middleware-rewrite'), 'https://example.com/api/writing?verify=route');
+      }
+      const markdown = await middleware(new Request('https://example.com' + path, { headers: { accept: 'text/markdown' } }));
+      assert.equal(markdown.headers.get('content-type'), 'text/markdown; charset=utf-8');
+      assert.equal(await markdown.text(), '# Writing');
+      assert.equal(markdown.headers.get('x-middleware-rewrite'), null);
+    }
+    assert.equal(calls, 2);
+    for (const path of ['/', '/blog/local/', '/api/writing']) {
+      const response = await middleware(new Request('https://example.com' + path));
+      assert.equal(response.headers.get('x-middleware-rewrite'), null);
+      assert.equal(response.headers.get('x-middleware-next'), '1');
+    }
+    globalThis.fetch = async () => new Response('', { status: 404 });
+    const missingTwin = await middleware(new Request('https://example.com/blog/', { headers: { accept: 'text/markdown' } }));
+    assert.equal(missingTwin.headers.get('x-middleware-rewrite'), 'https://example.com/api/writing');
+  } finally { globalThis.fetch = originalFetch; }
+});
+
+test('the real function marks cold feed failure and HEAD fallback without claiming live data', async () => {
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async () => new Response('unavailable', { status: 503 });
+  try {
+    const { default: handler } = await import('../api/writing.js?cold-fallback');
+    const response = { headers: {}, setHeader(name, value) { this.headers[name] = value; }, end(body) { this.body = body; } };
+    await handler({ method: 'GET' }, response);
+    assert.equal(response.statusCode, 200);
+    assert.equal(response.body, readFileSync('dist/blog/index.html', 'utf8'));
+    assert.equal(response.headers['X-Writing-Source'], 'fallback');
+    assert.equal(response.headers['Vercel-CDN-Cache-Control'], 'public, s-maxage=30');
+    await handler({ method: 'HEAD' }, response);
+    assert.equal(response.headers['X-Writing-Source'], 'fallback');
+    assert.equal(response.body, undefined);
+  } finally { globalThis.fetch = originalFetch; }
 });

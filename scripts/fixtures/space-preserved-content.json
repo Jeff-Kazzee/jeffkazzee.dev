@@ -1,7 +1,7 @@
 {
   ".claude/skills/verify/acceptance.md": "178f2f3daab4417959f199b065d25339f0732a994ce99442a7032245e5d26f32",
   "astro.config.mjs": "9998eb6f5ea5741bc0617fa9a11d79ba6a3b004c4a49e2fcebd393f04dbdab15",
-  "middleware.ts": "aa33a1ced6d52dc91546b2953a633c7583bc836c67ab94ba5b3defe8c4a52bfd",
+  "middleware.ts": "d518d4462bed76c0f26a0eef3e569a83f17069e2498306833f5f4545b8578448",
   "package.json": "e6991983b5843df5b91d872edc5bd2ceccb272e2645ae3a65a4f63c2f7132f3a",
   "src/components/SiteHeader.astro": "296df205789c814ec7c7620c57aebfd7930dd4503ec830c8bb430c8234f67f61",
   "src/content/blog/a-company-paid-me-for-guides-i-gave-away.md": "8da6271072869ff3b2a43085a18334275f572544436b388c7fddd05ca5f36411",
