@@ -157,3 +157,13 @@ Local static preview still serves the fallback; verify the rewritten `/blog/`
 route, response headers and function packaging on the Vercel preview before
 promotion. Full-text mirrors still require separately published local content;
 feed-only entries link to their original Substack URLs.
+
+## Production branch compatibility
+
+CI accepts `main`, `prod` and `dev` while the production rename is prepared.
+The verifier fetches the remote default branch only when it is `main` or `prod`,
+records that ref and SHA, and reads its independent acceptance key. For a hosting
+branch that differs from the repository default, the operator must confirm it and
+set `VERIFY_PRODUCTION_BRANCH=main` or `prod` explicitly. It never falls back to
+HEAD or the branch under test. The build release label uses that same fetched SHA.
+These changes do not rename a branch or change Vercel/protection settings.
