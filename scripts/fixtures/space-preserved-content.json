@@ -2,7 +2,7 @@
   ".claude/skills/verify/acceptance.md": "178f2f3daab4417959f199b065d25339f0732a994ce99442a7032245e5d26f32",
   "astro.config.mjs": "9998eb6f5ea5741bc0617fa9a11d79ba6a3b004c4a49e2fcebd393f04dbdab15",
   "middleware.ts": "aa33a1ced6d52dc91546b2953a633c7583bc836c67ab94ba5b3defe8c4a52bfd",
-  "package.json": "fbeedf13e8fcb9ecbc06c3e37ffe96e903f05be19fce81c2d4fa6e15f96c77b1",
+  "package.json": "e6991983b5843df5b91d872edc5bd2ceccb272e2645ae3a65a4f63c2f7132f3a",
   "src/components/SiteHeader.astro": "296df205789c814ec7c7620c57aebfd7930dd4503ec830c8bb430c8234f67f61",
   "src/content/blog/a-company-paid-me-for-guides-i-gave-away.md": "8da6271072869ff3b2a43085a18334275f572544436b388c7fddd05ca5f36411",
   "src/content/blog/cheap-ai-was-a-sale-the-bill-is-coming.md": "93fa42ce6d8174f05bd57d4c17043779f9437f5689bd602d595e856bcc025ac9",
@@ -24,5 +24,5 @@
   "src/content/projects/vivary.md": "67b489342720fc4bfef7dda2ab40a52ea7b92aa17db486db5c6009067b1272d6",
   "src/pages/index.astro": "4a9ef08400f6cbbd0f84d6e355b542112b294f6d8303ef678ba48b4b60a46ad1",
   "src/styles/global.css": "205b7b5f7e3371e167f19dd55faf5a517e1f9dd85dbb4a606785445d0bfd9434",
-  "vercel.json": "e88f35ccb41e1c71ec165aa6c894a2f8d9279861e6c91faa1489a6703140b118"
+  "vercel.json": "34214484f1c2b7a97c4929edaa57b384a37e0122b3f167f1f8f66a430347365f"
 }
