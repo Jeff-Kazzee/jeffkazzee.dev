@@ -23,21 +23,18 @@ test('the sitemap lists only self-canonical HTML pages', () => {
   }
 });
 
-test('every published source article keeps its HTML and declared canonical', () => {
-  const sources = readdirSync('src/content/blog').filter((file) => file.endsWith('.md') && !file.startsWith('_'));
-  assert.ok(sources.length > 0);
-  for (const file of sources) {
-    const source = readFileSync(join('src/content/blog', file), 'utf8');
-    const frontmatter = source.match(/^---\r?\n([\s\S]*?)\r?\n---/)?.[1];
-    assert.ok(frontmatter, file);
-    if (/^draft:\s*true\s*$/m.test(frontmatter)) continue;
-    const slug = file.slice(0, -3);
-    const local = `${origin}/blog/${slug}/`;
-    const declared = frontmatter.match(/^canonicalUrl:\s*(.+)$/m)?.[1].trim().replace(/^['"]|['"]$/g, '') ?? local;
-    const html = readFileSync(join('dist/blog', slug, 'index.html'), 'utf8');
+test('every published collection article keeps its HTML and declared canonical', () => {
+  // This endpoint uses getCollection: IDs include Astro slug overrides and normalization.
+  const { posts } = JSON.parse(readFileSync('dist/api/content.json', 'utf8'));
+  assert.ok(posts.length > 0, 'build a nonempty published article index first');
+  for (const post of posts) {
+    const local = post.url;
+    assert.equal(new URL(local).origin, origin);
+    const declared = post.canonicalUrl ?? local;
+    const html = readFileSync(join('dist', decodeURIComponent(new URL(local).pathname), 'index.html'), 'utf8');
     const canonical = html.match(/<link\b[^>]*rel="canonical"[^>]*href="([^"]+)"/)?.[1];
-    assert.equal(canonical, declared, `canonical changed or missing: ${file}`);
-    assert.equal(urls.includes(local), declared === local, `wrong sitemap membership: ${file}`);
+    assert.equal(canonical, declared, `canonical changed or missing: ${post.slug}`);
+    assert.equal(urls.includes(local), declared === local, `wrong sitemap membership: ${post.slug}`);
   }
 });
 
