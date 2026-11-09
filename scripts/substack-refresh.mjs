@@ -38,30 +38,13 @@ export async function checkRefresh({ fetchImpl = fetch } = {}) {
   return { checked: posts.length, missing: missingPosts(posts, await page.text(), index) };
 }
 
-export async function requestBuild(hook, { fetchImpl = fetch } = {}) {
-  if (!hook) throw new Error('Missing VERCEL_DEPLOY_HOOK_URL: configure an existing main-branch deploy hook before enabling refresh');
-  const url = new URL(hook);
-  if (url.protocol !== 'https:' || url.hostname !== 'api.vercel.com' || !url.pathname.startsWith('/v1/integrations/deploy/')) {
-    throw new Error('Expected a Vercel HTTPS deploy hook');
-  }
-  // Never print the hook URL, response body, or network error (which can contain it).
-  let response;
-  try { response = await fetchImpl(hook, { method: 'POST', redirect: 'error', signal: AbortSignal.timeout(20000) }); }
-  catch { throw new Error('Vercel build request failed; inspect the configured hook privately'); }
-  if (!response.ok) throw new Error(`Vercel build request returned HTTP ${response.status}`);
-}
-
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   try {
     const result = await checkRefresh();
     console.log(`Checked ${result.checked} feed posts; ${result.missing.length} missing from the writing page.`);
     for (const post of result.missing) console.log(`${post.pubDate} ${post.url}`);
-    if (result.missing.length) {
-      if (process.argv.includes('--request-build')) {
-        await requestBuild(process.env.VERCEL_DEPLOY_HOOK_URL);
-        console.log('Build requested. This is not confirmation of deployment or article visibility; rerun the check after deployment.');
-      } else process.exitCode = 1;
-    }
+    if (result.missing.length) process.exitCode = 1;
+
   } catch (error) {
     console.error(error.message);
     process.exitCode = 1;

@@ -24,9 +24,11 @@ const posts = await getWriting();
       {guides.length > 0 && ` ${guides.length} published ${guides.length === 1 ? 'guide' : 'guides'}.`}
     </p>
     <div class="posts">
+      <template id="writing-start"></template>
       {posts.map((post, i) => (
         <PostCard post={post} index={i % 6} />
       ))}
+      <template id="writing-end"></template>
     </div>
   </section>
 </BaseLayout>

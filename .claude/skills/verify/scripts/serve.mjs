@@ -4,6 +4,7 @@
 import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import { extname, join, resolve, sep } from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 const [dist, port] = [resolve(process.argv[2]), Number(process.argv[3])];
 const vercel = JSON.parse(await readFile(join(dist, '..', 'vercel.json'), 'utf8'));
@@ -43,6 +44,11 @@ createServer(async (req, res) => {
   if (redirect) {
     res.writeHead(redirect.permanent ? 308 : 307, { location: redirect.destination });
     return res.end();
+  }
+  // Exercise the same native Writing handler as Vercel, not only its static fallback.
+  if (path === '/blog' || path === '/blog/') {
+    const { default: writing } = await import(pathToFileURL(join(dist, '..', 'api/writing.js')).href);
+    return writing(req, res);
   }
   const file = await resolveFile(path);
   const served = file ?? join(dist, '404.html');

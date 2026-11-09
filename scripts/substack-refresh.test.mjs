@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { parseFeed } from '../src/lib/substack-feed.mjs';
-import { checkRefresh, missingPosts, requestBuild } from './substack-refresh.mjs';
+import { checkRefresh, missingPosts } from './substack-refresh.mjs';
 
 const xml = readFileSync(new URL('./fixtures/substack-feed.xml', import.meta.url), 'utf8');
 const posts = parseFeed(xml);
@@ -50,27 +50,6 @@ test('feed outage and malformed success responses fail visibly', async () => {
 test('a site read failure cannot be mistaken for a missing article', async () => {
   await assert.rejects(checkRefresh({ fetchImpl: async url => url.endsWith('/feed') ? new Response(xml) : new Response('down', { status: 503 }) }), /HTTP 503 reading/);
 });
-
-test('missing hook fails and build errors never disclose the hook', async () => {
-  await assert.rejects(requestBuild(''), /Missing VERCEL_DEPLOY_HOOK_URL/);
-  const hook = 'https://api.vercel.com/v1/integrations/deploy/test-private-hook';
-  await assert.rejects(requestBuild(hook, { fetchImpl: async () => { throw new Error(hook); } }), error => !error.message.includes(hook) && /request failed/.test(error.message));
-});
-
-test('build request uses POST once and rejects unsuccessful responses', async () => {
-  const hook = 'https://api.vercel.com/v1/integrations/deploy/test-private-hook';
-  let calls = 0;
-  await requestBuild(hook, { fetchImpl: async (url, init) => {
-    calls++;
-    assert.equal(url, hook);
-    assert.equal(init.method, 'POST');
-    assert.equal(init.redirect, 'error');
-    return new Response('{}');
-  } });
-  assert.equal(calls, 1);
-  await assert.rejects(requestBuild(hook, { fetchImpl: async () => new Response('no', { status: 403 }) }), /HTTP 403/);
-});
-
 
 test('a linked same-slug mirror counts without canonical metadata, as getWriting does', () => {
   const local = { slug: posts[0].id, url: `https://jeffkazzee.dev/blog/${posts[0].id}/` };

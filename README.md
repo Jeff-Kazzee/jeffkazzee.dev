@@ -130,3 +130,30 @@ response, the MCP tool list and the agent card each answered from the live origi
 
 No license file yet. Until one is added, all rights are reserved. The space images
 are NASA, ESA, CSA and STScI images. The site credits each one where it appears.
+
+## Writing refresh
+
+`/blog/` is served as HTML by the native Vercel function in `api/writing.js`.
+It reads the public Substack feed on cache misses, combines it with published
+local records, and uses the same card renderer and mirror rules as the static
+build. No Git push, Actions schedule, deploy hook or new credential is needed.
+All other routes remain static and existing security headers remain in place.
+
+Successful HTML is cached at Vercel for five minutes, with up to one additional
+minute of stale-while-revalidate; each warm function also coalesces requests and
+caches a feed result for one minute. Refresh is traffic-driven, not immediate.
+Feed reads time out after two seconds. A failed, empty or incomplete feed returns
+the last good HTML in that warm instance, or the complete built Writing page on
+a cold instance, and retries after a short cache interval. The built page retains
+whatever feed entries were available at build time; a cold failed build has local
+articles only. Runtime memory is not durable archival storage.
+
+The static HTML and content index are explicitly bundled with the function.
+`pnpm run build` tests these artifacts and request rendering. The read-only
+`node scripts/substack-refresh.mjs` compares production links with the current
+feed and exits nonzero for missing articles; it never requests a deployment.
+The retired Actions refresh workflow and deploy-hook caller have been removed.
+Local static preview still serves the fallback; verify the rewritten `/blog/`
+route, response headers and function packaging on the Vercel preview before
+promotion. Full-text mirrors still require separately published local content;
+feed-only entries link to their original Substack URLs.
