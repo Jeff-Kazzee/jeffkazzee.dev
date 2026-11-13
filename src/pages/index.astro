@@ -13,19 +13,19 @@ const projects = await getCollection('projects');
 const bySlug = new Map(projects.map((p) => [p.id, p]));
 
 /**
- * The home page picks its projects by slug. A feature or card links straight to
- * a live site, so it must have a screenshot and a `verified` stamp from
- * `npm run verify:projects`. Rows link to the project page on this site.
+ * The home page picks its projects by slug. A feature or card needs a screenshot.
+ * Cards that link to a live site also need a `verified` stamp from
+ * `npm run verify:projects`. Other cards and rows link to the project page here.
  */
 const FEATURE = 'vivary';
-const CARDS = ['open-world-factbook', 'llm-arcade', 'puckwork', 'neon-noir-detective-agency'];
-const ROWS = ['context-engine', 'sdlc-skills', 'ps5-agent-remote'];
+const CARDS = ['open-world-factbook', 'llm-arcade', 'puckwork', 'ps5-agent-remote'];
+const ROWS = ['context-engine', 'sdlc-skills'];
 
-function pick(slug: string, needsLive: boolean): Project {
+function pick(slug: string, needsScreenshot: boolean): Project {
   const project = bySlug.get(slug);
   if (!project) throw new Error(`Home page lists "${slug}", but there is no such project.`);
-  if (needsLive) {
-    if (!project.data.verified)
+  if (needsScreenshot) {
+    if (project.data.liveUrl && !project.data.verified)
       throw new Error(`"${slug}" is on the home page but was never verified. Run npm run verify:projects.`);
     if (!project.data.screenshots.length)
       throw new Error(`"${slug}" is a home page card but has no screenshot.`);
@@ -136,6 +136,7 @@ const jsonLd = JSON.stringify({
           <span class="frame">
             <Image
               class="shot"
+              data-fit={p.data.screenshots[0].fit}
               src={p.data.screenshots[0].src}
               alt={p.data.screenshots[0].alt}
               widths={[360, 480, 640, 800, 1040]}
@@ -386,6 +387,11 @@ const jsonLd = JSON.stringify({
     object-fit: cover;
     object-position: left top;
     transition: filter 0.3s var(--ease-out);
+  }
+
+  .frame :global(.shot[data-fit='contain']) {
+    object-fit: contain;
+    object-position: center;
   }
 
   /* ---------- feature ---------- */
