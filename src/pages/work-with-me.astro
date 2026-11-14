@@ -26,15 +26,15 @@ const bookingEmail = (subject: string) =>
 const tracks = [
   {
     title: 'Learn to code with AI',
-    desc: 'From zero, or close to it. Real tools, Cursor and Claude, on a real project instead of a toy exercise. You leave able to read code, change it, and ship it with an AI pair.',
+    desc: 'Start with little or no coding experience. Use Cursor and Claude on your own project. Practise reading code, changing it and checking what it does.',
   },
   {
     title: 'Use AI for real work',
-    desc: 'Your actual job. Research, writing, data, docs, and automating the boring parts. Done faster, and understood well enough that you can trust the output instead of guessing at it.',
+    desc: 'Bring a task from your job: research, writing, data, documentation or automation. We work through the task and check the output.',
   },
   {
     title: 'Build something real',
-    desc: 'Bring an idea. Leave with a working, shippable thing: a tool, a site, an automation. Step by step, screen-shared. You drive, I guide.',
+    desc: 'Bring an idea for a tool, website or automation. You share your screen and build while I explain the next step.',
   },
 ];
 
@@ -42,7 +42,7 @@ const pricing = [
   {
     name: 'Half hour',
     price: '$40',
-    desc: 'One session, one screen, one problem. The fastest way to find out if this works for you.',
+    desc: 'One half-hour session for one problem, with a shared screen.',
     cta: 'Pay and book',
     href: STRIPE_HALF_HOUR,
     selfServe: true,
@@ -50,7 +50,7 @@ const pricing = [
   {
     name: 'One hour',
     price: '$65',
-    desc: 'Two thirty-minute blocks, back to back. Send a note first so we can line up the time.',
+    desc: 'Two thirty-minute blocks, back to back. Email me first to arrange the time.',
     cta: 'Email to book an hour',
     href: bookingEmail('Booking an hour session'),
     selfServe: false,
@@ -58,7 +58,7 @@ const pricing = [
   {
     name: 'Three-session pack',
     price: '$100',
-    desc: 'Three half-hour sessions. The best value, because the second and third are usually where it clicks.',
+    desc: 'Three half-hour sessions. Email me to arrange the dates.',
     cta: 'Email to arrange',
     href: bookingEmail('Three-session pack'),
     selfServe: false,
@@ -66,7 +66,7 @@ const pricing = [
   {
     name: 'Groups and workshops',
     price: 'from $25 / person',
-    desc: 'Small group of two to four at $35 a person per hour. Workshop of five to ten at $25 a person per hour. Tell me the group and the topic.',
+    desc: 'Two to four people: $35 per person per hour. Five to ten people: $25 per person per hour. Email me the group size and topic.',
     cta: 'Email about a group',
     href: bookingEmail('Group session or workshop'),
     selfServe: false,
@@ -84,7 +84,7 @@ const shipped = (await getCollection('projects'))
 const faqs = [
   {
     q: 'Do I need experience?',
-    a: 'No. Plenty of people start at zero. That is a normal place to start.',
+    a: 'No. You can start with no coding experience.',
   },
   {
     q: 'What do I need installed?',
@@ -92,15 +92,15 @@ const faqs = [
   },
   {
     q: 'Can my team book together?',
-    a: 'Yes. Two to four is a small group, five to ten is a workshop, both at a lower rate per person.',
+    a: 'Yes. Two to four people can book a small group. Five to ten can book a workshop. Both cost less per person than a one-on-one hour.',
   },
   {
     q: 'Can I reschedule?',
-    a: 'Yes. Give me at least 24 hours notice and we will find a new time.',
+    a: 'Yes. Give me at least 24 hours notice, and we will arrange a new time.',
   },
   {
     q: 'Refunds?',
-    a: 'If your first session is not useful, tell me and I refund it. That is the whole policy.',
+    a: 'If your first session is not useful, tell me and I will refund it.',
   },
 ];
 ---
@@ -108,7 +108,7 @@ const faqs = [
 <BaseLayout
   title="Learn to build with AI, live with Jeff Kazzee"
   hero={{ title: "You don't need a degree to build with AI. You need an hour and someone who has done it." }}
-  description="Live, screen-shared coaching. Learn to code with AI, use AI for your real work, or build something real. One-on-one and small-group sessions."
+  description="Live coaching with a shared screen. Learn to code, use AI for a work task or build a project. One-on-one, small-group and workshop sessions."
 >
   <div slot="hero-meta">
     <p class="now rise" style="--i: 0">
@@ -116,9 +116,7 @@ const faqs = [
       One-on-one and group sessions, live and screen-shared
     </p>
     <p class="lede rise" style="--i: 2">
-      This is live teaching, not a course you watch alone. We get on a call, share a screen, and
-      work on your thing: your first program, your real job, or the idea you keep not shipping. You
-      leave with something that runs, and the skill to keep going without me.
+      Bring a project, a task from work or an idea you want to try. We work on it together on a live call. You share your screen, make the changes and ask questions as we go.
     </p>
     <div class="cta rise" style="--i: 3">
       <LinkButton href="#pricing" variant="primary">Reserve a session</LinkButton>
@@ -129,12 +127,12 @@ const faqs = [
   <section class="wrap">
     <SectionHeading
       title="Who this is for"
-      note="Learners and working professionals, not people who need their code cleaned up."
+      note="These sessions teach you to use AI. They are not a code-cleanup service."
     />
     <ul class="who flow">
-      <li>People who want to build something real and keep bouncing off tutorials.</li>
-      <li>Working professionals who want to use AI on the actual job, not a toy demo.</li>
-      <li>Small teams who want to get better together.</li>
+      <li>People who want to build a project and need help getting past tutorials.</li>
+      <li>Working professionals who want to use AI for tasks from their own jobs.</li>
+      <li>Small teams who want to learn together.</li>
     </ul>
     <p class="pull">If you have been meaning to learn this for a year, an hour with a person beats another month of open tabs.</p>
   </section>
@@ -142,7 +140,7 @@ const faqs = [
   <section class="wrap" id="tracks">
     <SectionHeading
       title="What you'll learn"
-      note="Three tracks. Pick one, or mix them across sessions."
+      note="Choose one track, or use different tracks across sessions."
     />
     <div class="grid">
       {tracks.map((t, i) => (
@@ -157,21 +155,20 @@ const faqs = [
   <section class="wrap">
     <SectionHeading title="Formats" />
     <ul class="formats flow">
-      <li><strong>One-on-one.</strong> Live, screen-shared, your pace.</li>
-      <li><strong>Small group, two to four.</strong> Learn with your team or your friends at a lower cost per person.</li>
-      <li><strong>Workshop, five to ten.</strong> One focused topic for a group.</li>
-      <li><strong>More than once.</strong> Most people book again, because skills compound. Recurring is the point, not the exception.</li>
+      <li><strong>One-on-one.</strong> We share a screen and work at your pace.</li>
+      <li><strong>Small group, two to four.</strong> Learn with your team or friends at a lower cost per person.</li>
+      <li><strong>Workshop, five to ten.</strong> Work through one topic as a group.</li>
+      <li><strong>More than once.</strong> Book separate sessions for work spread across days. The three-session pack includes three half-hour calls.</li>
     </ul>
   </section>
 
   <section class="wrap">
     <SectionHeading
       title="What I've built with these tools"
-      note="No testimonials yet. Here is the work instead."
+      note="See the projects below for examples of my work."
     />
     <p class="proof-lede">
-      I teach the tools I use every day. Here is what I have shipped with them, live right now. I
-      will teach you to build like this.
+      I build software with AI coding agents. These project links show examples from my portfolio.
     </p>
     <div class="proof-grid">
       {shipped.map((p) => (
@@ -188,7 +185,7 @@ const faqs = [
   <section class="wrap" id="pricing">
     <SectionHeading
       title="What it costs"
-      note="The half hour books itself. Everything else, send a note and I set it up with you."
+      note="You can pay and book a half hour online. Email me for all other formats."
     />
     <div class="prices">
       {pricing.map((p) => (
@@ -205,19 +202,16 @@ const faqs = [
       ))}
     </div>
     <p class="boundary">
-      Sessions run from a half hour up to four hours. Anything longer than a single half hour,
-      spread across days, or for a group needs a quick email first so I can block the right time.
-      Every engagement gets scoped to fit. Already paid for your half hour?
-      <a href={BOOKING_URL} target="_blank" rel="noopener">Book your slot here.</a>
+      Sessions last from half an hour to four hours. Email me first for anything longer than one half hour, spread across days or for a group. We set the scope to fit the session. Already paid for your half hour? <a href={BOOKING_URL} target="_blank" rel="noopener">Book your slot here.</a>
     </p>
   </section>
 
   <section class="wrap">
     <SectionHeading title="How it works" />
     <ol class="steps flow">
-      <li><strong>Pick your session.</strong> The half hour is ready to book right now. For anything longer or for a group, send me a note and I get you set up.</li>
-      <li><strong>Pay.</strong> Secure Stripe checkout. You and I both get an emailed receipt, and that receipt confirms your spot.</li>
-      <li><strong>Book your time.</strong> After payment, grab a slot on my calendar. You get a calendar invite and a reminder.</li>
+      <li><strong>Pick your session.</strong> You can book a half hour online. Email me to arrange anything longer or a group.</li>
+      <li><strong>Pay.</strong> Use the Stripe checkout. You and I both get an email receipt. It confirms your session.</li>
+      <li><strong>Book your time.</strong> After payment, choose a slot on my calendar. You get a calendar invite and a reminder.</li>
     </ol>
   </section>
 
@@ -225,12 +219,10 @@ const faqs = [
     <SectionHeading title="Is this a fit?" />
     <div class="flow">
       <p>
-        Good fit if you want to learn by building real things, you like a patient person who
-        explains the why, and you would rather understand the tool than buy a shortcut.
+        You want to learn by building, with someone who explains each step. You want to understand the tools, not hand off the whole job.
       </p>
       <p>
-        One honest thing. If your problem is bigger than a session can solve, I will say so, and I
-        will point you somewhere better.
+        If the problem is too large for a session, I will say so and suggest where to look next.
       </p>
     </div>
     <p class="pull">I don't fix your mistakes. I teach you to not need me.</p>
@@ -251,8 +243,7 @@ const faqs = [
   <section class="wrap final">
     <SectionHeading title="Bring the thing you keep meaning to learn" />
     <p class="final-copy">
-      We will build it together, and you will leave able to keep building. Start with a half hour.
-      If you want the longer version or a group, email me first.
+      Start with a half hour. Bring a task or an idea, and we will work on it together. Email me first for a longer session or a group.
     </p>
     <div class="cta">
       <LinkButton href={STRIPE_HALF_HOUR} variant="primary">Book a half hour</LinkButton>
