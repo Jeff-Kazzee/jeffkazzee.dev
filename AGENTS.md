@@ -3,6 +3,7 @@
 The site is static Astro output with a native Vercel Writing route. Production is currently `main`; the planned rename is `prod`. Confirm the Vercel production branch during the operational switch.
 
 Follow the machine Git law in `~/AGENTS.md` (Jeff, 2026-11-03). Task branches start from `origin/dev` and squash-merge into `dev`. Promotions from `dev` to the active production branch (`main` or `prod`) use a pull request and a merge commit. Each merge waits for Jeff’s approval after an independent exact-head receipt passes.
+Use the [GitHub Flow skill](https://github.com/Jeff-Kazzee/github-skills/blob/649e340019a49f29d27bc940f0822d2c815dff8e/github-flow/SKILL.md) for task pull requests into `dev` under this repository's Git rules.
 
 ## Verify
 
