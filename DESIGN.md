@@ -62,7 +62,7 @@ Calm and readable on a laptop first. Revised 2026-10-26 after the first version 
 
 ## Motion
 
-- Little of it. `cubic-bezier(0.22, 1, 0.36, 1)`. Hover color changes, and `.reveal` fade-up on the project cards and agent note, gated so no-JS readers see everything. Nothing moves in the hero.
+- Little of it. `cubic-bezier(0.22, 1, 0.36, 1)`. Hover color changes, and `.reveal` fade-up on the project cards and agent note, gated so no-JS readers see everything. Nothing moves in the hero. The one scene that moves is the agent demo at the top of Projects (`src/components/AgentDemo.astro`), an illustrated task list. It loops only while it is on screen, and readers with reduced motion or no JavaScript see its finished state, still. (Jeff, 2026-11-26)
 - Full `prefers-reduced-motion` support.
 
 ## Speed
