@@ -5,6 +5,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import cosmicCliffs from '../assets/cosmic-cliffs.jpg';
 import Status from '../components/Status.astro';
+import AgentDemo from '../components/AgentDemo.astro';
 import { SITE } from '../data/agent-surface.mjs';
 
 type Project = CollectionEntry<'projects'>;
@@ -129,6 +130,8 @@ const jsonLd = JSON.stringify({
       <h2 id="projects-title">Projects</h2>
       <a class="see-all" href="/projects/">All projects</a>
     </div>
+
+    <AgentDemo />
 
     <div class="cards">
       {cards.map((p, i) => (

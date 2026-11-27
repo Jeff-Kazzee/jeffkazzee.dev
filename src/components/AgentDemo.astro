@@ -1,0 +1,714 @@
+---
+/**
+ * The agent demo at the top of Projects: one task worked from claim to review.
+ * The task drops in at the top of the list and pushes it down, its steps open
+ * and tick one at a time, and its status goes Working, Checking, then Waiting
+ * on Jeff, which holds. The row then closes the way it opened and the loop
+ * starts again.
+ *
+ * Ported from the Stageshow `agent-task` scene, without React. The markup is
+ * the finished state, so readers without JavaScript or with reduced motion
+ * see the payoff and nothing moves. The script below runs the loop only while
+ * the scene is on screen.
+ *
+ * The task, branch names and steps are illustrative, not a real task.
+ */
+const STEPS = ['Changed 3 files', '14 tests passed', 'Opened pull request #42', 'Checked by a second agent'];
+const STAGES = ['Working', 'Checking', 'Waiting on Jeff'];
+const NAV = [64, 88, 52, 76, 60];
+const FILLER = [176, 148, 196];
+---
+
+<figure class="agent-demo" data-agent-demo>
+  <div class="ad-layout">
+    <div
+      class="ad-stage"
+      role="img"
+      aria-label="Illustration of a task list. A task called Add a contact form ticks off four steps: changed 3 files, 14 tests passed, opened pull request 42, checked by a second agent. Its status ends on Waiting on Jeff."
+    >
+      <div class="ad-win">
+        <aside class="ad-side">
+          <span class="ad-lights"><i></i><i></i><i></i></span>
+          <span class="ad-nav">
+            {NAV.map((w, i) => (
+              <span class="ad-nav-item" data-active={i === 1 || undefined}>
+                <span class="ad-bar ad-bar--icon"></span>
+                <span class="ad-bar" style={`width: ${w}px`}></span>
+              </span>
+            ))}
+          </span>
+        </aside>
+        <div class="ad-main">
+          <div class="ad-head">
+            <span class="ad-lights ad-lights--compact"><i></i><i></i><i></i></span>
+            <span class="ad-title">Tasks</span>
+          </div>
+          <div class="ad-body">
+            <div class="ad-collapse" data-open data-lead>
+              <div class="ad-inner">
+                <div class="ad-glide">
+                  <div class="ad-row">
+                    <span class="ad-lines">
+                      <span class="ad-msg">Add a contact form</span>
+                      <span class="ad-meta">
+                        <svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true">
+                          <path d="M6 3v12M18 9a9 9 0 0 1-9 9" />
+                          <circle cx="18" cy="6" r="3" />
+                          <circle cx="6" cy="18" r="3" />
+                        </svg>
+                        <span class="ad-branch">task/42-contact-form</span>
+                      </span>
+                    </span>
+                    <span class="ad-badge" data-tone="accent">
+                      <span class="ad-dot"></span>
+                      <span class="ad-label">
+                        {STAGES.map((t, i) => (
+                          <span class="ad-word" data-on={i === STAGES.length - 1 || undefined}>{t}</span>
+                        ))}
+                      </span>
+                    </span>
+                  </div>
+                  <div class="ad-steps">
+                    {STEPS.map((t) => (
+                      <div class="ad-collapse" data-open data-step>
+                        <div class="ad-inner">
+                          <div class="ad-glide">
+                            <div class="ad-step" data-done>
+                              <span class="ad-check" data-on>
+                                <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+                                  <circle class="ad-check-ring" cx="8" cy="8" r="7.25" />
+                                  <circle class="ad-check-arc" cx="8" cy="8" r="7.25" pathLength="1" />
+                                  <circle class="ad-check-fill" cx="8" cy="8" r="8" />
+                                  <path class="ad-check-tick" d="M4.5 8.2 7 10.6l4.6-5" pathLength="1" />
+                                </svg>
+                              </span>
+                              <span>{t}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="ad-row">
+              <span class="ad-lines">
+                <span class="ad-msg">Fix pricing copy</span>
+                <span class="ad-meta">
+                  <svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M6 3v12M18 9a9 9 0 0 1-9 9" />
+                    <circle cx="18" cy="6" r="3" />
+                    <circle cx="6" cy="18" r="3" />
+                  </svg>
+                  <span class="ad-branch">task/41-pricing-copy</span>
+                </span>
+              </span>
+              <span class="ad-badge" data-tone="shipped"><span class="ad-dot"></span>Landed</span>
+            </div>
+            {FILLER.map((w) => (
+              <div class="ad-row">
+                <span class="ad-lines">
+                  <span class="ad-bar ad-bar--title" style={`width: ${w}px`}></span>
+                  <span class="ad-bar ad-bar--meta"></span>
+                </span>
+                <span class="ad-bar ad-bar--pill"></span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption>
+      An illustration of how work reaches this site. An agent claims a task and does it on its own
+      branch, and a second agent checks it. Nothing merges until I review it.
+    </figcaption>
+  </div>
+</figure>
+
+<script>
+  type S = { open: boolean; step: number; done: number; stage: number };
+
+  const initial: S = { open: false, step: 0, done: 0, stage: 0 };
+
+  // Each beat waits, then changes the scene. The loop starts from the
+  // finished task the reader already sees, so the first move is the row
+  // closing, not a jump back to an empty list.
+  const BEATS: [number, Partial<S> | 'reset'][] = [
+    [2400, { open: false }],
+    [600, 'reset'],
+    [400, { open: true }],
+    [800, { step: 1 }],
+    [1300, { done: 1, step: 2 }],
+    [1400, { done: 2, step: 3 }],
+    [1200, { done: 3, step: 4, stage: 1 }],
+    [1700, { done: 4, stage: 2 }],
+  ];
+
+  function run(root: HTMLElement) {
+    const lead = root.querySelector<HTMLElement>('[data-lead]')!;
+    const steps = [...root.querySelectorAll<HTMLElement>('[data-step]')];
+    const label = root.querySelector<HTMLElement>('.ad-label')!;
+    const words = [...label.querySelectorAll<HTMLElement>('.ad-word')];
+    let widths: number[] = [];
+    let s: S = { open: true, step: 4, done: 4, stage: 2 };
+
+    const flag = (el: Element, name: string, on: boolean) => el.toggleAttribute(name, on);
+
+    function apply(next: S) {
+      flag(lead, 'data-open', next.open);
+      steps.forEach((el, i) => {
+        flag(el, 'data-open', next.step > i);
+        flag(el.querySelector('.ad-step')!, 'data-done', next.done > i);
+        const check = el.querySelector('.ad-check')!;
+        flag(check, 'data-on', next.done > i);
+        flag(check, 'data-pending', next.step > i && next.done <= i);
+      });
+      words.forEach((el, i) => flag(el, 'data-on', i === next.stage));
+      if (widths.length) {
+        flag(label, 'data-shrink', widths[next.stage] < widths[s.stage]);
+        label.style.width = `${widths[next.stage]}px`;
+      }
+      s = next;
+    }
+
+    // A reset happens while the row is closed, so nobody sees it. It still
+    // lands without transitions, so nothing is left easing when the row opens.
+    function snap(next: S) {
+      root.setAttribute('data-snap', '');
+      apply(next);
+      void root.offsetWidth;
+      root.removeAttribute('data-snap');
+    }
+
+    let beat = 0;
+    let timer = 0;
+    let due = 0;
+    let left = BEATS[0][0];
+
+    function tick() {
+      const [, change] = BEATS[beat];
+      if (change === 'reset') snap(initial);
+      else apply({ ...s, ...change });
+      beat = (beat + 1) % BEATS.length;
+      left = BEATS[beat][0];
+      play();
+    }
+
+    function play() {
+      window.clearTimeout(timer);
+      due = performance.now() + left;
+      timer = window.setTimeout(tick, left);
+    }
+
+    function pause() {
+      window.clearTimeout(timer);
+      left = Math.max(0, due - performance.now());
+    }
+
+    let onScreen = false;
+    const update = () => (onScreen && !document.hidden ? play() : pause());
+
+    document.fonts.ready.then(() => {
+      widths = words.map((el) => el.offsetWidth);
+      label.style.width = `${widths[s.stage]}px`;
+      root.setAttribute('data-live', '');
+      new IntersectionObserver(
+        ([entry]) => {
+          onScreen = entry.isIntersecting;
+          update();
+        },
+        { threshold: 0.4 },
+      ).observe(root);
+      document.addEventListener('visibilitychange', update);
+    });
+  }
+
+  const root = document.querySelector<HTMLElement>('[data-agent-demo]');
+  if (root && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) run(root);
+</script>
+
+<style>
+  /* Local tones for the scene. Everything else comes from the site's tokens. */
+  .agent-demo {
+    --ad-ink-1: rgb(255 255 255 / 0.05);
+    --ad-ink-2: rgb(255 255 255 / 0.07);
+    --ad-ink-4: rgb(255 255 255 / 0.13);
+    --ad-line-faint: rgb(123 156 194 / 0.12);
+    --ad-check: #4a5272;
+    container-type: inline-size;
+    margin: 0 0 calc(var(--space) * 3);
+  }
+
+  .ad-stage {
+    position: relative;
+    max-width: 760px;
+    height: 440px;
+    overflow: hidden;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    line-height: 1.3;
+    color: var(--ink-soft);
+    user-select: none;
+  }
+
+  figcaption {
+    max-width: var(--measure);
+    margin-top: var(--space);
+    color: var(--ink-muted);
+    font-size: 0.95rem;
+  }
+
+  /* Wide: the caption sits beside the scene, level with its foot */
+  @container (width >= 60rem) {
+    .ad-layout {
+      display: grid;
+      grid-template-columns: 760px minmax(0, 1fr);
+      gap: calc(var(--space) * 2);
+      align-items: end;
+    }
+
+    figcaption {
+      margin-top: 0;
+    }
+  }
+
+  /* ---------- window ---------- */
+
+  /* Inset 48px top and left, off the right and bottom. Only the window's
+     empty margin is cut: the body's right padding keeps the status inside. */
+  .ad-win {
+    position: absolute;
+    top: 48px;
+    left: 48px;
+    width: calc(100% - 16px);
+    display: flex;
+    overflow: hidden;
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+
+  .ad-lights {
+    display: flex;
+    gap: 6px;
+  }
+
+  .ad-lights i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--ad-ink-4);
+  }
+
+  .ad-side {
+    flex: none;
+    width: 168px;
+    background: var(--bg-raised);
+    border-right: 1px solid var(--line);
+  }
+
+  .ad-side > .ad-lights {
+    height: 38px;
+    align-items: center;
+    padding: 0 14.5px;
+  }
+
+  .ad-nav {
+    display: grid;
+    align-content: start;
+    justify-items: start;
+    padding: 14px 10px;
+  }
+
+  .ad-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    height: 28px;
+    padding: 0 8px;
+    border-radius: var(--radius);
+  }
+
+  .ad-nav-item[data-active] {
+    background: var(--ad-ink-1);
+  }
+
+  .ad-nav-item .ad-bar {
+    height: 6px;
+    border-radius: 3px;
+    background: var(--ad-ink-2);
+  }
+
+  .ad-nav-item .ad-bar--icon {
+    width: 12px;
+    height: 12px;
+  }
+
+  .ad-nav-item[data-active] .ad-bar {
+    background: var(--ad-ink-4);
+  }
+
+  .ad-main {
+    flex: 1;
+    min-width: 0;
+    background: var(--surface);
+  }
+
+  .ad-head {
+    display: flex;
+    align-items: center;
+    height: 38px;
+    padding: 0 16px;
+    border-bottom: 1px solid var(--line);
+    background: var(--surface);
+  }
+
+  .ad-lights--compact {
+    display: none;
+  }
+
+  .ad-title {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .ad-body {
+    min-height: 480px;
+    padding: 4px 66px 0 16px;
+  }
+
+  /* ---------- rows ---------- */
+
+  .ad-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 132px;
+    align-items: center;
+    gap: 16px;
+    height: 62px;
+    border-bottom: 1px solid var(--ad-line-faint);
+    white-space: nowrap;
+  }
+
+  /* The lead row's hairline sits under its steps, so the task and its work
+     read as one record */
+  [data-lead] .ad-row {
+    border-bottom: 0;
+  }
+
+  .ad-lines {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .ad-msg {
+    overflow: hidden;
+    color: var(--ink);
+    font-weight: 500;
+    text-overflow: ellipsis;
+  }
+
+  .ad-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 16px;
+    color: var(--ink-faint);
+  }
+
+  .ad-meta svg {
+    flex: none;
+    fill: none;
+    stroke: #5a6180;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .ad-branch {
+    overflow: hidden;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    text-overflow: ellipsis;
+  }
+
+  .ad-bar {
+    display: block;
+    max-width: 100%;
+  }
+
+  .ad-bar--title {
+    height: 8px;
+    border-radius: 4px;
+    background: var(--ad-ink-2);
+  }
+
+  .ad-bar--meta {
+    width: 112px;
+    height: 7px;
+    border-radius: 3.5px;
+    background: var(--ad-ink-1);
+  }
+
+  .ad-bar--pill {
+    width: 64px;
+    height: 18px;
+    border-radius: var(--radius);
+    background: var(--ad-ink-1);
+  }
+
+  /* ---------- status pill ---------- */
+
+  .ad-badge {
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    height: 20px;
+    padding: 0 9px 0 7px;
+    border-radius: var(--radius);
+    background: var(--ad-ink-2);
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  .ad-badge[data-tone='accent'] {
+    background: rgb(232 160 76 / 0.14);
+    color: var(--accent);
+  }
+
+  /* Landed is shipped: glacier, the site's shipped color */
+  .ad-badge[data-tone='shipped'] {
+    color: var(--glacier);
+  }
+
+  .ad-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  /* The status word: the pill keeps its left edge and only its right edge
+     moves. Longer, the edge opens first and the new word fades into the
+     room. Shorter, the old word leaves before the edge comes in. */
+  .ad-label {
+    display: grid;
+    justify-items: start;
+  }
+
+  [data-live] .ad-label {
+    transition: width 0.32s var(--ease-out);
+  }
+
+  .ad-label[data-shrink] {
+    transition-delay: 0.1s;
+  }
+
+  .ad-word {
+    grid-area: 1 / 1;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.14s ease;
+  }
+
+  .ad-word[data-on] {
+    opacity: 1;
+    transition: opacity 0.2s ease 0.12s;
+  }
+
+  /* ---------- steps ---------- */
+
+  .ad-steps {
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--ad-line-faint);
+  }
+
+  .ad-step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 26px;
+    color: var(--ink);
+    font-size: 12.5px;
+    white-space: nowrap;
+    transition: color 0.3s ease;
+  }
+
+  .ad-step[data-done] {
+    color: var(--ink-soft);
+  }
+
+  /* A status circle. Pending turns an arc inside the ring. Done fills the
+     circle from its center and then draws the tick. */
+  .ad-check {
+    display: inline-grid;
+    flex: none;
+    place-items: center;
+  }
+
+  .ad-check svg {
+    overflow: visible;
+  }
+
+  .ad-check-ring {
+    fill: none;
+    stroke: var(--ad-ink-4);
+    stroke-width: 1.5;
+    transition: opacity 0.2s ease;
+  }
+
+  .ad-check-arc {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-dasharray: 0.28 1;
+    opacity: 0;
+    transform-origin: 8px 8px;
+    animation: ad-spin 0.8s linear infinite;
+    transition: opacity 0.18s ease;
+  }
+
+  .ad-check[data-pending] .ad-check-arc {
+    opacity: 1;
+  }
+
+  .ad-check[data-on] .ad-check-arc {
+    transition-duration: 0.08s;
+  }
+
+  .ad-check[data-on] .ad-check-ring {
+    opacity: 0;
+  }
+
+  .ad-check-fill {
+    fill: var(--ad-check);
+    opacity: 0;
+    transform: scale(0.35);
+    transform-origin: 8px 8px;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .ad-check[data-on] .ad-check-fill {
+    opacity: 1;
+    transform: scale(1);
+    transition: transform 0.4s var(--ease-out), opacity 0s;
+  }
+
+  .ad-check-tick {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .ad-check[data-on] .ad-check-tick {
+    stroke-dashoffset: 0;
+    opacity: 1;
+    transition: stroke-dashoffset 0.32s cubic-bezier(0.65, 0, 0.35, 1) 0.16s, opacity 0.01s 0.16s;
+  }
+
+  @keyframes ad-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* ---------- open and close ---------- */
+
+  /* The row's height opens and carries the list below it down. Its content
+     drops in as the space finishes opening. Closing, the content dims fast
+     and dissolves while the space closes, so no empty box is shown. */
+  .ad-collapse {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition: grid-template-rows 0.42s cubic-bezier(0.4, 0, 0.2, 1) 0.05s, opacity 0.42s cubic-bezier(0, 0.8, 0.5, 1);
+  }
+
+  .ad-collapse[data-open] {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    transition: grid-template-rows 0.5s cubic-bezier(0.45, 0, 0.2, 1), opacity 0.3s ease 0.24s;
+  }
+
+  .ad-inner {
+    min-height: 0;
+  }
+
+  .ad-glide {
+    transform: translateY(-10px);
+    transition: transform 0.3s ease;
+  }
+
+  [data-open] > .ad-inner > .ad-glide {
+    transform: none;
+    transition: transform 0.6s var(--ease-out) 0.2s;
+  }
+
+  [data-snap] *,
+  [data-snap] {
+    transition: none !important;
+  }
+
+  /* ---------- compact: phone column ---------- */
+
+  /* A second design, not a squeeze: no sidebar, one 16px gutter top and
+     left, the window well past the right edge. */
+  @container (width < 35rem) {
+    .ad-stage {
+      height: 344px;
+    }
+
+    .ad-win {
+      top: 16px;
+      left: 16px;
+      width: calc(100% + 40px);
+    }
+
+    .ad-side {
+      display: none;
+    }
+
+    .ad-head {
+      padding: 0 14.5px;
+    }
+
+    /* Optically centered: offsets the lights on the left */
+    .ad-title {
+      flex: 1;
+      margin-right: 39px;
+      text-align: center;
+    }
+
+    .ad-lights--compact {
+      display: flex;
+    }
+
+    .ad-body {
+      padding: 4px 72px 0 16px;
+    }
+
+    .ad-row {
+      grid-template-columns: minmax(0, 1fr) 128px;
+      gap: 10px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ad-check-arc {
+      animation: none;
+    }
+  }
+</style>
